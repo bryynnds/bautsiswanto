@@ -1,0 +1,27 @@
+<?php
+use yii\bootstrap5\ActiveForm;
+use yii\bootstrap5\Html;
+
+/** @var $model app\models\HomepageTestimoni */
+/** @var $testimonis app\models\HomepageTestimoni[] */
+
+// Ensure $model is an object, not an array
+if (!is_object($model)) {
+    $model = new \app\models\HomepageTestimoni();
+}
+?>
+
+<h3>Tambah Testimoni</h3>
+<?php $form = ActiveForm::begin(); ?>
+    <?= $form->field($model, 'content')->textarea() ?>
+    <?= $form->field($model, 'author')->textInput() ?>
+    <?= Html::submitButton('Tambah Testimoni', ['class' => 'btn btn-success']) ?>
+<?php ActiveForm::end(); ?>
+
+<hr>
+<h3>Daftar Testimoni</h3>
+<ul>
+<?php foreach ($testimonis as $t): ?>
+    <li>"<?= $t->content ?>" <i>- <?= $t->author ?></i></li>
+<?php endforeach; ?>
+</ul>
