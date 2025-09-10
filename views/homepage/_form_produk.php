@@ -29,6 +29,13 @@ if (!is_object($model)) {
         <?php if ($p->image): ?>
             <br><img src="/<?= $p->image ?>" style="max-width:100px;">
         <?php endif; ?>
+        <br>
+        <?= Html::a('Edit', ['homepage/update-produk', 'id' => $p->id], ['class' => 'btn btn-sm btn-warning']) ?>
+        <?= Html::a('Hapus', ['homepage/delete-produk', 'id' => $p->id], [
+            'class' => 'btn btn-sm btn-danger',
+            'data' => ['confirm' => 'Yakin hapus produk ini?']
+        ]) ?>
     </li>
 <?php endforeach; ?>
 </ul>
+
