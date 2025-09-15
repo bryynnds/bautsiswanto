@@ -1,39 +1,37 @@
 <?php
+
 /** @var yii\web\View $this */
+/** @var app\models\HomepageHero $hero */
+/** @var app\models\HomepageProduk[] $produks */
+/** @var app\models\HomepageKeunggulan[] $keunggulans */
+/** @var app\models\HomepageTestimoni[] $testimonis */
 $this->title = 'Wardah Cosmetics';
 ?>
 
 <!-- Hero Section -->
-<section class="hero loading">
+<section class="hero loading"
+  style="background-image: url('<?= Yii::getAlias('@web') ?>/<?= $hero->background_image ?? 'images/background.jpg' ?>'); 
+         background-size: cover;">
   <div class="hero-text">
-    <h1>Kecantikan Natural Bersama Wardah</h1>
-    <p>Kosmetik halal, natural, dan terpercaya untuk mendukung pesona cantikmu setiap hari.</p>
+    <h1><?= $hero->title ?? 'Kecantikan Natural Bersama Wardah' ?></h1>
+    <p><?= $hero->subtitle ?? 'Kosmetik halal, natural, dan terpercaya untuk mendukung pesona cantikmu setiap hari.' ?></p>
     <a href="#produk" class="btn">Lihat Produk</a>
   </div>
 </section>
+
 
 <!-- Produk Unggulan -->
 <section class="produk loading" id="produk">
   <h2>Produk Unggulan</h2>
   <div class="produk-grid">
-    <div class="card">
-      <img src="<?= Yii::getAlias('@web') ?>/images/lipstik.png" alt="Kosmetik Wardah">
-      <h3>Lipstick</h3>
-      <p>Warna tahan lama dengan kandungan natural.</p>
-      <a href="#" class="btn-beli">Beli Sekarang</a>
-    </div>
-    <div class="card">
-      <img src="<?= Yii::getAlias('@web') ?>/images/foundation.png" alt="Kosmetik Wardah">
-      <h3>Foundation</h3>
-      <p>Cocok untuk semua jenis kulit dengan hasil flawless.</p>
-      <a href="#" class="btn-beli">Beli Sekarang</a>
-    </div>
-    <div class="card">
-      <img src="<?= Yii::getAlias('@web') ?>/images/mascara.png" alt="Kosmetik Wardah">
-      <h3>Mascara</h3>
-      <p>Tampilan bulu mata tebal alami sepanjang hari.</p>
-      <a href="#" class="btn-beli">Beli Sekarang</a>
-    </div>
+    <?php foreach ($produks as $produk): ?>
+      <div class="card">
+        <img src="<?= Yii::getAlias('@web') ?>/<?= $produk->image ?>" alt="<?= $produk->title ?>" class="produk-img">
+        <h3><?= $produk->title ?></h3>
+        <p><?= $produk->description ?></p>
+        <a href="#" class="btn-beli">Beli Sekarang</a>
+      </div>
+    <?php endforeach; ?>
   </div>
 </section>
 
@@ -41,18 +39,12 @@ $this->title = 'Wardah Cosmetics';
 <section class="keunggulan loading" id="keunggulan">
   <h2>Mengapa Memilih Wardah?</h2>
   <div class="keunggulan-grid">
-    <div class="point">
-      <h3>Halal</h3>
-      <p>Diformulasikan sesuai standar halal internasional.</p>
-    </div>
-    <div class="point">
-      <h3>Alami</h3>
-      <p>Bahan alami yang aman digunakan setiap hari.</p>
-    </div>
-    <div class="point">
-      <h3>Aman</h3>
-      <p>Teruji aman oleh para ahli dermatologi.</p>
-    </div>
+    <?php foreach ($keunggulans as $k): ?>
+      <div class="point">
+        <h3><?= $k->title ?></h3>
+        <p><?= $k->subtitle ?></p>
+      </div>
+    <?php endforeach; ?>
   </div>
 </section>
 
@@ -60,18 +52,12 @@ $this->title = 'Wardah Cosmetics';
 <section class="testimoni loading" id="testimoni">
   <h2>Apa Kata Mereka?</h2>
   <div class="testimoni-grid">
-    <div class="testi">
-      <p>"Produk Wardah bikin wajahku lebih fresh, dan aku suka karena halal."</p>
-      <span>- Rani, 25 th</span>
-    </div>
-    <div class="testi">
-      <p>"Foundation-nya ringan banget, cocok dipakai sehari-hari."</p>
-      <span>- Sinta, 22 th</span>
-    </div>
-    <div class="testi">
-      <p>"Skincare Wardah bikin kulitku lembab dan glowing natural."</p>
-      <span>- Dwi, 27 th</span>
-    </div>
+    <?php foreach ($testimonis as $t): ?>
+      <div class="testi">
+        <p>"<?= $t->content ?>"</p>
+        <span>- <?= $t->author ?></span>
+      </div>
+    <?php endforeach; ?>
   </div>
 </section>
 

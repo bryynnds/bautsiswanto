@@ -9,6 +9,10 @@ use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
+use app\models\HomepageHero;
+use app\models\HomepageProduk;
+use app\models\HomepageKeunggulan;
+use app\models\HomepageTestimoni;
 
 class SiteController extends Controller
 {
@@ -61,7 +65,17 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $hero = HomepageHero::find()->one(); // karena hanya 1 baris
+        $produks = HomepageProduk::find()->all();
+        $keunggulans = HomepageKeunggulan::find()->all();
+        $testimonis = HomepageTestimoni::find()->all();
+
+        return $this->render('index', [
+            'hero' => $hero,
+            'produks' => $produks,
+            'keunggulans' => $keunggulans,
+            'testimonis' => $testimonis,
+        ]);
     }
 
     /**

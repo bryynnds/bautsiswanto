@@ -24,9 +24,13 @@ class HomepageController extends Controller
         if ($hero->load(Yii::$app->request->post())) {
             $file = UploadedFile::getInstance($hero, 'background_image');
             if ($file) {
-                $path = 'web/images/' . $file->baseName . '.' . $file->extension;
-                $file->saveAs($path);
-                $hero->background_image = 'images/' . $file->baseName . '.' . $file->extension;
+                // simpan file di web/images/
+                $fileName = time() . '-' . $file->baseName . '.' . $file->extension;
+                $path = Yii::getAlias('@webroot') . '/images/' . $fileName;
+                if ($file->saveAs($path)) {
+                    // simpan nama file relatif supaya bisa dipanggil di <img src>
+                    $hero->background_image = 'images/' . $fileName;
+                }
             }
             $hero->save(false);
             Yii::$app->session->setFlash('success', 'Hero section updated!');
@@ -39,9 +43,11 @@ class HomepageController extends Controller
         if ($newProduk->load(Yii::$app->request->post())) {
             $file = UploadedFile::getInstance($newProduk, 'image');
             if ($file) {
-                $path = 'web/images/' . $file->baseName . '.' . $file->extension;
-                $file->saveAs($path);
-                $newProduk->image = 'images/' . $file->baseName . '.' . $file->extension;
+                $fileName = time() . '-' . $file->baseName . '.' . $file->extension;
+                $path = Yii::getAlias('@webroot') . '/images/' . $fileName;
+                if ($file->saveAs($path)) {
+                    $newProduk->image = 'images/' . $fileName;
+                }
             }
             $newProduk->save(false);
             Yii::$app->session->setFlash('success', 'Produk baru ditambahkan!');
@@ -88,9 +94,11 @@ class HomepageController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             $file = UploadedFile::getInstance($model, 'image');
             if ($file) {
-                $path = 'web/images/' . $file->baseName . '.' . $file->extension;
-                $file->saveAs($path);
-                $model->image = 'images/' . $file->baseName . '.' . $file->extension;
+                $fileName = time() . '-' . $file->baseName . '.' . $file->extension;
+                $path = Yii::getAlias('@webroot') . '/images/' . $fileName;
+                if ($file->saveAs($path)) {
+                    $model->image = 'images/' . $fileName;
+                }
             }
             $model->save(false);
             Yii::$app->session->setFlash('success', 'Produk berhasil diupdate!');
