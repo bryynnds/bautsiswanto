@@ -19,4 +19,11 @@ class HomepageKeunggulan extends ActiveRecord
             [['title'], 'string', 'max' => 255],
         ];
     }
+    public function attributeLabels()
+    {
+        return [
+            'title' => 'Keunggulan',
+            'subtitle' => 'Deskripsi'
+        ];
+    }
 }

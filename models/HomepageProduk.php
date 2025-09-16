@@ -20,4 +20,12 @@ class HomepageProduk extends ActiveRecord
             [['image'], 'string', 'max' => 255],
         ];
     }
+    public function attributeLabels()
+    {
+        return [
+            'title' => 'Nama Produk',
+            'description' => 'Deskripsi',
+            'image' => 'Gambar Produk',
+        ];
+    }
 }

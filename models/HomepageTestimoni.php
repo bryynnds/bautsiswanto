@@ -19,4 +19,11 @@ class HomepageTestimoni extends ActiveRecord
             [['author'], 'string', 'max' => 255],
         ];
     }
+    public function attributeLabels()
+    {
+        return [
+            'content' => 'Testimoni',
+            'author' => 'Nama'
+        ];
+    }
 }

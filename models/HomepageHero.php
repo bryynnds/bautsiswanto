@@ -20,4 +20,13 @@ class HomepageHero extends ActiveRecord
             [['background_image'], 'string', 'max' => 255],
         ];
     }
+
+    public function attributeLabels()
+    {
+        return [
+            'title' => 'Judul Slogan',
+            'subtitle' => 'Deskripsi',
+            'background_image' => 'Gambar Latar Belakang',
+        ];
+    }
 }
