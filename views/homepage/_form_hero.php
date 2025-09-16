@@ -16,6 +16,6 @@ if (!is_object($model)) {
     <?php if ($model->background_image): ?>
         <img src="/<?= $model->background_image ?>" style="max-width:200px;">
     <?php endif; ?>
-    <br>
-    <?= Html::submitButton('Simpan', ['class' => 'btn btn-primary']) ?>
+    <br><br>
+    <?= Html::submitButton('Simpan', ['class' => 'btn btn-success']) ?>
 <?php ActiveForm::end(); ?>
