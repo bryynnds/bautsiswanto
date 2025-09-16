@@ -13,8 +13,12 @@ if (!is_object($model)) {
 
 <h3>Tambah Testimoni</h3>
 <?php $form = ActiveForm::begin(); ?>
-    <?= $form->field($model, 'content')->textarea() ?>
-    <?= $form->field($model, 'author')->textInput() ?>
+    <?= $form->field($model, 'content')->textarea([
+        'placeholder' => 'Ketik disini...',
+    ]) ?>
+    <?= $form->field($model, 'author')->textInput([
+        'placeholder' => 'Ketik disini...',
+    ]) ?>
     <?= Html::submitButton('Tambah Testimoni', ['class' => 'btn btn-success']) ?>
 <?php ActiveForm::end(); ?>
 

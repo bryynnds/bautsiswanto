@@ -1,4 +1,5 @@
 <?php
+
 use yii\bootstrap5\ActiveForm;
 use yii\bootstrap5\Html;
 
@@ -13,24 +14,31 @@ if (!is_object($model)) {
 
 <h3>Tambah Keunggulan</h3>
 <?php $form = ActiveForm::begin(); ?>
-    <?= $form->field($model, 'title')->textInput() ?>
-    <?= $form->field($model, 'subtitle')->textInput() ?>
-    <?= Html::submitButton('Tambah Keunggulan', ['class' => 'btn btn-success']) ?>
+<?= $form->field($model, 'title')->textInput(
+    [
+        'placeholder' => 'Ketik disini...',
+    ]
+) ?>
+<?= $form->field($model, 'subtitle')->textInput(
+    [
+        'placeholder' => 'Ketik disini...',
+    ]
+) ?>
+<?= Html::submitButton('Tambah Keunggulan', ['class' => 'btn btn-success']) ?>
 <?php ActiveForm::end(); ?>
 
 <hr>
 <h3>Daftar Keunggulan</h3>
 <ul>
-<?php foreach ($keunggulans as $k): ?>
-    <li>
-        <b><?= $k->title ?></b> - <?= $k->subtitle ?>
-        <br>
-        <?= Html::a('Edit', ['homepage/update-keunggulan', 'id' => $k->id], ['class' => 'btn btn-sm btn-warning']) ?>
-        <?= Html::a('Hapus', ['homepage/delete-keunggulan', 'id' => $k->id], [
-            'class' => 'btn btn-sm btn-danger',
-            'data' => ['confirm' => 'Yakin hapus keunggulan ini?']
-        ]) ?>
-    </li>
-<?php endforeach; ?>
+    <?php foreach ($keunggulans as $k): ?>
+        <li>
+            <b><?= $k->title ?></b> - <?= $k->subtitle ?>
+            <br>
+            <?= Html::a('Edit', ['homepage/update-keunggulan', 'id' => $k->id], ['class' => 'btn btn-sm btn-warning']) ?>
+            <?= Html::a('Hapus', ['homepage/delete-keunggulan', 'id' => $k->id], [
+                'class' => 'btn btn-sm btn-danger',
+                'data' => ['confirm' => 'Yakin hapus keunggulan ini?']
+            ]) ?>
+        </li>
+    <?php endforeach; ?>
 </ul>
-

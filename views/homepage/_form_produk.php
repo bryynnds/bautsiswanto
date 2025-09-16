@@ -14,8 +14,12 @@ if (!is_object($model)) {
 
 <h3>Tambah Produk</h3>
 <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
-    <?= $form->field($model, 'title')->textInput() ?>
-    <?= $form->field($model, 'description')->textarea() ?>
+    <?= $form->field($model, 'title')->textInput([
+        'placeholder' => 'Ketik disini...',
+    ]) ?>
+    <?= $form->field($model, 'description')->textarea([
+        'placeholder' => 'Ketik disini...',
+    ]) ?>
     <?= $form->field($model, 'image')->fileInput() ?>
     <?= Html::submitButton('Tambah Produk', ['class' => 'btn btn-success']) ?>
 <?php ActiveForm::end(); ?>
