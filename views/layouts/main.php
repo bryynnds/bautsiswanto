@@ -29,64 +29,84 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
 </head>
 
 <body class="d-flex flex-column h-100">
-    <?php $this->beginBody() ?>
+<?php $this->beginBody() ?>
 
-    <header id="header">
-        <?php
-        NavBar::begin([
-            'brandLabel' => "Wardah Cosmetics",
-            'brandUrl' => Yii::$app->homeUrl,
-            'options' => [
-                'class' => 'navbar navbar-expand-md fixed-top custom-navbar'
-            ],
-            'containerOptions' => [
-                'class' => 'container-fluid' // ganti default "container" jadi "container-fluid"
-            ],
-        ]);
-        echo Nav::widget([
-            'options' => ['class' => 'navbar-nav ms-auto'],
-            'items' => [
-                ['label' => 'Beranda', 'url' => ['/site/index']],
-                ['label' => 'Contact', 'url' => ['/site/contact']],
-                ['label' => 'Ubah Beranda', 'url' => ['/homepage/edit']],
-                Yii::$app->user->isGuest
-                    ? ['label' => 'Login', 'url' => ['/site/login']]
-                    : '<li class="nav-item">'
-                    . Html::beginForm(['/site/logout'])
-                    . Html::submitButton(
-                        'Logout (' . Yii::$app->user->identity->username . ')',
-                        ['class' => 'nav-link btn btn-link logout']
-                    )
-                    . Html::endForm()
-                    . '</li>'
-            ]
-        ]);
-        NavBar::end();
-        ?>
-    </header>
+<header id="header">
+    <?php
+    NavBar::begin([
+        'brandLabel' => "Wardah Cosmetics",
+        'brandUrl' => Yii::$app->homeUrl,
+        'options' => [
+            'class' => 'navbar navbar-expand-md fixed-top custom-navbar'
+        ],
+        'containerOptions' => [
+            'class' => 'container-fluid'
+        ],
+    ]);
 
+    // Tentukan menu sesuai kondisi
+    if (Yii::$app->user->isGuest) {
+        $menuItems = [
+            ['label' => 'Beranda', 'url' => ['/site/index']],
+            ['label' => 'Contact', 'url' => ['/site/contact']],
+            ['label' => 'Login', 'url' => ['/site/login']],
+        ];
+    } elseif (Yii::$app->user->identity->isAdmin()) {
+        $menuItems = [
+            ['label' => 'Ubah Beranda', 'url' => ['/homepage/edit']],
+            '<li class="nav-item">'
+            . Html::beginForm(['/site/logout'])
+            . Html::submitButton(
+                'Logout (' . Yii::$app->user->identity->username . ')',
+                ['class' => 'nav-link btn btn-link logout']
+            )
+            . Html::endForm()
+            . '</li>'
+        ];
+    } else {
+        // kalau nanti ada role user biasa, tinggal isi di sini
+        $menuItems = [
+            ['label' => 'Beranda', 'url' => ['/site/index']],
+            ['label' => 'Contact', 'url' => ['/site/contact']],
+            '<li class="nav-item">'
+            . Html::beginForm(['/site/logout'])
+            . Html::submitButton(
+                'Logout (' . Yii::$app->user->identity->username . ')',
+                ['class' => 'nav-link btn btn-link logout']
+            )
+            . Html::endForm()
+            . '</li>'
+        ];
+    }
 
-    <main id="main" class="flex-shrink-0" role="main">
-        <div class="container-fluid p-0">
-            <?php if (!empty($this->params['breadcrumbs'])): ?>
-                <?= Breadcrumbs::widget(['links' => $this->params['breadcrumbs']]) ?>
-            <?php endif ?>
-            <?= Alert::widget() ?>
-            <?= $content ?>
-        </div>
-    </main>
+    echo Nav::widget([
+        'options' => ['class' => 'navbar-nav ms-auto'],
+        'items' => $menuItems,
+    ]);
+    NavBar::end();
+    ?>
+</header>
 
-    <footer id="kontak">
-        <p>© 2025 Wardah Cosmetics</p>
-        <p>Ikuti kami di
-            <a href="#">Instagram</a> |
-            <a href="#">Facebook</a> |
-            <a href="#">Twitter</a>
-        </p>
-    </footer>
+<main id="main" class="flex-shrink-0" role="main">
+    <div class="container-fluid p-0">
+        <?php if (!empty($this->params['breadcrumbs'])): ?>
+            <?= Breadcrumbs::widget(['links' => $this->params['breadcrumbs']]) ?>
+        <?php endif ?>
+        <?= Alert::widget() ?>
+        <?= $content ?>
+    </div>
+</main>
 
-    <?php $this->endBody() ?>
+<footer id="kontak">
+    <p>© 2025 Wardah Cosmetics</p>
+    <p>Ikuti kami di
+        <a href="#">Instagram</a> |
+        <a href="#">Facebook</a> |
+        <a href="#">Twitter</a>
+    </p>
+</footer>
+
+<?php $this->endBody() ?>
 </body>
-
 </html>
 <?php $this->endPage() ?>
