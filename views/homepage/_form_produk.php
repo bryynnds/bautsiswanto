@@ -1,4 +1,5 @@
 <?php
+
 use yii\bootstrap5\ActiveForm;
 use yii\bootstrap5\Html;
 
@@ -14,32 +15,36 @@ if (!is_object($model)) {
 
 <h3>Tambah Produk</h3>
 <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
-    <?= $form->field($model, 'title')->textInput([
-        'placeholder' => 'Ketik disini...',
-    ]) ?>
-    <?= $form->field($model, 'description')->textarea([
-        'placeholder' => 'Ketik disini...',
-    ]) ?>
-    <?= $form->field($model, 'image')->fileInput() ?>
-    <?= Html::submitButton('Tambah Produk', ['class' => 'btn btn-success']) ?>
+<?= $form->field($model, 'title')->textInput([
+    'placeholder' => 'Ketik disini...',
+]) ?>
+<?= $form->field($model, 'description')->textarea([
+    'placeholder' => 'Ketik disini...',
+]) ?>
+<?= $form->field($model, 'image')->fileInput() ?>
+<?= Html::submitButton('Tambah Produk', ['class' => 'btn btn-success']) ?>
 <?php ActiveForm::end(); ?>
 
 <hr>
 <h3>Daftar Produk</h3>
-<ul>
-<?php foreach ($produks as $p): ?>
-    <li>
-        <b><?= $p->title ?></b> - <?= $p->description ?>
-        <?php if ($p->image): ?>
-            <br><img src="/<?= $p->image ?>" style="max-width:100px;">
-        <?php endif; ?>
-        <br>
-        <?= Html::a('Edit', ['homepage/update-produk', 'id' => $p->id], ['class' => 'btn btn-sm btn-warning']) ?>
-        <?= Html::a('Hapus', ['homepage/delete-produk', 'id' => $p->id], [
-            'class' => 'btn btn-sm btn-danger',
-            'data' => ['confirm' => 'Yakin hapus produk ini?']
-        ]) ?>
-    </li>
-<?php endforeach; ?>
-</ul>
+<div class="produk-grid produk-admin">
+    <?php foreach ($produks as $p): ?>
+        <div class="card">
+            <?php if ($p->image): ?>
+                <img src="<?= Yii::getAlias('@web') ?>/<?= $p->image ?>" alt="<?= $p->title ?>" class="produk-img">
+            <?php endif; ?>
 
+            <h3><?= Html::encode($p->title) ?></h3>
+            <p><?= Html::encode($p->description) ?></p>
+
+            <div class="btn-wrapper">
+                <?= Html::a('Edit', ['homepage/update-produk', 'id' => $p->id], ['class' => 'btn-edit']) ?>
+                <?= Html::a('Hapus', ['homepage/delete-produk', 'id' => $p->id], [
+                    'class' => 'btn-hapus',
+                    'data' => ['confirm' => 'Yakin hapus produk ini?']
+                ]) ?>
+            </div>
+
+        </div>
+    <?php endforeach; ?>
+</div>

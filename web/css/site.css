@@ -281,6 +281,51 @@ body {
   box-shadow: 0 8px 20px rgba(0,0,0,0.15);
 }
 
+.produk-admin .card {
+  max-width: 200px;
+  padding: 15px;
+}
+
+.produk-admin .card h3 {
+  font-size: 1rem;
+}
+
+.produk-admin .card p {
+  font-size: 0.9rem;
+}
+
+.btn-wrapper {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.btn-edit,
+.btn-hapus {
+  padding: 6px 12px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 0.85rem;
+  color: #fff;
+  flex: 0; /* jangan memanjang */
+}
+
+.btn-edit {
+  background: #f0ad4e;
+}
+.btn-edit:hover {
+  background: #ec971f;
+}
+
+.btn-hapus {
+  background: #d9534f;
+}
+.btn-hapus:hover {
+  background: #c9302c;
+}
+
+
+
 /* Keunggulan */
 .keunggulan {
   padding: 60px 10%;
