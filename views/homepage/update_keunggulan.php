@@ -14,12 +14,12 @@ use yii\bootstrap5\Html;
         ]); ?>
 
             <?= $form->field($model, 'title')->textInput([
-                'placeholder' => 'Judul keunggulan...',
+                'placeholder' => 'Ketik disini',
                 'class' => 'form-control'
             ]) ?>
 
             <?= $form->field($model, 'subtitle')->textInput([
-                'placeholder' => 'Deskripsi singkat...',
+                'placeholder' => 'Ketik disini',
                 'class' => 'form-control'
             ]) ?>
 

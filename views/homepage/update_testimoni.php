@@ -15,12 +15,12 @@ use yii\bootstrap5\Html;
 
             <?= $form->field($model, 'content')->textarea([
                 'rows' => 4,
-                'placeholder' => 'Isi testimoni...',
+                'placeholder' => 'Ketik disini',
                 'class' => 'form-control'
             ]) ?>
 
             <?= $form->field($model, 'author')->textInput([
-                'placeholder' => 'Nama pemberi testimoni...',
+                'placeholder' => 'Ketik disini',
                 'class' => 'form-control'
             ]) ?>
 

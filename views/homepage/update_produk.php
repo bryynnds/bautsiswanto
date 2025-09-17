@@ -14,13 +14,13 @@ use yii\bootstrap5\Html;
         ]); ?>
 
             <?= $form->field($model, 'title')->textInput([
-                'placeholder' => 'Judul produk...',
+                'placeholder' => 'Ketik disini',
                 'class' => 'form-control'
             ]) ?>
 
             <?= $form->field($model, 'description')->textarea([
                 'rows' => 4,
-                'placeholder' => 'Deskripsi produk...',
+                'placeholder' => 'Ketik disini',
                 'class' => 'form-control'
             ]) ?>
 
