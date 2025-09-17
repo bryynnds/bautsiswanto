@@ -10,9 +10,28 @@ use app\models\HomepageHero;
 use app\models\HomepageProduk;
 use app\models\HomepageKeunggulan;
 use app\models\HomepageTestimoni;
+use yii\filters\AccessControl;
 
 class HomepageController extends Controller
 {
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::class,
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'], // harus login
+                        'matchCallback' => function ($rule, $action) {
+                            return Yii::$app->user->identity->isAdmin();
+                        }
+                    ],
+                ],
+            ],
+        ];
+    }
+    
     public function actionEdit()
     {
         // HERO (ambil row pertama saja)
