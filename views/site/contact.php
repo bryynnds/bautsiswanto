@@ -8,16 +8,16 @@ use yii\bootstrap5\ActiveForm;
 use yii\bootstrap5\Html;
 use yii\captcha\Captcha;
 
-// $this->title = 'Kontak Kami';
+$this->title = 'Kontak Kami';
 // $this->params['breadcrumbs'][] = $this->title;
 ?>
 
-<section id="kontak" class="contact-section py-5">
-    <div class="container">
-        <div class="text-center mb-5">
-            <h1 class="section-title"><?= Html::encode($this->title) ?></h1>
-            <p class="section-subtitle">Jika ada pertanyaan atau kerja sama, silakan isi form di bawah.</p>
-        </div>
+<div class="container mt-5">
+    <div class="form-card">
+        <h2 class="section-title mb-3 text-center"><?= Html::encode($this->title) ?></h2>
+        <p class="section-subtitle text-center mb-4">
+            Jika ada pertanyaan atau kerja sama, silakan isi form di bawah.
+        </p>
 
         <?php if (Yii::$app->session->hasFlash('contactFormSubmitted')): ?>
             <div class="alert alert-success text-center">
@@ -25,30 +25,47 @@ use yii\captcha\Captcha;
             </div>
         <?php else: ?>
 
-            <div class="row justify-content-center">
-                <div class="col-md-8 col-lg-6">
-                    <?php $form = ActiveForm::begin(['id' => 'contact-form']); ?>
+            <?php $form = ActiveForm::begin([
+                'id' => 'contact-form',
+                'options' => ['class' => 'form-styled']
+            ]); ?>
 
-                        <?= $form->field($model, 'name')->textInput(['placeholder' => 'Nama lengkap']) ?>
+                <?= $form->field($model, 'name')->textInput([
+                    'placeholder' => 'Nama lengkap',
+                    'class' => 'form-control'
+                ]) ?>
 
-                        <?= $form->field($model, 'email')->textInput(['placeholder' => 'Alamat email']) ?>
+                <?= $form->field($model, 'email')->textInput([
+                    'placeholder' => 'Alamat email',
+                    'class' => 'form-control'
+                ]) ?>
 
-                        <?= $form->field($model, 'subject')->textInput(['placeholder' => 'Subjek pesan']) ?>
+                <?= $form->field($model, 'subject')->textInput([
+                    'placeholder' => 'Subjek pesan',
+                    'class' => 'form-control'
+                ]) ?>
 
-                        <?= $form->field($model, 'body')->textarea(['rows' => 6, 'placeholder' => 'Tulis pesan Anda di sini...']) ?>
+                <?= $form->field($model, 'body')->textarea([
+                    'rows' => 6,
+                    'placeholder' => 'Tulis pesan Anda di sini...',
+                    'class' => 'form-control'
+                ]) ?>
 
-                        <?= $form->field($model, 'verifyCode')->widget(Captcha::class, [
-                            'template' => '<div class="row"><div class="col-4">{image}</div><div class="col-8">{input}</div></div>',
-                        ]) ?>
+                <?= $form->field($model, 'verifyCode')->widget(Captcha::class, [
+                    'template' => '<div class="row">
+                                      <div class="col-4">{image}</div>
+                                      <div class="col-8">{input}</div>
+                                   </div>',
+                ]) ?>
 
-                        <div class="form-group text-center mt-4">
-                            <?= Html::submitButton('Kirim Pesan', ['class' => 'btn btn-primary btn-lg px-4']) ?>
-                        </div>
-
-                    <?php ActiveForm::end(); ?>
+                <div class="mt-4 text-center">
+                    <?= Html::submitButton('Kirim Pesan', [
+                        'class' => 'btn btn-primary px-4'
+                    ]) ?>
                 </div>
-            </div>
+
+            <?php ActiveForm::end(); ?>
 
         <?php endif; ?>
     </div>
-</section>
+</div>

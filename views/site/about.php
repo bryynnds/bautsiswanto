@@ -4,15 +4,23 @@
 
 use yii\helpers\Html;
 
-$this->title = 'About';
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = 'Tentang Kami';
+// $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="site-about">
-    <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
-        This is the About page. You may modify the following file to customize its content:
-    </p>
+<div class="container mt-5">
+    <div class="form-card text-center">
+        <h2 class="section-title mb-3"><?= Html::encode($this->title) ?></h2>
+        <p class="section-subtitle mb-4">
+            Halaman ini berisi informasi tentang aplikasi/website ini. 
+            Anda dapat menyesuaikan kontennya sesuai kebutuhan.
+        </p>
 
-    <code><?= __FILE__ ?></code>
+        <div class="about-content text-muted">
+            <p>
+                File ini dapat dimodifikasi untuk menambahkan profil perusahaan, 
+                visi & misi, atau detail lainnya yang ingin ditampilkan.
+            </p>
+        </div>
+    </div>
 </div>

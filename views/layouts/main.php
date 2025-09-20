@@ -48,8 +48,9 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
     if (Yii::$app->user->isGuest) {
         $menuItems = [
             ['label' => 'Beranda', 'url' => ['/site/index']],
-            ['label' => 'Contact', 'url' => ['/site/contact']],
-            ['label' => 'Login', 'url' => ['/site/login']],
+            ['label' => 'Kontak', 'url' => ['/site/contact']],
+            ['label' => 'Tentang', 'url' => ['/site/about']],
+            ['label' => 'Masuk', 'url' => ['/site/login']],
         ];
     } elseif (Yii::$app->user->identity->isAdmin()) {
         $menuItems = [
@@ -57,7 +58,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
             '<li class="nav-item">'
             . Html::beginForm(['/site/logout'])
             . Html::submitButton(
-                'Logout (' . Yii::$app->user->identity->username . ')',
+                'Keluar (' . Yii::$app->user->identity->username . ')',
                 ['class' => 'nav-link btn btn-link logout']
             )
             . Html::endForm()
