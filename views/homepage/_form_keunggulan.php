@@ -12,8 +12,10 @@ if (!is_object($model)) {
 }
 ?>
 
-<h3>Tambah Keunggulan</h3>
-<?php $form = ActiveForm::begin(); ?>
+<!-- <h3>Tambah Keunggulan</h3> -->
+<?php $form = ActiveForm::begin([
+    'action' => ['homepage/create-keunggulan']
+]); ?>
 <?= $form->field($model, 'title')->textInput(
     [
         'placeholder' => 'Ketik disini...',

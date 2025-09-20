@@ -2,14 +2,17 @@
 use yii\bootstrap5\ActiveForm;
 use yii\bootstrap5\Html;
 
-/** @var $model app\models\HomepageHero*/
-
+/** @var $model app\models\HomepageHero */
 if (!is_object($model)) {
     $model = new \app\models\HomepageHero();
 }
 ?>
 
-<?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
+<?php $form = ActiveForm::begin([
+    'action' => ['homepage/edit-hero'],
+    'options' => ['enctype' => 'multipart/form-data']
+]); ?>
+
     <?= $form->field($model, 'title')->textInput() ?>
     <?= $form->field($model, 'subtitle')->textInput() ?>
     <?= $form->field($model, 'background_image')->fileInput() ?>
@@ -18,4 +21,5 @@ if (!is_object($model)) {
     <?php endif; ?>
     <br><br>
     <?= Html::submitButton('Simpan', ['class' => 'btn btn-success']) ?>
+
 <?php ActiveForm::end(); ?>

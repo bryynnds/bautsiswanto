@@ -13,8 +13,11 @@ if (!is_object($model)) {
 ?>
 
 
-<h3>Tambah Produk</h3>
-<?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
+<!-- <h3>Tambah Produk</h3> -->
+<?php $form = ActiveForm::begin([
+    'action' => ['homepage/create-produk'],
+    'options' => ['enctype' => 'multipart/form-data']
+]); ?>
 <?= $form->field($model, 'title')->textInput([
     'placeholder' => 'Ketik disini...',
 ]) ?>
