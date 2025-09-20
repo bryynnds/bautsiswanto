@@ -42,9 +42,12 @@ $this->title = 'Admin - Ubah Produk';
 
         <?php if ($model->image): ?>
             <div class="mb-3 text-center">
-                <img src="/<?= $model->image ?>" class="img-fluid rounded shadow-sm" style="max-width:200px;">
+                <img src="<?= Yii::getAlias('@web') . '/' . $model->image ?>"
+                    class="img-fluid rounded shadow-sm"
+                    style="max-width:200px;">
             </div>
         <?php endif; ?>
+
 
         <div class="mt-4">
             <?= Html::submitButton('Simpan Perubahan', [

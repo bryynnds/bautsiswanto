@@ -31,7 +31,7 @@ class HomepageController extends Controller
             ],
         ];
     }
-    
+
     public function actionEdit()
     {
         // HERO (ambil row pertama saja)
@@ -68,10 +68,12 @@ class HomepageController extends Controller
                     $newProduk->image = 'images/' . $fileName;
                 }
             }
-            $newProduk->save(false);
-            Yii::$app->session->setFlash('success', 'Produk baru ditambahkan!');
+            if ($newProduk->save()) { // <── gunakan save() agar validasi jalan
+                Yii::$app->session->setFlash('success', 'Produk baru ditambahkan!');
+            }
             return $this->refresh();
         }
+
 
         // DATA untuk listing
         $produks = HomepageProduk::find()->all();
@@ -110,22 +112,38 @@ class HomepageController extends Controller
             throw new NotFoundHttpException("Produk tidak ditemukan.");
         }
 
+        // simpan path lama dulu
+        $oldImage = $model->image;
+
         if ($model->load(Yii::$app->request->post())) {
             $file = UploadedFile::getInstance($model, 'image');
+
             if ($file) {
                 $fileName = time() . '-' . $file->baseName . '.' . $file->extension;
                 $path = Yii::getAlias('@webroot') . '/images/' . $fileName;
+
                 if ($file->saveAs($path)) {
+                    // hapus gambar lama jika ada dan file-nya masih ada
+                    if (!empty($oldImage) && file_exists(Yii::getAlias('@webroot') . '/' . $oldImage)) {
+                        @unlink(Yii::getAlias('@webroot') . '/' . $oldImage);
+                    }
                     $model->image = 'images/' . $fileName;
                 }
+            } else {
+                // kalau tidak ada file baru, pakai gambar lama
+                $model->image = $oldImage;
             }
-            $model->save(false);
-            Yii::$app->session->setFlash('success', 'Produk berhasil diupdate!');
+
+            if ($model->save(false)) {
+                Yii::$app->session->setFlash('success', 'Produk berhasil diupdate!');
+            }
             return $this->redirect(['edit']);
         }
 
         return $this->render('update_produk', ['model' => $model]);
     }
+
+
 
     public function actionDeleteProduk($id)
     {
