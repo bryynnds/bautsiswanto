@@ -2,11 +2,12 @@
 use yii\bootstrap5\Tabs;
 use yii\bootstrap5\ActiveForm;
 use yii\bootstrap5\Html;
+$this->title = 'Admin - Ubah Halaman Beranda';
 ?>
 
 <section class="edit-section loading">
   <div class="container">
-    <h2 class="section-title">Ubah Beranda</h2>
+    <h2 class="section-title">Ubah Halaman Beranda</h2>
 
     <div class="edit-tabs">
       <?= Tabs::widget([

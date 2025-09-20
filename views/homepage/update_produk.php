@@ -3,6 +3,7 @@ use yii\bootstrap5\ActiveForm;
 use yii\bootstrap5\Html;
 
 /** @var app\models\HomepageProduk $model */
+$this->title = 'Admin - Ubah Produk';
 ?>
 
 <div class="container mt-5">
