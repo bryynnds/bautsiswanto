@@ -16,16 +16,20 @@ class HomepageProduk extends ActiveRecord
         return [
             [['title'], 'required'],
             [['description'], 'string'],
+            [['harga', 'stok'], 'integer'], // ✅ validasi angka
             [['title'], 'string', 'max' => 255],
             [['image'], 'string', 'max' => 255],
         ];
     }
+
     public function attributeLabels()
     {
         return [
             'title' => 'Nama Produk',
             'description' => 'Deskripsi',
             'image' => 'Gambar Produk',
+            'harga' => 'Harga',
+            'stok' => 'Jumlah Stok',
         ];
     }
 }

@@ -1,11 +1,20 @@
 <?php
 
+use yii\grid\GridView;
+use yii\data\ArrayDataProvider;
+use app\models\HomepageProduk;
+
 /** @var yii\web\View $this */
 /** @var app\models\HomepageHero $hero */
 /** @var app\models\HomepageProduk[] $produks */
 /** @var app\models\HomepageKeunggulan[] $keunggulans */
 /** @var app\models\HomepageTestimoni[] $testimonis */
 $this->title = 'Wardah Cosmetics';
+
+$dataProvider = new ArrayDataProvider([
+  'allModels' => $produks,
+  'pagination' => false, // kalau mau disable pagination
+]);
 ?>
 
 <!-- Hero Section -->
@@ -26,10 +35,12 @@ $this->title = 'Wardah Cosmetics';
   <div class="produk-grid">
     <?php foreach ($produks as $produk): ?>
       <div class="card">
-        <img src="<?= Yii::getAlias('@web') ?>/<?= $produk->image ?>" alt="<?= $produk->title ?>" class="produk-img">
         <h3><?= $produk->title ?></h3>
+        <img src="<?= Yii::getAlias('@web') ?>/<?= $produk->image ?>" alt="<?= $produk->title ?>" class="produk-img">
         <p><?= $produk->description ?></p>
-        <a href="#" class="btn-beli">Beli Sekarang</a>
+        <p>Rp <?= number_format($produk->harga, 0, ',', '.') ?></p>
+        <p><strong>Stok:</strong> <?= $produk->stok ?> pcs</p>
+        <a href="#" class="btn-beli">Tambah ke keranjang</a>
       </div>
     <?php endforeach; ?>
   </div>

@@ -235,7 +235,7 @@ body {
 .card {
   background: #fff;
   flex: 0 1 calc(33.333% - 20px); /* max 3 kolom */
-  max-width: 300px; /* biar gak terlalu gede */
+  max-width: 240px; /* biar gak terlalu gede */
   border-radius: 15px;
   padding: 20px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.1);
@@ -253,14 +253,14 @@ body {
   margin-bottom: 15px;
 }
 .card h3 {
-  margin: 10px 0 5px;
+  margin: 10px 0 15px;
   font-size: 1.2rem;
   text-align: center;
   color: #006666;
 }
 .card p {
   flex-grow: 1; /* isi teks dorong tombol ke bawah */
-  margin-bottom: 15px;
+  margin-bottom: 3px;
   text-align: center;
 }
 .card .btn-beli {
@@ -268,6 +268,7 @@ body {
   text-align: center;
   background: #006666;
   color: #fff;
+  margin-top: 8px;
   padding: 10px;
   border-radius: 8px;
   text-decoration: none;
@@ -477,7 +478,6 @@ footer a:hover {
 
 .btn-beli {
   display: inline-block;
-  margin-top: 10px;
   background: #008b8b;
   color: #fff;
   padding: 10px 20px;
