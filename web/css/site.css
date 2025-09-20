@@ -146,55 +146,53 @@ body {
   color: #005f5f;
 }
 
-/* Hero */
 .hero {
-  min-height: 100vh;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  padding: 60px 10%;
-  justify-content: flex-end;
-  position: relative;
-  background-image: url('../images/background.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
+  background-color: #fff;
   width: 100%;
+  padding: 60px 0 0 0; /* padding atas saja */
 }
 
-/* Remove the ::before pseudo-element since we're applying background directly */
-.hero::before {
-  display: none;
+.container-hero {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+.hero-image {
+  flex: 1 1 45%;
+  display: flex;
+  align-items: flex-end; /* gambar nempel bawah */
+}
+
+.hero-image img {
+  max-width: 90%;
+  height: auto;
+  display: block;
+  vertical-align: bottom;
+  margin: 0;
+  padding: 0;
+  margin-bottom: -1px; /* hilangkan celah kecil */
 }
 
 .hero-text {
-  flex: 0 1 50%;
+  flex: 1 1 50%;
+  text-align: left;
   padding: 20px;
-  background-color: rgba(240, 250, 249, 0.95); /* Made slightly transparent */
-  border-radius: 15px;
-  backdrop-filter: blur(5px);
-  max-width: 600px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-  animation: slideIn 1s ease-out;
-}
-
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateX(50px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
 }
 
 .hero-text h1 {
   font-size: 2.5rem;
   margin-bottom: 15px;
   color: #006666;
+}
+
+.hero-text p {
+  margin-bottom: 20px;
+  color: #333;
 }
 
 .hero-text .btn {
@@ -205,14 +203,23 @@ body {
   text-decoration: none;
   transition: 0.3s;
 }
-
-.hero-text p {
-  margin-bottom: 20px;
-  color: #333;
+.hero-text .btn:hover {
+  background: #005f5f;
+  opacity: 0.9;
+  transform: scale(1.05);
 }
 
-.hero-img {
-  display: none;
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .hero {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .hero-image {
+    order: -1; /* gambar di atas teks kalau di mobile */
+    margin-bottom: 0;
+  }
 }
 
 /* Produk */
@@ -458,17 +465,6 @@ footer a:hover {
 
 /* Responsive */
 @media (max-width: 768px) {
-  .hero {
-    flex-direction: column;
-    text-align: center;
-    padding: 40px 5%;
-  }
-  
-  .hero-text {
-    flex: 0 1 100%;
-    text-align: center;
-  }
-  
   .produk, .keunggulan, .testimoni {
     padding: 40px 5%;
   }

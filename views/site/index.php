@@ -18,15 +18,19 @@ $dataProvider = new ArrayDataProvider([
 ?>
 
 <!-- Hero Section -->
-<section class="hero loading"
-  style="background-image: url('<?= Yii::getAlias('@web') ?>/<?= $hero->background_image ?? 'images/background.jpg' ?>'); 
-         background-size: cover;">
-  <div class="hero-text">
-    <h1><?= $hero->title ?? 'Kecantikan Natural Bersama Wardah' ?></h1>
-    <p><?= $hero->subtitle ?? 'Kosmetik halal, natural, dan terpercaya untuk mendukung pesona cantikmu setiap hari.' ?></p>
-    <a href="#produk" class="btn">Lihat Produk</a>
+<section class="hero">
+  <div class="container-hero">
+    <div class="hero-image">
+      <img src="<?= Yii::getAlias('@web') ?>/<?= $hero->background_image ?? 'images/background.jpg' ?>" alt="Hero Image">
+    </div>
+    <div class="hero-text">
+      <h1><?= $hero->title ?? 'Kecantikan Natural Bersama Wardah' ?></h1>
+      <p><?= $hero->subtitle ?? 'Kosmetik halal, natural, dan terpercaya untuk mendukung pesona cantikmu setiap hari.' ?></p>
+      <a href="#produk" class="btn">Lihat Produk</a>
+    </div>
   </div>
 </section>
+
 
 
 <!-- Produk Unggulan -->
