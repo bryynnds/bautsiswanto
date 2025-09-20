@@ -36,10 +36,11 @@ $dataProvider = new ArrayDataProvider([
     <?php foreach ($produks as $produk): ?>
       <div class="card">
         <h3><?= $produk->title ?></h3>
+        <p>Rp <?= number_format($produk->harga, 0, ',', '.') ?></p>
         <img src="<?= Yii::getAlias('@web') ?>/<?= $produk->image ?>" alt="<?= $produk->title ?>" class="produk-img">
         <p><?= $produk->description ?></p>
-        <p>Rp <?= number_format($produk->harga, 0, ',', '.') ?></p>
-        <p><strong>Stok:</strong> <?= $produk->stok ?> pcs</p>
+        
+        <!-- <p><strong>Stok:</strong> <?= $produk->stok ?> pcs</p> -->
         <a href="#" class="btn-beli">Tambah ke keranjang</a>
       </div>
     <?php endforeach; ?>

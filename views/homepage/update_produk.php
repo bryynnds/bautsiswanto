@@ -1,4 +1,5 @@
 <?php
+
 use yii\bootstrap5\ActiveForm;
 use yii\bootstrap5\Html;
 
@@ -14,34 +15,45 @@ $this->title = 'Admin - Ubah Produk';
             'options' => ['class' => 'form-styled', 'enctype' => 'multipart/form-data']
         ]); ?>
 
-            <?= $form->field($model, 'title')->textInput([
-                'placeholder' => 'Ketik disini',
-                'class' => 'form-control'
-            ]) ?>
+        <?= $form->field($model, 'title')->textInput([
+            'placeholder' => 'Ketik disini',
+            'class' => 'form-control'
+        ]) ?>
 
-            <?= $form->field($model, 'description')->textarea([
-                'rows' => 4,
-                'placeholder' => 'Ketik disini',
-                'class' => 'form-control'
-            ]) ?>
+        <?= $form->field($model, 'description')->textarea([
+            'rows' => 4,
+            'placeholder' => 'Ketik disini',
+            'class' => 'form-control'
+        ]) ?>
 
-            <?= $form->field($model, 'image')->fileInput([
-            ]) ?>
+        <?= $form->field($model, 'harga')->textInput([
+            'type' => 'number',
+            'placeholder' => 'Masukkan harga produk',
+            'class' => 'form-control'
+        ]) ?>
 
-            <?php if ($model->image): ?>
-                <div class="mb-3 text-center">
-                    <img src="/<?= $model->image ?>" class="img-fluid rounded shadow-sm" style="max-width:200px;">
-                </div>
-            <?php endif; ?>
+        <?= $form->field($model, 'stok')->textInput([
+            'type' => 'number',
+            'placeholder' => 'Masukkan jumlah stok',
+            'class' => 'form-control'
+        ]) ?>
 
-            <div class="mt-4">
-                <?= Html::submitButton('Simpan Perubahan', [
-                    'class' => 'btn btn-primary me-2'
-                ]) ?>
-                <?= Html::a('Kembali', ['homepage/edit'], [
-                    'class' => 'btn btn-secondary'
-                ]) ?>
+        <?= $form->field($model, 'image')->fileInput([]) ?>
+
+        <?php if ($model->image): ?>
+            <div class="mb-3 text-center">
+                <img src="/<?= $model->image ?>" class="img-fluid rounded shadow-sm" style="max-width:200px;">
             </div>
+        <?php endif; ?>
+
+        <div class="mt-4">
+            <?= Html::submitButton('Simpan Perubahan', [
+                'class' => 'btn btn-primary me-2'
+            ]) ?>
+            <?= Html::a('Kembali', ['homepage/edit'], [
+                'class' => 'btn btn-secondary'
+            ]) ?>
+        </div>
 
         <?php ActiveForm::end(); ?>
     </div>
