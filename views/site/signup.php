@@ -23,28 +23,29 @@ $this->title = 'Daftar Akun';
             ],
         ]); ?>
 
-            <?= $form->field($model, 'username')->textInput([
-                'autofocus' => true,
-                'placeholder' => 'Username...'
-            ]) ?>
+        <?= $form->field($model, 'username')->textInput([
+            'autofocus' => true,
+            'placeholder' => 'Username...'
+        ]) ?>
 
-            <?= $form->field($model, 'password')->passwordInput([
-                'placeholder' => 'Password...'
-            ]) ?>
+        <?= $form->field($model, 'password')->passwordInput([
+            'placeholder' => 'Password...'
+        ]) ?>
 
-            <?= $form->field($model, 'confirmPassword')->passwordInput([
-                'placeholder' => 'Ulangi Password...'
-            ]) ?>
+        <?= $form->field($model, 'confirmPassword')->passwordInput([
+            'placeholder' => 'Ulangi Password...'
+        ]) ?>
 
-            <div class="mt-4 d-flex justify-content-between">
-                <?= Html::submitButton('Daftar', [
-                    'class' => 'btn btn-success me-2',
-                    'name' => 'signup-button'
-                ]) ?>
-                <?= Html::a('Kembali', ['site/index'], [
-                    'class' => 'btn btn-secondary'
-                ]) ?>
-            </div>
+        <div class="mt-4 d-flex justify-content-between">
+            <?= Html::submitButton('Daftar', [
+                'class' => 'btn btn-primary me-2',
+                'name' => 'login-button'
+            ]) ?>
+        </div>
+
+        <div class="mt-3 text-center">
+            <?= Html::a('Sudah punya akun? Masuk disini', ['site/login']) ?>
+        </div>
 
         <?php ActiveForm::end(); ?>
     </div>

@@ -42,12 +42,9 @@ $this->title = 'Masuk Akun';
         </div>
 
         <div class="mt-4 d-flex justify-content-between">
-            <?= Html::submitButton('Login', [
+            <?= Html::submitButton('Masuk', [
                 'class' => 'btn btn-primary me-2',
                 'name' => 'login-button'
-            ]) ?>
-            <?= Html::a('Kembali', ['site/index'], [
-                'class' => 'btn btn-secondary'
             ]) ?>
         </div>
 
