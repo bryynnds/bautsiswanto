@@ -24,32 +24,36 @@ $this->title = 'Masuk Akun';
             ],
         ]); ?>
 
-            <?= $form->field($model, 'username')->textInput([
-                'autofocus' => true,
-                'placeholder' => 'Username...'
+        <?= $form->field($model, 'username')->textInput([
+            'autofocus' => true,
+            'placeholder' => 'Username...'
+        ]) ?>
+
+        <?= $form->field($model, 'password')->passwordInput([
+            'placeholder' => 'Password...'
+        ]) ?>
+
+        <div class="form-check mb-3">
+            <?= $form->field($model, 'rememberMe')->checkbox([
+                'template' => "{input} {label}\n{error}",
+                'labelOptions' => ['class' => 'form-check-label'],
+                'class' => 'form-check-input'
             ]) ?>
+        </div>
 
-            <?= $form->field($model, 'password')->passwordInput([
-                'placeholder' => 'Password...'
+        <div class="mt-4 d-flex justify-content-between">
+            <?= Html::submitButton('Login', [
+                'class' => 'btn btn-primary me-2',
+                'name' => 'login-button'
             ]) ?>
+            <?= Html::a('Kembali', ['site/index'], [
+                'class' => 'btn btn-secondary'
+            ]) ?>
+        </div>
 
-            <div class="form-check mb-3">
-                <?= $form->field($model, 'rememberMe')->checkbox([
-                    'template' => "{input} {label}\n{error}",
-                    'labelOptions' => ['class' => 'form-check-label'],
-                    'class' => 'form-check-input'
-                ]) ?>
-            </div>
-
-            <div class="mt-4 d-flex justify-content-between">
-                <?= Html::submitButton('Login', [
-                    'class' => 'btn btn-primary me-2',
-                    'name' => 'login-button'
-                ]) ?>
-                <?= Html::a('Kembali', ['site/index'], [
-                    'class' => 'btn btn-secondary'
-                ]) ?>
-            </div>
+        <div class="mt-3 text-center">
+            <?= Html::a('Belum punya akun? Daftar di sini', ['site/signup']) ?>
+        </div>
 
         <?php ActiveForm::end(); ?>
     </div>

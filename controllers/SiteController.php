@@ -104,6 +104,20 @@ class SiteController extends Controller
         ]);
     }
 
+    public function actionSignup()
+    {
+        $model = new \app\models\SignupForm();
+        if ($model->load(Yii::$app->request->post()) && $user = $model->signup()) {
+            Yii::$app->user->login($user);
+            return $this->goHome();
+        }
+
+        return $this->render('signup', [
+            'model' => $model,
+        ]);
+    }
+
+
     /**
      * Logout action.
      *
