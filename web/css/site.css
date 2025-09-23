@@ -185,6 +185,7 @@ body {
 
 .hero-text h1 {
   font-size: 2.5rem;
+  font-weight: bold;
   margin-bottom: 15px;
   color: #006666;
 }
@@ -227,6 +228,7 @@ body {
   text-align: center;
 }
 .produk h2 {
+  font-weight: bold;
   margin-bottom: 40px;
   color: #006666;
 }
@@ -261,6 +263,7 @@ body {
 }
 .card h3 {
   margin: 10px 0 15px;
+  font-weight: bold;
   font-size: 1.2rem;
   text-align: center;
   color: #006666;
@@ -354,6 +357,7 @@ body {
   text-align: center;
 }
 .keunggulan h2 {
+  font-weight: bold;
   margin-bottom: 30px;
   color: #006666;
 }
@@ -376,7 +380,7 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  text-align: left;
+  vertical-align: middle;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -386,6 +390,7 @@ body {
 }
 
 .keunggulan-grid .point h3 {
+  font-weight: bold;
   margin: 10px 0 5px;
   font-size: 1.2rem;
   color: #006666;
@@ -409,6 +414,7 @@ body {
   text-align: center;
 }
 .testimoni h2 {
+  font-weight: bold;
   margin-bottom: 40px;
   color: #006666;
 }
