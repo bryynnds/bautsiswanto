@@ -45,7 +45,8 @@ $dataProvider = new ArrayDataProvider([
         <p><?= $produk->description ?></p>
         
         <!-- <p><strong>Stok:</strong> <?= $produk->stok ?> pcs</p> -->
-        <a href="#" class="btn-beli">Tambah ke keranjang</a>
+        <button class="btn btn-add-cart" data-id="<?= $produk->id ?>">Tambah ke Keranjang</button>
+
       </div>
     <?php endforeach; ?>
   </div>
@@ -76,6 +77,43 @@ $dataProvider = new ArrayDataProvider([
     <?php endforeach; ?>
   </div>
 </section>
+
+<?php
+$addUrl = \yii\helpers\Url::to(['cart/add']);
+$cartUrl = \yii\helpers\Url::to(['cart/index']);
+$csrf = Yii::$app->request->csrfToken;
+$js = <<<JS
+$(document).on('click', '.btn-add-cart', function() {
+    let produkId = $(this).data('id');
+
+    $.ajax({
+        url: '/cart/add',
+        type: 'POST',
+        data: { id: produkId },
+        success: function(response) {
+            // tampilkan toast
+            let toastEl = document.getElementById('cartToast');
+            let toast = new bootstrap.Toast(toastEl, { delay: 2000 }); // hilang otomatis 2 detik
+            toast.show();
+        },
+        error: function() {
+            alert("Silahkan login terlebih dahulu untuk menambahkan ke keranjang.");
+        }
+    });
+});
+
+$(".btn-add-cart").click(function() {
+    var produkId = $(this).data("id");
+    $.post("$addUrl", {produk_id: produkId, _csrf: "$csrf"}, function(res) {
+        if(res.success) {
+            $("#cart-count").text(res.count);
+        }
+    });
+});
+JS;
+$this->registerJs($js);
+?>
+
 
 <?php
 $js = <<<JS

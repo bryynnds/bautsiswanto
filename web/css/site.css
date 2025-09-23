@@ -284,6 +284,21 @@ body {
 .card .btn-beli:hover {
   background: #004d4d;
 }
+
+.card .btn-add-cart {
+  display: block;
+  text-align: center;
+  background: #006666;
+  color: #fff;
+  margin-top: 8px;
+  padding: 10px;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background 0.3s ease;
+}
+.card .btn-add-cart:hover {
+  background: #004d4d;
+}
 .card:hover {
   transform: translateY(-5px);
   box-shadow: 0 8px 20px rgba(0,0,0,0.15);

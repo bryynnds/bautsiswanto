@@ -1,0 +1,171 @@
+<?php
+
+namespace app\controllers;
+
+use Yii;
+use yii\web\Controller;
+use yii\web\Response;
+use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
+use app\models\Keranjang;
+use app\models\HomepageProduk;
+
+class CartController extends Controller
+{
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::class,
+                // daftarkan semua action yang butuh proteksi @ (login)
+                'only' => ['index', 'add', 'update', 'clear', 'delete', 'update-qty', 'checkout'],
+                'rules' => [
+                    ['allow' => true, 'roles' => ['@']],
+                ],
+            ],
+            'verbs' => [
+                'class' => VerbFilter::class,
+                'actions' => [
+                    'add'        => ['post'],
+                    'update'     => ['post'],
+                    'clear'      => ['post'],
+                    'delete'     => ['post'],
+                    'update-qty' => ['post'],
+                    // checkout biasanya GET (render form)
+                ],
+            ],
+        ];
+    }
+
+    public function actionIndex()
+    {
+        $userId = Yii::$app->user->id;
+        $items = Keranjang::find()->where(['user_id' => $userId])->with('produk')->all();
+        return $this->render('index', ['items' => $items]);
+    }
+
+    public function actionAdd()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        if (Yii::$app->user->isGuest) {
+            return ['success' => false, 'error' => 'not_logged_in'];
+        }
+
+        $produkId = Yii::$app->request->post('produk_id');
+        $produk = HomepageProduk::findOne($produkId);
+        if (!$produk) {
+            return ['success' => false, 'error' => 'produk_not_found'];
+        }
+
+        if ($produk->stok < 1) {
+            return ['success' => false, 'error' => 'out_of_stock'];
+        }
+
+        $cart = Keranjang::findOne(['user_id' => Yii::$app->user->id, 'produk_id' => $produkId]);
+        if ($cart) {
+            $cart->jumlah += 1;
+        } else {
+            $cart = new Keranjang();
+            $cart->user_id = Yii::$app->user->id;
+            $cart->produk_id = $produkId;
+            $cart->jumlah = 1;
+        }
+
+        if ($cart->save()) {
+            $count = (int)Keranjang::find()->where(['user_id' => Yii::$app->user->id])->sum('jumlah');
+            return ['success' => true, 'count' => $count];
+        }
+
+        return ['success' => false, 'errors' => $cart->getErrors()];
+    }
+
+    public function actionUpdate($id)
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $cart = Keranjang::findOne($id);
+        if (!$cart || $cart->user_id != Yii::$app->user->id) return ['success' => false];
+
+        $jumlah = (int)Yii::$app->request->post('jumlah', 1);
+        if ($jumlah < 1) $jumlah = 1;
+        if ($cart->produk && $jumlah > $cart->produk->stok) {
+            return ['success' => false, 'error' => 'exceeds_stock'];
+        }
+
+        $cart->jumlah = $jumlah;
+        if ($cart->save()) {
+            $total = (int)Keranjang::find()->where(['user_id' => Yii::$app->user->id])->sum('jumlah');
+            return ['success' => true, 'count' => $total];
+        }
+
+        return ['success' => false, 'errors' => $cart->getErrors()];
+    }
+
+    public function actionClear()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        Keranjang::deleteAll(['user_id' => Yii::$app->user->id]);
+        return ['success' => true, 'grandTotal' => 0];
+    }
+
+    // untuk update qty (dipakai oleh plus/minus)
+    public function actionUpdateQty()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $id = Yii::$app->request->post('id');       // id keranjang
+        $qty = (int)Yii::$app->request->post('qty');     // jumlah baru
+
+        $item = Keranjang::findOne($id);
+        if ($item && $qty > 0 && $item->user_id == Yii::$app->user->id) {
+            $item->jumlah = $qty;
+            if ($item->save()) {
+                $harga = $item->produk->harga;
+                $subtotal = $harga * $qty;
+
+                // hitung grand total
+                $total = 0;
+                $items = Keranjang::find()->where(['user_id' => Yii::$app->user->id])->all();
+                foreach ($items as $i) {
+                    $total += $i->produk->harga * $i->jumlah;
+                }
+
+                return [
+                    'success'    => true,
+                    'subtotal'   => $subtotal,
+                    'grandTotal' => $total
+                ];
+            }
+        }
+        return ['success' => false];
+    }
+
+    // hapus 1 item
+    public function actionDelete()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $id = Yii::$app->request->post('id');
+        $item = Keranjang::findOne($id);
+
+        if ($item && $item->user_id == Yii::$app->user->id) {
+            $item->delete();
+
+            // recalc grand total
+            $total = 0;
+            $items = Keranjang::find()->where(['user_id' => Yii::$app->user->id])->all();
+            foreach ($items as $i) {
+                $total += $i->produk->harga * $i->jumlah;
+            }
+
+            return ['success' => true, 'grandTotal' => $total];
+        }
+
+        return ['success' => false, 'error' => 'not_found'];
+    }
+
+    // halaman checkout (GET)
+    public function actionCheckout()
+    {
+        // nanti tambah logic form / penyimpanan order
+        return $this->render('checkout');
+    }
+}
