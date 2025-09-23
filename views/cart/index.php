@@ -15,7 +15,7 @@ $checkoutUrl = Url::to(['cart/checkout']);
 $csrf       = Yii::$app->request->csrfToken;
 ?>
 
-<div class="container mt-4">
+<div class="container mt-5">
     <section class="keranjang loading">
         <h2><?= Html::encode($this->title) ?></h2>
 
@@ -88,6 +88,16 @@ $csrf       = Yii::$app->request->csrfToken;
             </div>
         <?php endif; ?>
     </section>
+    <div class="toast-container position-fixed bottom-0 start-0 p-3">
+        <div id="cartToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body" id="toast-message">
+                    <!-- pesan akan diisi dari JS -->
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
 </div>
 
 
@@ -143,6 +153,20 @@ $(document).on('click', '.plus, .minus', function(e){
     });
 });
 
+function showToast(message, callback) {
+    $('#toast-message').text(message);
+
+    var toastEl = document.getElementById('cartToast');
+    var bsToast = new bootstrap.Toast(toastEl, { delay: 500 });
+
+    toastEl.addEventListener('hidden.bs.toast', function () {
+        if (typeof callback === 'function') callback();
+    }, { once: true });
+
+    bsToast.show();
+}
+
+
 // delete per item (AJAX)
 $(document).on('click', '.delete-item', function(e){
     e.preventDefault();
@@ -164,9 +188,12 @@ $(document).on('click', '.delete-item', function(e){
                 row.remove();
                 // jika sudah tidak ada item tersisa -> refresh ke halaman keranjang kosong
                 if ($('tbody tr').length === 0) {
-                    location.reload();
+                    showToast('Produk dihapus dari keranjang', function(){
+                        location.reload();
+                    });
                 } else {
                     $('#grand-total').text(formatRupiah(res.grandTotal));
+                    showToast('Produk dihapus dari keranjang');
                 }
             } else {
                 alert('Gagal menghapus item');
@@ -194,7 +221,10 @@ $(document).on('click', '#clear-cart', function(e){
         success: function(res) {
             if (res && res.success) {
                 // langsung reload biar tampil versi keranjang kosong
-                location.reload();
+                showToast('Keranjang dikosongkan', function(){
+                    location.reload();
+                });
+                
             } else {
                 alert('Gagal mengosongkan keranjang');
             }
