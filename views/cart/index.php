@@ -16,82 +16,80 @@ $csrf       = Yii::$app->request->csrfToken;
 ?>
 
 <div class="container mt-4">
-    <h2><?= Html::encode($this->title) ?></h2>
+    <section class="keranjang loading">
+        <h2><?= Html::encode($this->title) ?></h2>
 
-    <table class="table table-bordered align-middle text-center">
-        <thead class="table-light">
-            <tr>
-                <th>Aksi</th>
-                <th>Gambar</th>
-                <th>Produk</th>
-                <th>Harga</th>
-                <th>Jumlah</th>
-                <th>Subtotal</th>
-                
-            </tr>
-        </thead>
-        <tbody>
-            <?php $grandTotal = 0; ?>
-            <?php foreach ($items as $item): ?>
-                <?php
-                $produk = $item->produk;
-                if (!$produk) continue;
-                $harga = (int)$produk->harga;
-                $subtotal = $harga * (int)$item->jumlah;
-                $grandTotal += $subtotal;
-                ?>
-                <tr data-id="<?= (int)$item->id ?>" data-harga="<?= $harga ?>">
-                    <td>
-                        <button class="btn btn-danger btn-sm delete-item">Hapus</button>
-                    </td>
-                    <td>
-                        <img src="<?= Html::encode(Yii::getAlias('@web/' . $produk->image)) ?>"
-                            alt="<?= Html::encode($produk->title) ?>"
-                            class="img-thumbnail" style="width:100px;">
-                    </td>
-                    <td class="text-start"><?= Html::encode($produk->title) ?></td>
-                    <td>Rp <?= number_format($harga, 0, ',', '.') ?></td>
-                    <td>
-                        <div class="d-flex justify-content-center align-items-center">
-                            <button class="btn btn-outline-secondary btn-sm minus">-</button>
-                            <input type="text" class="form-control mx-1 text-center qty"
-                                value="<?= (int)$item->jumlah ?>" style="width: 60px;" readonly>
-                            <button class="btn btn-outline-secondary btn-sm plus">+</button>
-                        </div>
-                    </td>
-                    <td class="subtotal">Rp <?= number_format($subtotal, 0, ',', '.') ?></td>
-                </tr>
-            <?php endforeach; ?>
+        <?php if (!empty($items)): ?>
+            <div class="cart-table-wrapper">
+                <table class="cart-table">
+                    <thead>
+                        <tr>
+                            <th>Aksi</th>
+                            <th>Gambar</th>
+                            <th>Produk</th>
+                            <th>Harga</th>
+                            <th>Jumlah</th>
+                            <th>Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php $grandTotal = 0; ?>
+                        <?php foreach ($items as $item): ?>
+                            <?php
+                            $produk = $item->produk;
+                            if (!$produk) continue;
+                            $harga = (int)$produk->harga;
+                            $subtotal = $harga * (int)$item->jumlah;
+                            $grandTotal += $subtotal;
+                            ?>
+                            <tr data-id="<?= (int)$item->id ?>" data-harga="<?= $harga ?>">
+                                <td>
+                                    <button class="btn-hapus delete-item">Hapus</button>
+                                </td>
+                                <td>
+                                    <img src="<?= Html::encode(Yii::getAlias('@web/' . $produk->image)) ?>"
+                                        alt="<?= Html::encode($produk->title) ?>"
+                                        class="cart-img">
+                                </td>
+                                <td><?= Html::encode($produk->title) ?></td>
+                                <td>Rp <?= number_format($harga, 0, ',', '.') ?></td>
+                                <td>
+                                    <div class="qty-control">
+                                        <button class="btn-qty minus">-</button>
+                                        <input type="text" class="qty" value="<?= (int)$item->jumlah ?>" readonly>
+                                        <button class="btn-qty plus">+</button>
+                                    </div>
+                                </td>
+                                <td class="subtotal">Rp <?= number_format($subtotal, 0, ',', '.') ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th colspan="5" class="text-end">Total</th>
+                            <th id="grand-total">Rp <?= number_format($grandTotal, 0, ',', '.') ?></th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
 
-            <?php if (count($items) === 0): ?>
-                <tr>
-                    <td colspan="6">Keranjang kosong</td>
-                </tr>
-            <?php endif; ?>
-        </tbody>
-        <tfoot>
-            <tr>
-                <th colspan="5" class="text-end">Total</th>
-                <th id="grand-total">Rp <?= number_format($grandTotal, 0, ',', '.') ?></th>
-            </tr>
-        </tfoot>
-    </table>
+            <div class="cart-actions">
+                <?= Html::button('Kosongkan Keranjang', [
+                    'class' => 'btn-clear',
+                    'id' => 'clear-cart'
+                ]) ?>
 
-    <!-- tombol berada di luar table, kiri = kosongkan, kanan = beli -->
-    <div class="d-flex justify-content-between mt-3">
-        <div>
-            <?= Html::button('Kosongkan Keranjang', [
-                'class' => 'btn btn-warning',
-                'id' => 'clear-cart'
-            ]) ?>
-        </div>
-
-        <div>
-            <?= Html::a('Beli', $checkoutUrl, ['class' => 'btn btn-success', 'id' => 'btn-checkout']) ?>
-        </div>
-    </div>
-
+                <?= Html::a('Beli', $checkoutUrl, ['class' => 'btn-checkout', 'id' => 'btn-checkout']) ?>
+            </div>
+        <?php else: ?>
+            <div class="cart-empty text-center">
+                <p>Keranjang Anda kosong.</p>
+                <?= Html::a('Belanja Sekarang', ['site/index'], ['class' => 'btn-checkout']) ?>
+            </div>
+        <?php endif; ?>
+    </section>
 </div>
+
 
 <?php
 $script = <<<JS
@@ -164,14 +162,14 @@ $(document).on('click', '.delete-item', function(e){
         success: function(res) {
             if (res && res.success) {
                 row.remove();
-                $('#grand-total').text(formatRupiah(res.grandTotal));
-
-                // jika kosong, tampilkan pesan kosong
+                // jika sudah tidak ada item tersisa -> refresh ke halaman keranjang kosong
                 if ($('tbody tr').length === 0) {
-                    $('tbody').append('<tr><td colspan="6">Keranjang kosong</td></tr>');
+                    location.reload();
+                } else {
+                    $('#grand-total').text(formatRupiah(res.grandTotal));
                 }
             } else {
-                alert('Gagal menghapus item: ' + (res && res.error ? res.error : 'Unknown'));
+                alert('Gagal menghapus item');
             }
         },
         error: function(xhr, status, err) {
@@ -195,10 +193,8 @@ $(document).on('click', '#clear-cart', function(e){
         },
         success: function(res) {
             if (res && res.success) {
-                // kosongkan tbody dan update total
-                $('tbody').empty();
-                $('tbody').append('<tr><td colspan="6">Keranjang kosong</td></tr>');
-                $('#grand-total').text(formatRupiah(0));
+                // langsung reload biar tampil versi keranjang kosong
+                location.reload();
             } else {
                 alert('Gagal mengosongkan keranjang');
             }
@@ -209,6 +205,7 @@ $(document).on('click', '#clear-cart', function(e){
         }
     });
 });
+
 JS;
 
 $this->registerJs($script, \yii\web\View::POS_END);
