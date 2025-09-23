@@ -164,8 +164,49 @@ class CartController extends Controller
 
     // halaman checkout (GET)
     public function actionCheckout()
-    {
-        // nanti tambah logic form / penyimpanan order
-        return $this->render('checkout');
+{
+    $userId = Yii::$app->user->id;
+    $cartItems = Keranjang::find()->where(['user_id' => $userId])->all();
+
+    if (Yii::$app->request->isPost) {
+        $post = Yii::$app->request->post();
+
+        // hitung total
+        $total = 0;
+        foreach ($cartItems as $item) {
+            $total += $item->produk->harga * $item->jumlah;
+        }
+
+        // simpan orders
+        $order = new \app\models\Order();
+        $order->user_id = $userId;
+        $order->nama = $post['nama'];
+        $order->no_hp = $post['no_hp'];
+        $order->alamat = $post['alamat'];
+        $order->metode_pembayaran = $post['metode_pembayaran'];
+        $order->total = $total;
+
+        if ($order->save()) {
+            foreach ($cartItems as $item) {
+                $orderItem = new \app\models\OrderItem();
+                $orderItem->order_id = $order->id;
+                $orderItem->produk_id = $item->produk_id;   
+                $orderItem->qty = $item->jumlah;
+                $orderItem->harga = $item->produk->harga;
+                $orderItem->subtotal = $item->produk->harga * $item->jumlah;
+                $orderItem->save();
+            }
+
+            // kosongkan keranjang
+            Keranjang::deleteAll(['user_id' => $userId]);
+
+            return $this->redirect(['site/index']);
+        }
     }
+
+    return $this->render('checkout', [
+        'items' => $cartItems,
+    ]);
+}
+
 }

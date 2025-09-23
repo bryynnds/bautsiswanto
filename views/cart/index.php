@@ -1,4 +1,5 @@
 <?php
+
 use yii\helpers\Html;
 use yii\helpers\Url;
 
@@ -10,7 +11,7 @@ $this->title = 'Keranjang Saya';
 $updateUrl  = Url::to(['cart/update-qty']);
 $deleteUrl  = Url::to(['cart/delete']);
 $clearUrl   = Url::to(['cart/clear']);
-$checkoutUrl= Url::to(['cart/checkout']);
+$checkoutUrl = Url::to(['cart/checkout']);
 $csrf       = Yii::$app->request->csrfToken;
 ?>
 
@@ -20,12 +21,13 @@ $csrf       = Yii::$app->request->csrfToken;
     <table class="table table-bordered align-middle text-center">
         <thead class="table-light">
             <tr>
+                <th>Aksi</th>
                 <th>Gambar</th>
                 <th>Produk</th>
                 <th>Harga</th>
                 <th>Jumlah</th>
                 <th>Subtotal</th>
-                <th>Aksi</th>
+                
             </tr>
         </thead>
         <tbody>
@@ -40,9 +42,12 @@ $csrf       = Yii::$app->request->csrfToken;
                 ?>
                 <tr data-id="<?= (int)$item->id ?>" data-harga="<?= $harga ?>">
                     <td>
+                        <button class="btn btn-danger btn-sm delete-item">Hapus</button>
+                    </td>
+                    <td>
                         <img src="<?= Html::encode(Yii::getAlias('@web/' . $produk->image)) ?>"
-                             alt="<?= Html::encode($produk->title) ?>"
-                             class="img-thumbnail" style="width:100px;">
+                            alt="<?= Html::encode($produk->title) ?>"
+                            class="img-thumbnail" style="width:100px;">
                     </td>
                     <td class="text-start"><?= Html::encode($produk->title) ?></td>
                     <td>Rp <?= number_format($harga, 0, ',', '.') ?></td>
@@ -50,21 +55,26 @@ $csrf       = Yii::$app->request->csrfToken;
                         <div class="d-flex justify-content-center align-items-center">
                             <button class="btn btn-outline-secondary btn-sm minus">-</button>
                             <input type="text" class="form-control mx-1 text-center qty"
-                                   value="<?= (int)$item->jumlah ?>" style="width: 60px;" readonly>
+                                value="<?= (int)$item->jumlah ?>" style="width: 60px;" readonly>
                             <button class="btn btn-outline-secondary btn-sm plus">+</button>
                         </div>
                     </td>
                     <td class="subtotal">Rp <?= number_format($subtotal, 0, ',', '.') ?></td>
-                    <td>
-                        <button class="btn btn-danger btn-sm delete-item">Hapus</button>
-                    </td>
                 </tr>
             <?php endforeach; ?>
 
             <?php if (count($items) === 0): ?>
-                <tr><td colspan="6">Keranjang kosong</td></tr>
+                <tr>
+                    <td colspan="6">Keranjang kosong</td>
+                </tr>
             <?php endif; ?>
         </tbody>
+        <tfoot>
+            <tr>
+                <th colspan="5" class="text-end">Total</th>
+                <th id="grand-total">Rp <?= number_format($grandTotal, 0, ',', '.') ?></th>
+            </tr>
+        </tfoot>
     </table>
 
     <!-- tombol berada di luar table, kiri = kosongkan, kanan = beli -->
