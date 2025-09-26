@@ -98,6 +98,7 @@ $this->title = 'Dashboard Admin';
         <h3>Daftar Order</h3>
         <div class="dashboard-card">
             <?= GridView::widget([
+                'summary' => false,
                 'dataProvider' => $orderDataProvider,
                 'tableOptions' => ['class' => 'cart-table'],
                 'columns' => [
