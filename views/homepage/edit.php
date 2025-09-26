@@ -7,7 +7,7 @@ $this->title = 'Admin - Ubah Halaman Beranda';
 
 <section class="edit-section loading">
   <div class="container">
-    <h2 class="section-title">Ubah Halaman Beranda</h2>
+    <!-- <h2 class="section-title">Ubah Halaman Beranda</h2> -->
 
     <div class="edit-tabs">
       <?= Tabs::widget([
