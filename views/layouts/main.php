@@ -56,8 +56,9 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
             ];
         } elseif (Yii::$app->user->identity->isAdmin()) {
             $menuItems = [
-                ['label' => 'Beranda Admin', 'url' => ['/admin/dashboard']],
-                ['label' => 'Ubah Beranda User', 'url' => ['/homepage/edit']],
+                ['label' => 'Beranda', 'url' => ['/admin/dashboard']],
+                ['label' => 'Kasir', 'url' => ['/admin/calculator']],
+                ['label' => 'CMS Beranda', 'url' => ['/homepage/edit']],
                 '<li class="nav-item">'
                     . Html::beginForm(['/site/logout'])
                     . Html::submitButton(
