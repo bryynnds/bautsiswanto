@@ -250,17 +250,18 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  text-align: left;
+  text-align: center;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-.card img.produk-img {
-  width: 100%;
-  height: 200px;
-  aspect-ratio: 1 / 1; /* kotak 1:1 */
+
+.card .produk-img {
+  width: 50%;
+  height: 120px;
   object-fit: cover; /* crop rapi */
-  border-radius: 10px;
-  margin-bottom: 15px;
+  border-radius: 8px;
+  margin : 15px auto;
 }
+
 .card h3 {
   margin: 10px 0 15px;
   font-weight: bold;
@@ -832,4 +833,109 @@ html {
     background: #fafafa;
     border-radius: 6px;
     border: 1px dashed #ccc;
+}
+
+/* Dashboard */
+.dashboard {
+  margin-bottom: 40px;
+}
+
+.dashboard h3 {
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #006666;
+}
+
+.dashboard h2 {
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 30px;
+  color: #006666;
+}
+
+.statistik-wrapper {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
+}
+.statistik-card {
+  flex: 1;
+  min-width: 180px;
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+.statistik-card h3 {
+  color: #333;
+  margin-bottom: 10px;
+}
+.statistik-card .angka {
+  font-size: 24px;
+  font-weight: bold;
+  color: #006666;
+}
+
+.dashboard-card {
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 30px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.produkunggulan-card {
+  padding: 20px;
+  margin-bottom: 30px;
+}
+
+.dashboard-card h3 {
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #006666;
+}
+
+
+.produk-card {
+  flex: 0 1 calc(33.333% - 20px);
+  max-width: 300px;
+  background: #fff;
+  border-radius: 15px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.produk-card h4 {
+  margin: 10px 0 15px;
+  font-weight: bold;
+  font-size: 1.2rem;
+  text-align: center;
+  color: #006666;
+}
+
+.produk-card p {
+  flex-grow: 1; /* isi teks dorong tombol ke bawah */
+  margin-bottom: 3px;
+  text-align: center;
+}
+
+.produk-card .harga {
+  font-weight: bold;
+  color: #006666;
+}
+.produk-img {
+  width: 50%;
+  max-height: 120px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+.produk-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
