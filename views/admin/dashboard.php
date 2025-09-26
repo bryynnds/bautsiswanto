@@ -26,9 +26,9 @@ $this->title = 'Dashboard Admin';
 ?>
 
 <div class="container mt-5">
+
     <section class="dashboard">
         <!-- <h2><?= Html::encode($this->title) ?></h2> -->
-
         <!-- Statistik Singkat -->
         <div class="statistik-wrapper">
             <div class="statistik-card">
@@ -55,7 +55,7 @@ $this->title = 'Dashboard Admin';
                             <?php if ($p['image']): ?>
                                 <img src="<?= Yii::getAlias('@web') ?>/<?= ($p['image']) ?>" alt="<?= ($p['title']) ?>" class="produk-img">
                             <?php endif; ?>
-                            
+
                             <p class="harga">Rp <?= number_format($p['harga'], 0, ',', '.') ?></p>
                             <p>Terjual: <strong><?= $p['jumlah_terjual'] ?></strong></p>
                         </div>
@@ -94,7 +94,7 @@ $this->title = 'Dashboard Admin';
             </table>
         </div>
 
-        
+
         <h3>Daftar Order</h3>
         <div class="dashboard-card">
             <?= GridView::widget([
@@ -118,15 +118,18 @@ $this->title = 'Dashboard Admin';
         </div>
 
         <!-- Grafik -->
-        <div class="dashboard-card">
-            <h3>Grafik Produk Terlaris</h3>
-            <canvas id="pieChart"></canvas>
+        <div class="graphic-wrapper">
+            <div class="graphic-card">
+                <h3>Grafik Produk Terlaris</h3>
+                <canvas id="pieChart"></canvas>
+            </div>
+
+            <div class="graphic-card">
+                <h3>Grafik Penjualan Per Bulan</h3>
+                <canvas id="lineChart"></canvas>
+            </div>
         </div>
 
-        <div class="dashboard-card">
-            <h3>Grafik Penjualan Per Bulan</h3>
-            <canvas id="lineChart"></canvas>
-        </div>
     </section>
 </div>
 
