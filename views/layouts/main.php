@@ -58,6 +58,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
             $menuItems = [
                 ['label' => 'Beranda', 'url' => ['/admin/dashboard']],
                 ['label' => 'Kasir', 'url' => ['/admin/calculator']],
+                ['label' => 'Riwayat Belanja', 'url' => ['/admin/history']],
                 ['label' => 'CMS Beranda', 'url' => ['/homepage/edit']],
                 '<li class="nav-item">'
                     . Html::beginForm(['/site/logout'])

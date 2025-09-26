@@ -9,6 +9,7 @@ use app\models\HomepageProduk;
 use app\models\Order;
 use app\models\OrderItems;
 use app\models\User;
+use yii\web\Response;
 
 class AdminController extends Controller
 {
@@ -75,5 +76,80 @@ class AdminController extends Controller
         return $this->render('calculator', [
             'produks' => $produks,
         ]);
+    }
+
+    public function actionHistory()
+    {
+        // ambil list user role user
+        $users = \app\models\User::find()
+            ->where(['role' => 'user'])
+            ->all();
+
+        return $this->render('history', [
+            'users' => $users,
+        ]);
+    }
+
+    public function actionGetHistory($user_id = null)
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        try {
+            // proteksi role admin
+            if (Yii::$app->user->isGuest || Yii::$app->user->identity->role !== 'admin') {
+                throw new \yii\web\ForbiddenHttpException('Anda tidak memiliki akses.');
+            }
+
+            if ($user_id === null || !is_numeric($user_id)) {
+                return ['success' => false, 'message' => 'Parameter user_id tidak valid', 'data' => []];
+            }
+
+            // cari class model Order (beberapa project pakai Order atau Orders)
+            if (class_exists('\app\models\Orders')) {
+                $orderClass = '\app\models\Orders';
+            } elseif (class_exists('\app\models\Order')) {
+                $orderClass = '\app\models\Order';
+            } else {
+                throw new \Exception('Model Order/Orders tidak ditemukan di app\\models.');
+            }
+
+            // lakukan query aman, pakai with() bila relasi benar
+            $orders = $orderClass::find()
+                ->where(['user_id' => (int)$user_id])
+                ->with(['items.produk', 'user']) // pastikan relasi ini ada: getOrderItems(), getProduk(), getUser()
+                ->orderBy(['created_at' => SORT_DESC])
+                ->all();
+
+            $result = [];
+            foreach ($orders as $order) {
+                // fallback: ambil user jika relasi user kosong
+                $theUser = $order->user ?? User::findOne($order->user_id);
+
+                foreach ($order->items as $item) {
+                    $result[] = [
+                        'username' => $theUser ? $theUser->username : null,
+                        'nama'     => $order->nama,
+                        'produk'   => $item->produk ? $item->produk->title : ($item->produk_id ?? '-'),
+                        'harga'    => number_format($item->harga, 0, ',', '.'),
+                        'qty'      => (int)$item->qty,
+                        'subtotal' => number_format($item->subtotal, 0, ',', '.'),
+                        'tanggal'  => Yii::$app->formatter->asDatetime($item->created_at, 'php:d-m-Y'), // format tanggal
+                    ];
+                }
+            }
+
+            return ['success' => true, 'data' => $result];
+
+        } catch (\Throwable $e) {
+            // log lengkap supaya bisa dilacak di runtime/logs/app.log
+            Yii::error("actionGetHistory error: " . $e->getMessage() . "\n" . $e->getTraceAsString(), __METHOD__);
+
+            // kembalikan pesan singkat (jangan expose stack trace di production)
+            return [
+                'success' => false,
+                'message' => 'Terjadi kesalahan pada server: ' . $e->getMessage(),
+                'data' => []
+            ];
+        }
     }
 }
