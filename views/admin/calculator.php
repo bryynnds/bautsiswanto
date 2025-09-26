@@ -12,7 +12,7 @@ $this->title = 'Kalkulator Kasir';
             <!-- Kiri: Kasir -->
             <div class="col-md-6">
                 <div class="dashboard-card p-3">
-                    <h4>Pilih Produk</h4>
+                    <h3>Pilih Produk</h3>
                     <div class="row g-2">
                         <div class="col-md-7">
                             <select id="productSelect" class="form-select">
@@ -42,7 +42,7 @@ $this->title = 'Kalkulator Kasir';
             <!-- Kanan: Kalkulator Sederhana -->
             <div class="col-md-6">
                 <div class="dashboard-card p-3">
-                    <h4>Kalkulator</h4>
+                    <h3>Kalkulator</h3>
                     <input type="text" id="calcInput" class="form-control mb-2" readonly>
                     <div class="row g-2">
                         <?php
