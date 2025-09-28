@@ -31,6 +31,42 @@ $dataProvider = new ArrayDataProvider([
   </div>
 </section>
 
+<!-- Promo Section -->
+<section class="promo loading" id="promo">
+  <h2>Promo Spesial</h2>
+  <div id="promoCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="4000" data-bs-pause="hover">
+
+    <!-- Slides -->
+    <div class="carousel-inner">
+      <?php foreach ($promos as $index => $promo): ?>
+        <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>">
+          <div class="card mx-auto" style="max-width: 800px;">
+            <img src="<?= Yii::getAlias('@web') ?>/<?= $promo->image ?>" class="card-img-top" alt="<?= $promo->title ?>">
+            <div class="card-body text-center">
+              <h3 class="card-title"><?= $promo->title ?></h3>
+              <p class="card-text">
+                <?= Yii::$app->formatter->asDate($promo->start_date, 'php:d F Y') ?>
+                –
+                <?= Yii::$app->formatter->asDate($promo->end_date, 'php:d F Y') ?>
+              </p>
+            </div>
+          </div>
+        </div>
+      <?php endforeach; ?>
+    </div>
+
+    <!-- Indicators (Dots) di luar card -->
+    <div class="carousel-indicators mt-1">
+      <?php foreach ($promos as $index => $promo): ?>
+        <button type="button" data-bs-target="#promoCarousel" data-bs-slide-to="<?= $index ?>"
+          class="<?= $index === 0 ? 'active' : '' ?>" aria-current="<?= $index === 0 ? 'true' : 'false' ?>"
+          aria-label="Slide <?= $index + 1 ?>"></button>
+      <?php endforeach; ?>
+    </div>
+  </div>
+</section>
+
+
 
 
 <!-- Produk Unggulan -->
@@ -43,7 +79,7 @@ $dataProvider = new ArrayDataProvider([
         <p>Rp <?= number_format($produk->harga, 0, ',', '.') ?></p>
         <img src="<?= Yii::getAlias('@web') ?>/<?= $produk->image ?>" alt="<?= $produk->title ?>" class="produk-img">
         <p><?= $produk->description ?></p>
-        
+
         <!-- <p><strong>Stok:</strong> <?= $produk->stok ?> pcs</p> -->
         <button class="btn btn-add-cart" data-id="<?= $produk->id ?>">Tambah ke Keranjang</button>
 

@@ -11,6 +11,7 @@ use app\models\HomepageProduk;
 use app\models\HomepageKeunggulan;
 use app\models\HomepageTestimoni;
 use yii\filters\AccessControl;
+use app\models\HomepagePromo;
 
 class HomepageController extends Controller
 {
@@ -42,6 +43,7 @@ class HomepageController extends Controller
         $produks = HomepageProduk::find()->all();
         $keunggulans = HomepageKeunggulan::find()->all();
         $testimonis = HomepageTestimoni::find()->all();
+        $promos = HomepagePromo::find()->all(); // ambil semua promo
 
         return $this->render('edit', [
             'hero' => $hero,
@@ -51,7 +53,60 @@ class HomepageController extends Controller
             'keunggulans' => $keunggulans,
             'newTestimoni' => new HomepageTestimoni(),
             'testimonis' => $testimonis,
+            'newPromo' => new HomepagePromo(), // instance baru untuk form tambah
+            'promos' => $promos, // passing semua promo
         ]);
+    }
+
+
+    public function actionCreatePromo()
+    {
+        $model = new HomepagePromo();
+
+        if ($model->load(Yii::$app->request->post())) {
+            $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
+            if ($model->upload() && $model->save(false)) {
+                Yii::$app->session->setFlash('success', 'Promo berhasil ditambahkan.');
+                return $this->redirect(['edit']);
+            }
+        }
+
+        Yii::$app->session->setFlash('error', 'Gagal menambahkan promo.');
+        return $this->redirect(['edit']);
+    }
+
+    public function actionUpdatePromo($id)
+    {
+        $model = HomepagePromo::findOne($id);
+
+        if (!$model) {
+            throw new NotFoundHttpException("Promo tidak ditemukan.");
+        }
+
+        if ($model->load(Yii::$app->request->post())) {
+            $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
+            if ($model->upload() && $model->save(false)) {
+                Yii::$app->session->setFlash('success', 'Promo berhasil diperbarui.');
+                return $this->redirect(['edit']);
+            }
+        }
+
+        return $this->render('update_promo', [
+            'model' => $model,
+        ]);
+    }
+
+    public function actionDeletePromo($id)
+    {
+        $model = HomepagePromo::findOne($id);
+        if ($model) {
+            if ($model->image && file_exists(Yii::getAlias('@webroot') . '/' . $model->image)) {
+                @unlink(Yii::getAlias('@webroot') . '/' . $model->image);
+            }
+            $model->delete();
+            Yii::$app->session->setFlash('success', 'Promo berhasil dihapus.');
+        }
+        return $this->redirect(['edit']);
     }
 
     public function actionEditHero()

@@ -13,6 +13,7 @@ use app\models\HomepageHero;
 use app\models\HomepageProduk;
 use app\models\HomepageKeunggulan;
 use app\models\HomepageTestimoni;
+use app\models\HomepagePromo;
 
 class SiteController extends Controller
 {
@@ -69,12 +70,14 @@ class SiteController extends Controller
         $produks = HomepageProduk::find()->all();
         $keunggulans = HomepageKeunggulan::find()->all();
         $testimonis = HomepageTestimoni::find()->all();
+        $promos = HomepagePromo::find()->all();
 
         return $this->render('index', [
             'hero' => $hero,
             'produks' => $produks,
             'keunggulans' => $keunggulans,
             'testimonis' => $testimonis,
+            'promos' => $promos,
         ]);
     }
 
