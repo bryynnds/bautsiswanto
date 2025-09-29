@@ -43,28 +43,44 @@ if (!is_object($model)) {
 <?php ActiveForm::end(); ?>
 
 <hr>
-<h3>Daftar Produk</h3>
-<div class="produk-grid produk-admin">
-    <?php foreach ($produks as $p): ?>
-        <div class="card">
-
-
-            <h3><?= Html::encode($p->title) ?></h3>
-            <?php if ($p->image): ?>
-                <img src="<?= Yii::getAlias('@web') ?>/<?= $p->image ?>" alt="<?= $p->title ?>" class="produk-img">
-            <?php endif; ?>
-            <p><?= Html::encode($p->description) ?></p>
-            <p>Rp <?= number_format($p->harga, 0, ',', '.') ?></p>
-            <p><strong>Stok:</strong> <?= $p->stok ?> pcs</p>
-
-            <div class="btn-wrapper">
-                <?= Html::a('Edit', ['homepage/update-produk', 'id' => $p->id], ['class' => 'btn-edit']) ?>
-                <?= Html::a('Hapus', ['homepage/delete-produk', 'id' => $p->id], [
-                    'class' => 'btn-hapus',
-                    'data' => ['confirm' => 'Yakin hapus produk ini?']
-                ]) ?>
-            </div>
-
-        </div>
-    <?php endforeach; ?>
+<div class="promo-card">
+    <h3>Daftar Produk</h3>
+    <table class="cart-table">
+        <thead>
+            <tr>
+                <th>Gambar</th>
+                <th>Nama Produk</th>
+                <th>Deskripsi</th>
+                <th>Harga</th>
+                <th>Stok</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($produks as $p): ?>
+                <tr>
+                    <td>
+                        <?php if ($p->image): ?>
+                            <img src="<?= Yii::getAlias('@web') ?>/<?= $p->image ?>"
+                                alt="<?= Html::encode($p->title) ?>"
+                                class="cart-img">
+                        <?php endif; ?>
+                    </td>
+                    <td><?= Html::encode($p->title) ?></td>
+                    <td><?= Html::encode($p->description) ?></td>
+                    <td>Rp <?= number_format($p->harga, 0, ',', '.') ?></td>
+                    <td><?= $p->stok ?> pcs</td>
+                    <td>
+                        <div class="btn-wrapper">
+                            <?= Html::a('Edit', ['homepage/update-produk', 'id' => $p->id], ['class' => 'btn-edit']) ?>
+                            <?= Html::a('Hapus', ['homepage/delete-produk', 'id' => $p->id], [
+                                'class' => 'btn-hapus',
+                                'data' => ['confirm' => 'Yakin hapus produk ini?']
+                            ]) ?>
+                        </div>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
 </div>

@@ -27,17 +27,32 @@ if (!is_object($model)) {
 <?php ActiveForm::end(); ?>
 
 <hr>
-<h3>Daftar Testimoni</h3>
-<ul>
-    <?php foreach ($testimonis as $t): ?>
-        <li>
-            "<?= $t->content ?>" <i>- <?= $t->author ?></i>
-            <br>
-            <?= Html::a('Edit', ['homepage/update-testimoni', 'id' => $t->id], ['class' => 'btn btn-sm btn-warning']) ?>
-            <?= Html::a('Hapus', ['homepage/delete-testimoni', 'id' => $t->id], [
-                'class' => 'btn btn-sm btn-danger',
-                'data' => ['confirm' => 'Yakin hapus testimoni ini?']
-            ]) ?>
-        </li>
-    <?php endforeach; ?>
-</ul>
+<div class="promo-card">
+    <h3>Daftar Testimoni</h3>
+    <table class="cart-table">
+        <thead>
+            <tr>
+                <th>Isi Testimoni</th>
+                <th>Penulis</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($testimonis as $t): ?>
+                <tr>
+                    <td>"<?= Html::encode($t->content) ?>"</td>
+                    <td><i><?= Html::encode($t->author) ?></i></td>
+                    <td>
+                        <div class="btn-wrapper">
+                            <?= Html::a('Edit', ['homepage/update-testimoni', 'id' => $t->id], ['class' => 'btn-edit']) ?>
+                            <?= Html::a('Hapus', ['homepage/delete-testimoni', 'id' => $t->id], [
+                                'class' => 'btn-hapus',
+                                'data' => ['confirm' => 'Yakin hapus testimoni ini?']
+                            ]) ?>
+                        </div>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>

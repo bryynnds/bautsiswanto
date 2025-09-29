@@ -30,17 +30,32 @@ if (!is_object($model)) {
 <?php ActiveForm::end(); ?>
 
 <hr>
-<h3>Daftar Keunggulan</h3>
-<ul>
-    <?php foreach ($keunggulans as $k): ?>
-        <li>
-            <b><?= $k->title ?></b> - <?= $k->subtitle ?>
-            <br>
-            <?= Html::a('Edit', ['homepage/update-keunggulan', 'id' => $k->id], ['class' => 'btn btn-sm btn-warning']) ?>
-            <?= Html::a('Hapus', ['homepage/delete-keunggulan', 'id' => $k->id], [
-                'class' => 'btn btn-sm btn-danger',
-                'data' => ['confirm' => 'Yakin hapus keunggulan ini?']
-            ]) ?>
-        </li>
-    <?php endforeach; ?>
-</ul>
+<div class="promo-card">
+    <h3>Daftar Keunggulan</h3>
+    <table class="cart-table">
+        <thead>
+            <tr>
+                <th>Judul</th>
+                <th>Subjudul</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($keunggulans as $k): ?>
+                <tr>
+                    <td><?= Html::encode($k->title) ?></td>
+                    <td><?= Html::encode($k->subtitle) ?></td>
+                    <td>
+                        <div class="btn-wrapper">
+                            <?= Html::a('Edit', ['homepage/update-keunggulan', 'id' => $k->id], ['class' => 'btn-edit']) ?>
+                            <?= Html::a('Hapus', ['homepage/delete-keunggulan', 'id' => $k->id], [
+                                'class' => 'btn-hapus',
+                                'data' => ['confirm' => 'Yakin hapus keunggulan ini?']
+                            ]) ?>
+                        </div>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
