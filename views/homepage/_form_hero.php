@@ -1,4 +1,5 @@
 <?php
+
 use yii\bootstrap5\ActiveForm;
 use yii\bootstrap5\Html;
 
@@ -13,13 +14,15 @@ if (!is_object($model)) {
     'options' => ['enctype' => 'multipart/form-data']
 ]); ?>
 
-    <?= $form->field($model, 'title')->textInput() ?>
-    <?= $form->field($model, 'subtitle')->textInput() ?>
-    <?= $form->field($model, 'background_image')->fileInput() ?>
+<?= $form->field($model, 'title')->textInput() ?>
+<?= $form->field($model, 'subtitle')->textInput() ?>
+<?= $form->field($model, 'background_image')->fileInput() ?>
+<div class="mb-3 text-center">
     <?php if ($model->background_image): ?>
         <img src="/<?= $model->background_image ?>" style="max-width:200px;">
     <?php endif; ?>
-    <br><br>
-    <?= Html::submitButton('Simpan', ['class' => 'btn btn-success']) ?>
+</div>
+<br><br>
+<?= Html::submitButton('Simpan', ['class' => 'btn btn-success']) ?>
 
 <?php ActiveForm::end(); ?>
