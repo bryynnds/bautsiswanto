@@ -50,6 +50,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
         if (Yii::$app->user->isGuest) {
             $menuItems = [
                 ['label' => 'Beranda', 'url' => ['/site/index']],
+                ['label' => 'Produk', 'url' => ['/produk/index']],
                 ['label' => 'Kontak', 'url' => ['/site/contact']],
                 ['label' => 'Tentang', 'url' => ['/site/about']],
                 ['label' => 'Masuk', 'url' => ['/site/login']],
@@ -73,6 +74,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
             // untuk user biasa
             $menuItems = [
                 ['label' => 'Beranda', 'url' => ['/site/index']],
+                ['label' => 'Produk', 'url' => ['/produk/index']],
                 ['label' => 'Kontak', 'url' => ['/site/contact']],
                 ['label' => 'Tentang', 'url' => ['/site/about']],
                 ['label' => 'Keranjang', 'url' => ['/cart/index']],
