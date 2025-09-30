@@ -66,27 +66,31 @@ $dataProvider = new ArrayDataProvider([
   </div>
 </section>
 
-
-
-
 <!-- Produk Unggulan -->
 <section class="produk loading" id="produk">
-  <h2>Produk Unggulan</h2>
+  <h2>Produk Terlaris</h2>
   <div class="produk-grid">
-    <?php foreach ($produks as $produk): ?>
-      <div class="card">
-        <h3><?= $produk->title ?></h3>
-        <p>Rp <?= number_format($produk->harga, 0, ',', '.') ?></p>
-        <img src="<?= Yii::getAlias('@web') ?>/<?= $produk->image ?>" alt="<?= $produk->title ?>" class="produk-img">
-        <p><?= $produk->description ?></p>
+    <?php if (!empty($produkTerlaris)): ?>
+      <?php foreach ($produkTerlaris as $p): ?>
+        <div class="card">
+          <h3><?= $p['title'] ?></h3>
+          <p>Rp <?= number_format($p['harga'], 0, ',', '.') ?></p>
+          <img src="<?= Yii::getAlias('@web') ?>/<?= $p['image'] ?>"
+            alt="<?= $p['title'] ?>" class="produk-img">
+          <p><?= $p['description'] ?></p>
+          <!-- <p><strong>Stok:</strong> <?= $p['stok'] ?> pcs</p> -->
 
-        <!-- <p><strong>Stok:</strong> <?= $produk->stok ?> pcs</p> -->
-        <button class="btn btn-add-cart" data-id="<?= $produk->id ?>">Tambah ke Keranjang</button>
-
-      </div>
-    <?php endforeach; ?>
+          <button class="btn btn-add-cart" data-id="<?= $p['id'] ?>">
+            Tambah ke Keranjang
+          </button>
+        </div>
+      <?php endforeach; ?>
+    <?php else: ?>
+      <p>Belum ada produk terlaris.</p>
+    <?php endif; ?>
   </div>
 </section>
+
 
 <!-- Keunggulan -->
 <section class="keunggulan loading" id="keunggulan">

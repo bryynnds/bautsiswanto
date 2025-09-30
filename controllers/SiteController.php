@@ -72,12 +72,38 @@ class SiteController extends Controller
         $testimonis = HomepageTestimoni::find()->all();
         $promos = HomepagePromo::find()->all();
 
+        $produkTerlaris = (new \yii\db\Query())
+            ->select([
+                'p.id',
+                'p.title',
+                'p.harga',
+                'p.image',
+                'p.description',
+                'p.stok',
+                'SUM(oi.qty) AS jumlah_terjual'
+            ])
+            ->from(['oi' => 'order_items'])
+            ->innerJoin(['p' => 'homepage_produk'], 'oi.produk_id = p.id')
+            ->groupBy([
+                'p.id',
+                'p.title',
+                'p.harga',
+                'p.image',
+                'p.description',
+                'p.stok'
+            ])
+            ->orderBy(['jumlah_terjual' => SORT_DESC])
+            ->limit(3)
+            ->all();
+
+
         return $this->render('index', [
             'hero' => $hero,
             'produks' => $produks,
             'keunggulans' => $keunggulans,
             'testimonis' => $testimonis,
             'promos' => $promos,
+            'produkTerlaris' => $produkTerlaris,
         ]);
     }
 
