@@ -36,7 +36,10 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
     <header id="header">
         <?php
         NavBar::begin([
-            'brandLabel' => "Wardah Cosmetics",
+            'brandLabel' => Html::img(
+                '@web/images/logo.png', // path logo di folder web/images
+                ['alt' => 'Wardah Cosmetics', 'style' => 'height:40px;'] // bisa diatur ukuran
+            ),
             'brandUrl' => Yii::$app->homeUrl,
             'options' => [
                 'class' => 'navbar navbar-expand-md fixed-top custom-navbar'

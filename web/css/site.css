@@ -146,6 +146,11 @@ body {
   color: #005f5f;
 }
 
+/* Style untuk menu navbar aktif */
+.navbar-nav .nav-link.active { /* contoh: pink */
+  border-bottom: 2px solid #008b8b; /* garis bawah cantik */
+}
+
 .hero {
   background-color: #fff;
   width: 100%;
@@ -236,7 +241,7 @@ section.promo h2 {
 .promo .card {
   border-radius: 15px;
   overflow: hidden;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
 .promo .card img {
   max-height: 200px;
@@ -259,8 +264,6 @@ section.promo h2 {
 .carousel-indicators .active {
   background-color: #000;
 }
-
-
 
 /* Produk */
 .produk {
@@ -299,7 +302,7 @@ section.promo h2 {
   height: 120px;
   object-fit: cover; /* crop rapi */
   border-radius: 8px;
-  margin : 15px auto;
+  margin: 15px auto;
 }
 
 .card h3 {
@@ -698,7 +701,6 @@ html {
   padding: 12px 10px;
   border-bottom: 1px solid #e0e0e0;
   text-align: center;
-
 }
 .cart-table thead {
   background: #ffffff;
@@ -725,8 +727,8 @@ html {
 
 /* header tabel */
 .cart-table thead tr {
-  background: #ffffff;   /* putih biar konsisten */
-  color: #006666;        /* hijau toska sesuai contoh produk */
+  background: #ffffff; /* putih biar konsisten */
+  color: #006666; /* hijau toska sesuai contoh produk */
   font-weight: 600;
   border-bottom: 2px solid #006666;
 }
@@ -745,7 +747,6 @@ html {
 .cart-table a:hover {
   text-decoration: underline;
 }
-
 
 /* Tombol */
 .btn-hapus {
@@ -832,10 +833,10 @@ html {
 
 /* Section wrapper */
 .checkout-section {
-    background: #fff;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  background: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
 .checkout-section h2 {
@@ -850,68 +851,68 @@ html {
 .checkout-section .form-control,
 .checkout-section .form-select,
 .checkout-section textarea {
-    border-radius: 6px;
-    border: 1px solid #ddd;
-    font-size: 15px;
-    padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  font-size: 15px;
+  padding: 10px;
 }
 
 .checkout-section .form-label {
-    font-weight: 500;
-    margin-bottom: 6px;
+  font-weight: 500;
+  margin-bottom: 6px;
 }
 
 /* Table style mengikuti cart */
 .checkout-section .cart-table-wrapper {
-    overflow-x: auto;
-    margin-top: 15px;
+  overflow-x: auto;
+  margin-top: 15px;
 }
 
 .checkout-section .cart-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 15px;
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 15px;
 }
 
 .checkout-section .cart-table th,
 .checkout-section .cart-table td {
-    padding: 10px 12px;
-    border: 1px solid #e5e5e5;
-    text-align: center;
-    font-size: 14px;
+  padding: 10px 12px;
+  border: 1px solid #e5e5e5;
+  text-align: center;
+  font-size: 14px;
 }
 
 .checkout-section .cart-table th {
-    background: #f8f8f8;
-    font-weight: 600;
+  background: #f8f8f8;
+  font-weight: 600;
 }
 
 /* Tombol bayar */
 .checkout-section .btn-checkout {
-    display: inline-block;
-    background: #28a745;
-    color: #fff;
-    border: none;
-    border-radius: 6px;
-    padding: 10px 18px;
-    font-size: 15px;
-    font-weight: 500;
-    transition: background 0.2s ease;
-    text-decoration: none;
-    cursor: pointer;
+  display: inline-block;
+  background: #28a745;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 18px;
+  font-size: 15px;
+  font-weight: 500;
+  transition: background 0.2s ease;
+  text-decoration: none;
+  cursor: pointer;
 }
 
 .checkout-section .btn-checkout:hover {
-    background: #218838;
-    color: #fff;
+  background: #218838;
+  color: #fff;
 }
 
 /* Empty state sama dengan keranjang */
 .checkout-section .cart-empty {
-    padding: 30px;
-    background: #fafafa;
-    border-radius: 6px;
-    border: 1px dashed #ccc;
+  padding: 30px;
+  background: #fafafa;
+  border-radius: 6px;
+  border: 1px dashed #ccc;
 }
 
 /* Dashboard */
@@ -946,7 +947,7 @@ html {
   border-radius: 10px;
   padding: 20px;
   text-align: center;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 .statistik-card h3 {
   color: #333;
@@ -963,7 +964,7 @@ html {
   padding: 20px;
   border-radius: 10px;
   margin-bottom: 30px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
 .promo-card {
@@ -991,7 +992,6 @@ html {
   margin-bottom: 20px;
   color: #006666;
 }
-
 
 .produk-card {
   flex: 0 1 calc(33.333% - 20px);
@@ -1030,7 +1030,7 @@ html {
 }
 .produk-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .graphic-wrapper {
@@ -1040,10 +1040,10 @@ html {
 }
 
 .graphic-card {
-   flex: 1;
+  flex: 1;
   background: #fff;
   padding: 20px;
   border-radius: 10px;
   margin-bottom: 30px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
