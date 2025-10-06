@@ -71,10 +71,13 @@ class AdminController extends Controller
             throw new \yii\web\ForbiddenHttpException('Anda tidak memiliki akses ke halaman ini.');
         }
 
-        $produks = HomepageProduk::find()->all();
+        $dataProvider = new ActiveDataProvider([
+            'query' => HomepageProduk::find(),
+            'pagination' => false, // tidak perlu pagination karena dropdown harus menampilkan semua produk
+        ]);
 
         return $this->render('calculator', [
-            'produks' => $produks,
+            'dataProvider' => $dataProvider,
         ]);
     }
 
@@ -139,7 +142,6 @@ class AdminController extends Controller
             }
 
             return ['success' => true, 'data' => $result];
-
         } catch (\Throwable $e) {
             // log lengkap supaya bisa dilacak di runtime/logs/app.log
             Yii::error("actionGetHistory error: " . $e->getMessage() . "\n" . $e->getTraceAsString(), __METHOD__);

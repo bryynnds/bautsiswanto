@@ -1,15 +1,13 @@
 <?php
 use yii\helpers\Html;
+use yii\widgets\ListView;
 
 $this->title = 'Kalkulator Kasir';
 ?>
 
 <div class="container mt-5">
     <section class="dashboard">
-        <!-- <h2><?= Html::encode($this->title) ?></h2> -->
-
         <div class="row">
-            <!-- Kiri: Kasir -->
             <div class="col-md-6">
                 <div class="dashboard-card p-3">
                     <h3>Tambah Produk</h3>
@@ -17,13 +15,23 @@ $this->title = 'Kalkulator Kasir';
                         <div class="col-md-7">
                             <select id="productSelect" class="form-select">
                                 <option value="">-- Pilih Produk --</option>
-                                <?php foreach ($produks as $produk): ?>
-                                    <option value="<?= $produk->id ?>"
-                                            data-harga="<?= $produk->harga ?>"
-                                            data-nama="<?= Html::encode($produk->title) ?>">
-                                        <?= Html::encode($produk->title) ?>
-                                    </option>
-                                <?php endforeach; ?>
+                                <?php
+                                echo ListView::widget([
+                                    'dataProvider' => $dataProvider,
+                                    'layout' => "{items}",
+                                    'itemView' => function ($model) {
+                                        return Html::tag(
+                                            'option',
+                                            Html::encode($model->title),
+                                            [
+                                                'value' => $model->id,
+                                                'data-harga' => $model->harga,
+                                                'data-nama' => Html::encode($model->title),
+                                            ]
+                                        );
+                                    },
+                                ]);
+                                ?>
                             </select>
                         </div>
                         <div class="col-md-3">
