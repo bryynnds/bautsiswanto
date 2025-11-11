@@ -9,7 +9,7 @@ use app\models\HomepageProduk;
 /** @var app\models\HomepageProduk[] $produks */
 /** @var app\models\HomepageKeunggulan[] $keunggulans */
 /** @var app\models\HomepageTestimoni[] $testimonis */
-$this->title = 'Wardah Cosmetics';
+$this->title = 'CuanKonek.id';
 
 $dataProvider = new ArrayDataProvider([
   'allModels' => $produks,

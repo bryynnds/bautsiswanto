@@ -37,8 +37,8 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
         <?php
         NavBar::begin([
             'brandLabel' => Html::img(
-                '@web/images/logo.png', // path logo di folder web/images
-                ['alt' => 'Wardah Cosmetics', 'style' => 'height:40px;'] // bisa diatur ukuran
+                '@web/images/logo121.png', // path logo di folder web/images
+                ['alt' => 'CuanKonek.id', 'style' => 'height:40px;'] // bisa diatur ukuran
             ),
             'brandUrl' => Yii::$app->homeUrl,
             'options' => [
@@ -112,7 +112,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
     </main>
 
     <footer id="kontak" class="mt-auto text-center py-3">
-        <p>© 2025 Wardah Cosmetics</p>
+        <p>© 2025 CuanKonek.id</p>
         <p>Ikuti kami di
             <a href="#">Instagram</a> |
             <a href="#">Facebook</a> |
