@@ -74,6 +74,7 @@ $dataProvider = new ArrayDataProvider([
       <?php foreach ($produkTerlaris as $p): ?>
         <div class="card">
           <h3><?= $p['title'] ?></h3>
+          <p>Brand : <?= $p['brand_name'] ?></p>
           <p>Rp <?= number_format($p['harga'], 0, ',', '.') ?></p>
           <img src="<?= Yii::getAlias('@web') ?>/<?= $p['image'] ?>"
             alt="<?= $p['title'] ?>" class="produk-img">
@@ -94,7 +95,7 @@ $dataProvider = new ArrayDataProvider([
 
 <!-- Keunggulan -->
 <section class="keunggulan loading" id="keunggulan">
-  <h2>Mengapa Memilih Wardah?</h2>
+  <h2>Mengapa Harus Memilih CuanKonek.id?</h2>
   <div class="keunggulan-grid">
     <?php foreach ($keunggulans as $k): ?>
       <div class="point">
@@ -107,7 +108,7 @@ $dataProvider = new ArrayDataProvider([
 
 <!-- Testimoni -->
 <section class="testimoni loading" id="testimoni">
-  <h2>Apa Kata Mereka?</h2>
+  <h2>Apa Pendapat Mereka?</h2>
   <div class="testimoni-grid">
     <?php foreach ($testimonis as $t): ?>
       <div class="testi">

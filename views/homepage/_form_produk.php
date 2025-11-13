@@ -22,6 +22,10 @@ if (!is_object($model)) {
     'placeholder' => 'Ketik disini...',
 ]) ?>
 
+<?= $form->field($model, 'brand_name')->textInput([
+    'placeholder' => 'Ketik disini...',
+]) ?>
+
 <?= $form->field($model, 'description')->textarea([
     'placeholder' => 'Ketik disini...',
 ]) ?>
@@ -36,6 +40,10 @@ if (!is_object($model)) {
     'placeholder' => 'Masukkan jumlah stok...',
     'type' => 'number',
     'min' => 0
+]) ?>
+
+<?= $form->field($model, 'link')->textInput([
+    'placeholder' => 'Ketik disini...',
 ]) ?>
 
 <?= $form->field($model, 'image')->fileInput() ?>

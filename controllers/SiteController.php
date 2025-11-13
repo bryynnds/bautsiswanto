@@ -76,6 +76,7 @@ class SiteController extends Controller
             ->select([
                 'p.id',
                 'p.title',
+                'p.brand_name',
                 'p.harga',
                 'p.image',
                 'p.description',
@@ -87,6 +88,7 @@ class SiteController extends Controller
             ->groupBy([
                 'p.id',
                 'p.title',
+                'p.brand_name',
                 'p.harga',
                 'p.image',
                 'p.description',

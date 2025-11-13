@@ -18,6 +18,8 @@ class HomepageProduk extends ActiveRecord
             [['description'], 'string'],
             [['harga', 'stok'], 'integer'], // ✅ validasi angka
             [['title'], 'string', 'max' => 255],
+            [['brand_name'], 'string', 'max' => 255],
+            [['link'], 'url'],
             [['image'], 'string', 'max' => 255],
         ];
     }
@@ -30,6 +32,8 @@ class HomepageProduk extends ActiveRecord
             'image' => 'Gambar Produk',
             'harga' => 'Harga',
             'stok' => 'Jumlah Stok',
+            'link' => 'Link Produk',
+            'brand_name' => 'Merek',
         ];
     }
 }
