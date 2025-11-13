@@ -313,11 +313,33 @@ class HomepageController extends Controller
     }
 
     public function actionAdminProduk()
-{
-    $produk = HomepageProduk::find()->all();
-    return $this->render('/admin/produk', [
-        'produk' => $produk,
-    ]);
-}
+    {
+        $produk = HomepageProduk::find()->all();
+        return $this->render('/admin/produk', [
+            'produk' => $produk,
+        ]);
+    }
 
+    public function actionTambahStok()
+    {
+        $produk = HomepageProduk::find()->all();
+        return $this->render('/admin/tambah_stok', [
+            'produk' => $produk,
+        ]);
+    }
+
+    public function actionSimpanStok()
+    {
+        $data = Yii::$app->request->post('stok');
+        if ($data) {
+            foreach ($data as $id => $jumlah) {
+                $model = HomepageProduk::findOne($id);
+                if ($model) {
+                    $model->stok = (int)$jumlah;
+                    $model->save(false);
+                }
+            }
+        }
+        return $this->redirect(['admin/produk']);
+    }
 }

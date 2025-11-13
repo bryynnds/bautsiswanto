@@ -10,7 +10,15 @@ $this->title = 'Daftar Produk';
 ?>
 
 <section class="produk mt-2" id="produk">
-    <h2>Daftar Produk</h2>
+    <h2 style="margin-bottom: 20px;">Daftar Produk</h2>
+    <div>
+        <a href="<?= \yii\helpers\Url::to(['homepage/create-produk']) ?>" class="btn btn-primary mb-4">
+            Tambah Produk
+        </a>
+        <a href="<?= \yii\helpers\Url::to(['homepage/tambah-stok']) ?>" class="btn btn-secondary mb-4">
+            Tambah Stok
+        </a>
+    </div>
 
     <div class="produk-grid">
         <?php foreach ($produk as $item): ?>
@@ -19,8 +27,8 @@ $this->title = 'Daftar Produk';
                 <p>Rp <?= number_format($item->harga, 0, ',', '.') ?></p>
 
                 <img src="<?= Yii::getAlias('@web') ?>/<?= Html::encode($item->image) ?>"
-                     alt="<?= Html::encode($item->title) ?>"
-                     class="produk-img">
+                    alt="<?= Html::encode($item->title) ?>"
+                    class="produk-img">
 
                 <p><?= Html::encode($item->description) ?></p>
 
@@ -44,4 +52,3 @@ $this->title = 'Daftar Produk';
         <?php endforeach; ?>
     </div>
 </section>
-
