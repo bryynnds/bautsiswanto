@@ -61,6 +61,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
         } elseif (Yii::$app->user->identity->isAdmin()) {
             $menuItems = [
                 ['label' => 'Beranda', 'url' => ['/admin/dashboard']],
+                ['label' => 'Produk', 'url' => ['/homepage/admin-produk']],
                 ['label' => 'Kasir', 'url' => ['/admin/calculator']],
                 ['label' => 'Riwayat Belanja', 'url' => ['/admin/history']],
                 ['label' => 'CMS Beranda', 'url' => ['/homepage/edit']],

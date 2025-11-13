@@ -46,9 +46,11 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                'admin/produk' => 'homepage/admin-produk',
+
             ],
         ],
-        
+
     ],
     'params' => $params,
 ];

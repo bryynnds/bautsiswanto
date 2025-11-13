@@ -166,20 +166,30 @@ class HomepageController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
             $file = UploadedFile::getInstance($model, 'image');
+
             if ($file) {
+                // pastikan nama unik
                 $fileName = time() . '-' . $file->baseName . '.' . $file->extension;
                 $path = Yii::getAlias('@webroot') . '/images/' . $fileName;
+
                 if ($file->saveAs($path)) {
                     $model->image = 'images/' . $fileName;
                 }
             }
-            if ($model->save()) {
-                Yii::$app->session->setFlash('success', 'Produk baru ditambahkan!');
+
+            if ($model->save(false)) {
+                Yii::$app->session->setFlash('success', 'Produk baru berhasil ditambahkan!');
+                return $this->redirect(['homepage/edit']);
+            } else {
+                Yii::$app->session->setFlash('error', 'Gagal menyimpan produk.');
             }
         }
 
-        return $this->redirect(['edit']);
+        return $this->render('tambah', [
+            'model' => $model,
+        ]);
     }
+
 
     public function actionCreateKeunggulan()
     {
@@ -301,4 +311,13 @@ class HomepageController extends Controller
         }
         return $this->redirect(['edit']);
     }
+
+    public function actionAdminProduk()
+{
+    $produk = HomepageProduk::find()->all();
+    return $this->render('/admin/produk', [
+        'produk' => $produk,
+    ]);
+}
+
 }

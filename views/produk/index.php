@@ -3,11 +3,11 @@
 /** @var yii\web\View $this */
 /** @var app\models\HomepageProduk[] $produks */
 
-$this->title = 'Semua Produk';
+$this->title = 'Daftar Produk';
 ?>
 
 <section class="produk mt-2" id="produk">
-    <h2>Produk Saya</h2>
+    <h2>Daftar Produk</h2>
     <div class="produk-grid">
         <?php foreach ($produks as $produk): ?>
             <div class="card">
