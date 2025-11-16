@@ -13,6 +13,41 @@ class User extends ActiveRecord implements IdentityInterface
         return 'user';
     }
 
+    // di models/User.php
+    public $old_password;
+    public $new_password;
+
+
+    public function rules()
+    {
+        return [
+            [['username'], 'required'],
+
+            // password lama wajib jika password baru diisi
+            ['old_password', 'required', 'when' => function ($model) {
+                return !empty($model->new_password);
+            }, 'whenClient' => "function(){ return $('#user-new_password').val() !== ''; }"],
+
+            // Validasi password lama
+            ['old_password', 'validateOldPassword'],
+
+            // password baru minimal 6 karakter
+            ['new_password', 'string', 'min' => 6],
+        ];
+    }
+
+    public function validateOldPassword($attribute, $params)
+    {
+        if (!empty($this->new_password)) {
+            if (!\Yii::$app->security->validatePassword($this->old_password, $this->getOldAttribute('password_hash'))) {
+                $this->addError($attribute, 'Password lama salah.');
+            }
+        }
+    }
+
+
+
+
     public static function findIdentity($id)
     {
         return static::findOne($id);
