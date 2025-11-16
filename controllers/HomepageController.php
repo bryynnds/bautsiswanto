@@ -179,7 +179,7 @@ class HomepageController extends Controller
 
             if ($model->save(false)) {
                 Yii::$app->session->setFlash('success', 'Produk baru berhasil ditambahkan!');
-                return $this->redirect(['homepage/edit']);
+                return $this->redirect(['admin/produk']);
             } else {
                 Yii::$app->session->setFlash('error', 'Gagal menyimpan produk.');
             }
@@ -242,7 +242,7 @@ class HomepageController extends Controller
             if ($model->save(false)) {
                 Yii::$app->session->setFlash('success', 'Produk berhasil diupdate!');
             }
-            return $this->redirect(['edit']);
+            return $this->redirect(['admin/produk']);
         }
 
         return $this->render('update_produk', ['model' => $model]);
@@ -257,7 +257,7 @@ class HomepageController extends Controller
             $model->delete();
             Yii::$app->session->setFlash('success', 'Produk berhasil dihapus!');
         }
-        return $this->redirect(['edit']);
+        return $this->redirect(['admin/produk']);
     }
 
     /* ================= KEUNGGULAN ================= */

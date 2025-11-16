@@ -4,91 +4,86 @@ use yii\bootstrap5\ActiveForm;
 use yii\bootstrap5\Html;
 
 /** @var $model app\models\HomepageProduk */
-/** @var $produks app\models\HomepageProduk[] */
 
-// Ensure $model is an object
 if (!is_object($model)) {
     $model = new \app\models\HomepageProduk();
 }
+
+$this->title = 'Admin - Tambah Produk';
 ?>
 
+<div class="container mt-5">
+    <div class="form-card">
+        <h2 class="section-title mb-4">Tambah Produk</h2>
 
-<!-- <h3>Tambah Produk</h3> -->
-<?php $form = ActiveForm::begin([
-    'action' => ['homepage/create-produk'],
-    'options' => ['enctype' => 'multipart/form-data']
-]); ?>
-<?= $form->field($model, 'title')->textInput([
-    'placeholder' => 'Ketik disini...',
-]) ?>
+        <?php $form = ActiveForm::begin([
+            'action' => ['homepage/create-produk'],
+            'options' => ['class' => 'form-styled', 'enctype' => 'multipart/form-data']
+        ]); ?>
 
-<?= $form->field($model, 'brand_name')->textInput([
-    'placeholder' => 'Ketik disini...',
-]) ?>
+        <!-- Nama Produk -->
+        <?= $form->field($model, 'title')->textInput([
+            'placeholder' => 'Ketik nama produk...',
+            'class' => 'form-control'
+        ]) ?>
 
-<?= $form->field($model, 'description')->textarea([
-    'placeholder' => 'Ketik disini...',
-]) ?>
+        <!-- Merek -->
+        <?= $form->field($model, 'brand_name')->textInput([
+            'placeholder' => 'Masukkan merek produk...',
+            'class' => 'form-control'
+        ]) ?>
 
-<?= $form->field($model, 'harga')->textInput([
-    'placeholder' => 'Masukkan harga produk...',
-    'type' => 'number',
-    'min' => 0
-]) ?>
+        <!-- Deskripsi -->
+        <?= $form->field($model, 'description')->textarea([
+            'rows' => 4,
+            'placeholder' => 'Masukkan deskripsi produk...',
+            'class' => 'form-control'
+        ]) ?>
 
-<?= $form->field($model, 'stok')->textInput([
-    'placeholder' => 'Masukkan jumlah stok...',
-    'type' => 'number',
-    'min' => 0
-]) ?>
+        <!-- Harga -->
+        <?= $form->field($model, 'harga')->textInput([
+            'type' => 'number',
+            'placeholder' => 'Masukkan harga produk...',
+            'min' => 0,
+            'class' => 'form-control'
+        ]) ?>
 
-<?= $form->field($model, 'link')->textInput([
-    'placeholder' => 'Ketik disini...',
-]) ?>
+        <!-- Jumlah Stok -->
+        <?= $form->field($model, 'stok')->textInput([
+            'type' => 'number',
+            'placeholder' => 'Masukkan jumlah stok...',
+            'min' => 0,
+            'class' => 'form-control'
+        ]) ?>
 
-<?= $form->field($model, 'image')->fileInput() ?>
-<?= Html::submitButton('Tambah Produk', ['class' => 'btn btn-success']) ?>
-<?php ActiveForm::end(); ?>
+        <!-- Link Produk -->
+        <?= $form->field($model, 'link')->textInput([
+            'placeholder' => 'Masukkan link produk...',
+            'class' => 'form-control'
+        ]) ?>
 
-<hr>
-<div class="promo-card">
-    <h3>Daftar Produk</h3>
-    <table class="cart-table">
-        <thead>
-            <tr>
-                <th>Gambar</th>
-                <th>Nama Produk</th>
-                <th>Deskripsi</th>
-                <th>Harga</th>
-                <th>Stok</th>
-                <th>Aksi</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($produks as $p): ?>
-                <tr>
-                    <td>
-                        <?php if ($p->image): ?>
-                            <img src="<?= Yii::getAlias('@web') ?>/<?= $p->image ?>"
-                                alt="<?= Html::encode($p->title) ?>"
-                                class="cart-img">
-                        <?php endif; ?>
-                    </td>
-                    <td><?= Html::encode($p->title) ?></td>
-                    <td><?= Html::encode($p->description) ?></td>
-                    <td>Rp <?= number_format($p->harga, 0, ',', '.') ?></td>
-                    <td><?= $p->stok ?> pcs</td>
-                    <td>
-                        <div class="btn-wrapper">
-                            <?= Html::a('Edit', ['homepage/update-produk', 'id' => $p->id], ['class' => 'btn-edit']) ?>
-                            <?= Html::a('Hapus', ['homepage/delete-produk', 'id' => $p->id], [
-                                'class' => 'btn-hapus',
-                                'data' => ['confirm' => 'Yakin hapus produk ini?']
-                            ]) ?>
-                        </div>
-                    </td>
-                </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
+        <!-- Upload Gambar -->
+        <?= $form->field($model, 'image')->fileInput([]) ?>
+
+        <!-- Preview Gambar (jika ada) -->
+        <?php if ($model->image): ?>
+            <div class="mb-3 text-center">
+                <img src="<?= Yii::getAlias('@web') . '/' . $model->image ?>"
+                    class="img-fluid rounded shadow-sm"
+                    style="max-width:200px;">
+            </div>
+        <?php endif; ?>
+
+        <!-- Tombol Aksi -->
+        <div class="mt-4">
+            <?= Html::submitButton('Tambah Produk', [
+                'class' => 'btn btn-success me-2'
+            ]) ?>
+            <?= Html::a('Kembali', ['admin/produk'], [
+                'class' => 'btn btn-secondary'
+            ]) ?>
+        </div>
+
+        <?php ActiveForm::end(); ?>
+    </div>
 </div>

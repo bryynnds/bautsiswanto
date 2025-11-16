@@ -12,7 +12,7 @@ $this->title = 'Daftar Produk';
 <section class="produk mt-2" id="produk">
     <h2 style="margin-bottom: 20px;">Daftar Produk</h2>
     <div>
-        <a href="<?= \yii\helpers\Url::to(['homepage/create-produk']) ?>" class="btn btn-primary mb-4">
+        <a href="<?= \yii\helpers\Url::to(['homepage/create-produk']) ?>" class="btn btn-primary mb-4 me-2">
             Tambah Produk
         </a>
         <a href="<?= \yii\helpers\Url::to(['homepage/tambah-stok']) ?>" class="btn btn-secondary mb-4">

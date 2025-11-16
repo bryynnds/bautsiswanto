@@ -29,15 +29,6 @@ $this->title = 'Admin - Ubah Halaman Beranda';
                                 'promos' => $promos
                             ]) . "</div>",
                     ],
-
-                    [
-                        'label' => 'Produk',
-                        'content' => "<div class='tab-card'>" .
-                            $this->render('_form_produk', [
-                                'model' => $newProduk,
-                                'produks' => $produks
-                            ]) . "</div>",
-                    ],
                     [
                         'label' => 'Keunggulan',
                         'content' => "<div class='tab-card'>" .
