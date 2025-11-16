@@ -28,6 +28,20 @@ class CheckoutController extends Controller
         ]);
     }
 
+    public function actionPaid($order_id)
+    {
+        $order = Order::findOne($order_id);
+        if (!$order) {
+            throw new \yii\web\NotFoundHttpException("Order not found");
+        }
+
+        $order->status = 'paid';
+        $order->save(false);
+
+        return json_encode(['success' => true]);
+    }
+
+
     public function actionProcess()
     {
         Config::$serverKey = 'SB-Mid-server-IWLFN5qdGmuxRk-QkCSoaTot';
@@ -100,9 +114,50 @@ class CheckoutController extends Controller
 
         $snapToken = Snap::getSnapToken($params);
 
+        $order->midtrans_order_id = $params['transaction_details']['order_id'];
+        $order->save(false);
+
+        Keranjang::deleteAll(['user_id' => $userId]);
+
         return $this->render('snap', [
             'snapToken' => $snapToken,
             'clientKey' => 'SB-Mid-client-b6veAVTs1n2MqX-T',
+            'order' => $order,
         ]);
+    }
+
+    public function actionNotification()
+    {
+        \Midtrans\Config::$serverKey = 'SB-Mid-server-IWLFN5qdGmuxRk-QkCSoaTot';
+        \Midtrans\Config::$isProduction = false;
+
+        $notif = new \Midtrans\Notification();
+
+        $orderId = explode('-', $notif->order_id)[1]; // karena formatmu ORDER-{id}-{time}
+        $transaction = $notif->transaction_status;
+        $fraud = $notif->fraud_status;
+
+        $order = Order::findOne($orderId);
+
+        if (!$order) {
+            Yii::error("Order tidak ditemukan: " . $orderId);
+            return;
+        }
+
+        if ($transaction == 'capture') {
+            if ($fraud == 'challenge') {
+                $order->status = 'pending';
+            } else {
+                $order->status = 'paid';
+            }
+        } else if ($transaction == 'settlement') {
+            $order->status = 'paid';
+        } else if ($transaction == 'deny' || $transaction == 'expire' || $transaction == 'cancel') {
+            $order->status = 'pending';
+        }
+
+        $order->save(false);
+
+        return "OK";
     }
 }

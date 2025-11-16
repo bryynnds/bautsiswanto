@@ -72,6 +72,17 @@ class SiteController extends Controller
         $testimonis = HomepageTestimoni::find()->all();
         $promos = HomepagePromo::find()->all();
 
+        if (Yii::$app->request->get('success')) {
+            Yii::$app->session->setFlash('success', 'Pembayaran berhasil!');
+        }
+        if (Yii::$app->request->get('pending')) {
+            Yii::$app->session->setFlash('info', 'Menunggu konfirmasi pembayaran.');
+        }
+        if (Yii::$app->request->get('error')) {
+            Yii::$app->session->setFlash('danger', 'Pembayaran gagal.');
+        }
+
+
         $produkTerlaris = (new \yii\db\Query())
             ->select([
                 'p.id',

@@ -119,6 +119,13 @@ $dataProvider = new ArrayDataProvider([
   </div>
 </section>
 
+<?php foreach (Yii::$app->session->getAllFlashes() as $type => $message): ?>
+  <div class="alert alert-<?= $type ?>">
+    <?= $message ?>
+  </div>
+<?php endforeach; ?>
+
+
 <?php
 $addUrl = \yii\helpers\Url::to(['cart/add']);
 $cartUrl = \yii\helpers\Url::to(['cart/index']);
