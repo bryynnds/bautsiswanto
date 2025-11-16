@@ -50,6 +50,12 @@ $config = [
 
             ],
         ],
+        'midtrans' => [
+            'class' => 'app\components\MidtransComponent',
+            'serverKey' => 'SB-Mid-server-IWLFN5qdGmuxRk-QkCSoaTot',
+            'clientKey' => 'SB-Mid-client-b6veAVTs1n2MqX-T',
+            'isProduction' => false,
+        ],
 
     ],
     'params' => $params,

@@ -14,10 +14,24 @@ $this->title = 'Checkout';
         <h2><?= Html::encode($this->title) ?></h2>
 
         <?php if (!empty($items)): ?>
+
+            <?php
+            // Hitung grand total dulu supaya bisa digunakan di form
+            $grandTotal = 0;
+            foreach ($items as $item) {
+                $harga = (int)$item->produk->harga;
+                $subtotal = $harga * $item->jumlah;
+                $grandTotal += $subtotal;
+            }
+            ?>
+
             <div class="row mt-4">
                 <!-- Form Data -->
                 <div class="col-md-6">
-                    <?php $form = ActiveForm::begin(); ?>
+                    <?php $form = ActiveForm::begin([
+                        'action' => ['/checkout/process'], // sesuaikan route jika beda
+                        'method' => 'post',
+                    ]); ?>
 
                     <div class="mb-3">
                         <label class="form-label">Nama Lengkap</label>
@@ -42,7 +56,10 @@ $this->title = 'Checkout';
                         </select>
                     </div>
 
-                    <button type="submit" class="btn-checkout">Bayar</button>
+                    <!-- kirim total sebagai hidden -->
+                    <input type="hidden" name="total" value="<?= htmlspecialchars($grandTotal, ENT_QUOTES) ?>">
+
+                    <button type="submit" class="btn-checkout btn btn-primary">Bayar</button>
 
                     <?php ActiveForm::end(); ?>
                 </div>
@@ -51,7 +68,7 @@ $this->title = 'Checkout';
                 <div class="col-md-6">
                     <h4>Ringkasan Pesanan</h4>
                     <div class="cart-table-wrapper">
-                        <table class="cart-table">
+                        <table class="cart-table table">
                             <thead>
                                 <tr>
                                     <th>Produk</th>
@@ -61,12 +78,10 @@ $this->title = 'Checkout';
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php $grandTotal = 0; ?>
                                 <?php foreach ($items as $item): ?>
                                     <?php
                                     $harga = (int)$item->produk->harga;
                                     $subtotal = $harga * $item->jumlah;
-                                    $grandTotal += $subtotal;
                                     ?>
                                     <tr>
                                         <td><?= Html::encode($item->produk->title) ?></td>
@@ -89,7 +104,7 @@ $this->title = 'Checkout';
         <?php else: ?>
             <div class="cart-empty text-center mt-4">
                 <p>Keranjang Anda kosong.</p>
-                <?= Html::a('Belanja Sekarang', ['site/index'], ['class' => 'btn-checkout']) ?>
+                <?= Html::a('Belanja Sekarang', ['site/index'], ['class' => 'btn-checkout btn btn-primary']) ?>
             </div>
         <?php endif; ?>
     </section>
