@@ -63,7 +63,7 @@ $this->title = 'Kalkulator Kasir';
                         foreach ($buttons as $row): ?>
                             <div class="col-12 d-flex gap-2 mb-2">
                                 <?php foreach ($row as $btn): ?>
-                                    <button type="button" class="btn btn-secondary flex-fill calc-btn"><?= $btn ?></button>
+                                    <button type="button" class="btn btn-primary flex-fill calc-btn"><?= $btn ?></button>
                                 <?php endforeach; ?>
                             </div>
                         <?php endforeach; ?>

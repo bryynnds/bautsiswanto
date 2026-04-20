@@ -2,7 +2,7 @@
 use yii\bootstrap5\ActiveForm;
 use yii\bootstrap5\Html;
 
-$this->title = "Ubah Profil";
+$this->title = "Ubah Password";
 ?>
 
 <div class="container mt-5">

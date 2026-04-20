@@ -64,7 +64,7 @@ $this->title = 'Profil Saya';
     </div>
 
     <div class="text-center mt-3">
-        <?= Html::a('Ubah Profil', ['user/update'], [
+        <?= Html::a('Ubah Password', ['user/update'], [
             'class' => 'btn btn-primary px-4'
         ]) ?>
     </div>

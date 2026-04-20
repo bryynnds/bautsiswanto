@@ -12,6 +12,7 @@ use app\models\HomepageKeunggulan;
 use app\models\HomepageTestimoni;
 use yii\filters\AccessControl;
 use app\models\HomepagePromo;
+use app\models\User;
 
 class HomepageController extends Controller
 {
@@ -23,9 +24,10 @@ class HomepageController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'roles' => ['@'], // harus login
+                        'roles' => ['@'],
                         'matchCallback' => function ($rule, $action) {
-                            return Yii::$app->user->identity->isAdmin();
+                            $user = Yii::$app->user->identity;
+                            return $user instanceof User && $user->isAdmin();
                         }
                     ],
                 ],
@@ -43,7 +45,7 @@ class HomepageController extends Controller
         $produks = HomepageProduk::find()->all();
         $keunggulans = HomepageKeunggulan::find()->all();
         $testimonis = HomepageTestimoni::find()->all();
-        $promos = HomepagePromo::find()->all(); // ambil semua promo
+        $promos = HomepagePromo::find()->all();
 
         return $this->render('edit', [
             'hero' => $hero,
@@ -53,8 +55,8 @@ class HomepageController extends Controller
             'keunggulans' => $keunggulans,
             'newTestimoni' => new HomepageTestimoni(),
             'testimonis' => $testimonis,
-            'newPromo' => new HomepagePromo(), // instance baru untuk form tambah
-            'promos' => $promos, // passing semua promo
+            'newPromo' => new HomepagePromo(),
+            'promos' => $promos, 
         ]);
     }
 
@@ -116,19 +118,19 @@ class HomepageController extends Controller
             $hero = new HomepageHero();
         }
 
-        // simpan path lama dulu
+        
         $oldImage = $hero->background_image;
 
         if ($hero->load(Yii::$app->request->post())) {
             $file = UploadedFile::getInstance($hero, 'background_image');
 
             if ($file) {
-                // pastikan nama file unik
+                
                 $fileName = uniqid() . '-' . $file->baseName . '.' . $file->extension;
                 $path = Yii::getAlias('@webroot') . '/images/' . $fileName;
 
                 if ($file->saveAs($path)) {
-                    // hapus gambar lama kalau ada
+                    
                     if (!empty($oldImage)) {
                         $oldPath = Yii::getAlias('@webroot') . DIRECTORY_SEPARATOR . $oldImage;
 
@@ -143,11 +145,11 @@ class HomepageController extends Controller
                         }
                     }
 
-                    // update path baru ke DB
+                    
                     $hero->background_image = 'images/' . $fileName;
                 }
             } else {
-                // kalau tidak ada upload baru → tetap pakai yang lama
+                
                 $hero->background_image = $oldImage;
             }
 
@@ -168,7 +170,7 @@ class HomepageController extends Controller
             $file = UploadedFile::getInstance($model, 'image');
 
             if ($file) {
-                // pastikan nama unik
+                
                 $fileName = time() . '-' . $file->baseName . '.' . $file->extension;
                 $path = Yii::getAlias('@webroot') . '/images/' . $fileName;
 
@@ -217,7 +219,7 @@ class HomepageController extends Controller
             throw new NotFoundHttpException("Produk tidak ditemukan.");
         }
 
-        // simpan path lama dulu
+        
         $oldImage = $model->image;
 
         if ($model->load(Yii::$app->request->post())) {
@@ -228,14 +230,14 @@ class HomepageController extends Controller
                 $path = Yii::getAlias('@webroot') . '/images/' . $fileName;
 
                 if ($file->saveAs($path)) {
-                    // hapus gambar lama jika ada dan file-nya masih ada
+                    
                     if (!empty($oldImage) && file_exists(Yii::getAlias('@webroot') . '/' . $oldImage)) {
                         @unlink(Yii::getAlias('@webroot') . '/' . $oldImage);
                     }
                     $model->image = 'images/' . $fileName;
                 }
             } else {
-                // kalau tidak ada file baru, pakai gambar lama
+                
                 $model->image = $oldImage;
             }
 
