@@ -46,7 +46,7 @@ class UserController extends Controller
                 $user->password_hash = $oldHash;
             }
 
-            if (!$user->hasErrors() && $user->save(false)) {
+            if (!$user->hasErrors() && $user->save()) {
                 Yii::$app->session->setFlash('success', 'Profil berhasil diperbarui.');
                 return $this->redirect(['profile']);
             }

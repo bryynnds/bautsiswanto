@@ -67,7 +67,7 @@ class HomepageController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
             $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
-            if ($model->upload() && $model->save(false)) {
+            if ($model->upload() && $model->save()) {
                 Yii::$app->session->setFlash('success', 'Promo berhasil ditambahkan.');
                 return $this->redirect(['edit']);
             }
@@ -87,7 +87,7 @@ class HomepageController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
             $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
-            if ($model->upload() && $model->save(false)) {
+            if ($model->upload() && $model->save()) {
                 Yii::$app->session->setFlash('success', 'Promo berhasil diperbarui.');
                 return $this->redirect(['edit']);
             }
@@ -153,7 +153,7 @@ class HomepageController extends Controller
                 $hero->background_image = $oldImage;
             }
 
-            if ($hero->save(false)) {
+            if ($hero->save()) {
                 Yii::$app->session->setFlash('success', 'Slogan utama berhasil diperbarui!');
             }
         }
@@ -179,7 +179,7 @@ class HomepageController extends Controller
                 }
             }
 
-            if ($model->save(false)) {
+            if ($model->save()) {
                 Yii::$app->session->setFlash('success', 'Produk baru berhasil ditambahkan!');
                 return $this->redirect(['admin/produk']);
             } else {
@@ -241,7 +241,7 @@ class HomepageController extends Controller
                 $model->image = $oldImage;
             }
 
-            if ($model->save(false)) {
+            if ($model->save()) {
                 Yii::$app->session->setFlash('success', 'Produk berhasil diupdate!');
             }
             return $this->redirect(['admin/produk']);
@@ -338,7 +338,7 @@ class HomepageController extends Controller
                 $model = HomepageProduk::findOne($id);
                 if ($model) {
                     $model->stok = (int)$jumlah;
-                    $model->save(false);
+                    $model->save();
                 }
             }
         }

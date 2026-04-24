@@ -17,8 +17,14 @@ $this->title = 'Admin - Tambah Produk';
         <h2 class="section-title mb-4">Tambah Produk</h2>
 
         <?php $form = ActiveForm::begin([
+            'id' => 'form-produk',
             'action' => ['homepage/create-produk'],
-            'options' => ['class' => 'form-styled', 'enctype' => 'multipart/form-data']
+            'options' => [
+                'class' => 'form-styled',
+                'enctype' => 'multipart/form-data'
+            ],
+            'enableClientValidation' => true,
+            'enableAjaxValidation' => false,
         ]); ?>
 
         <!-- Nama Produk -->
@@ -65,16 +71,15 @@ $this->title = 'Admin - Tambah Produk';
         <!-- Upload Gambar -->
         <?= $form->field($model, 'image')->fileInput([]) ?>
 
-        <!-- Preview Gambar (jika ada) -->
+        <!-- Preview Gambar -->
         <?php if ($model->image): ?>
             <div class="mb-3 text-center">
-                <img src="<?= Yii::getAlias('@web') . '/' . $model->image ?>"
-                    class="img-fluid rounded shadow-sm"
+                <img src="<?= Yii::getAlias('@web') . '/' . $model->image ?>" class="img-fluid rounded shadow-sm"
                     style="max-width:200px;">
             </div>
         <?php endif; ?>
 
-        <!-- Tombol Aksi -->
+        <!-- Tombol -->
         <div class="mt-4">
             <?= Html::submitButton('Tambah Produk', [
                 'class' => 'btn btn-success me-2'
@@ -87,3 +92,26 @@ $this->title = 'Admin - Tambah Produk';
         <?php ActiveForm::end(); ?>
     </div>
 </div>
+
+<?php
+$this->registerJs("
+    $('#form-produk').on('afterValidate', function (e, messages, errorAttributes) {
+        if (errorAttributes.length > 0) {
+
+            // Hapus alert lama
+            $('.custom-alert').remove();
+
+            // Buat alert
+            var alertBox = $('<div class=\"alert alert-danger custom-alert\">Mohon lengkapi data produk dengan benar.</div>');
+
+            // Letakkan setelah judul
+            $('.section-title').after(alertBox);
+
+            // Scroll ke atas
+            $('html, body').animate({
+                scrollTop: $('.form-card').offset().top - 20
+            }, 500);
+        }
+    });
+");
+?>

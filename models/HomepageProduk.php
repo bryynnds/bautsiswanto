@@ -14,13 +14,12 @@ class HomepageProduk extends ActiveRecord
     public function rules()
     {
         return [
-            [['title'], 'required'],
+            [['title', 'brand_name', 'description', 'harga', 'stok', 'link'], 'required'],
             [['description'], 'string'],
-            [['harga', 'stok'], 'integer'], // ✅ validasi angka
-            [['title'], 'string', 'max' => 255],
-            [['brand_name'], 'string', 'max' => 255],
+            [['harga', 'stok'], 'integer', 'min' => 0],
             [['link'], 'url'],
-            [['image'], 'string', 'max' => 255],
+            [['title', 'brand_name'], 'string', 'max' => 255],
+            [['image'], 'file', 'extensions' => 'png, jpg, jpeg', 'maxSize' => 2 * 1024 * 1024],
         ];
     }
 

@@ -45,7 +45,7 @@ class CheckoutController extends Controller
     public function actionProcess()
     {
         Config::$serverKey = 'SB-Mid-server-IWLFN5qdGmuxRk-QkCSoaTot';
-        Config::$isProduction = false;            // sandbox = false
+        Config::$isProduction = false;       
         Config::$isSanitized = true;
         Config::$is3ds = true;
 
