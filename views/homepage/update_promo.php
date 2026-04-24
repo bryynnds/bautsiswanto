@@ -11,7 +11,13 @@ $this->title = 'Admin - Ubah Promo';
         <h2 class="section-title mb-4">Ubah Promo</h2>
 
         <?php $form = ActiveForm::begin([
-            'options' => ['class' => 'form-styled', 'enctype' => 'multipart/form-data']
+            'id' => 'form-update-promo', // ✅ WAJIB
+            'options' => [
+                'class' => 'form-styled',
+                'enctype' => 'multipart/form-data'
+            ],
+            'enableClientValidation' => true,
+            'enableAjaxValidation' => false,
         ]); ?>
 
         <?= $form->field($model, 'title')->textInput(['placeholder' => 'Judul promo...']) ?>
@@ -35,3 +41,24 @@ $this->title = 'Admin - Ubah Promo';
         <?php ActiveForm::end(); ?>
     </div>
 </div>
+
+<?php
+$this->registerJs("
+    $('#form-update-promo').on('afterValidate', function (e, messages, errorAttributes) {
+        if (errorAttributes.length > 0) {
+
+            $('.custom-alert').remove();
+
+            var alertBox = $('<div class=\"alert alert-danger custom-alert\">Mohon lengkapi data promo dengan benar.</div>');
+
+            $('.form-card .section-title').after(alertBox);
+
+            $('html, body').animate({
+                scrollTop: $('.form-card').offset().top - 20
+            }, 500);
+
+            $('.has-error input, .has-error textarea').first().focus();
+        }
+    });
+");
+?>

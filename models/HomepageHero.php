@@ -14,7 +14,7 @@ class HomepageHero extends ActiveRecord
     public function rules()
     {
         return [
-            [['title'], 'required'],
+            [['title', 'subtitle'], 'required'],
             [['subtitle'], 'string', 'max' => 255],
             [['title'], 'string', 'max' => 255],
             [['background_image'], 'string', 'max' => 255],

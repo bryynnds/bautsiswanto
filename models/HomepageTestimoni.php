@@ -14,7 +14,7 @@ class HomepageTestimoni extends ActiveRecord
     public function rules()
     {
         return [
-            [['content'], 'required'],
+            [['content', 'author'], 'required'],
             [['content'], 'string'],
             [['author'], 'string', 'max' => 255],
         ];

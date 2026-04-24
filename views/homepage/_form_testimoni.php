@@ -6,27 +6,36 @@ use yii\bootstrap5\Html;
 /** @var $model app\models\HomepageTestimoni */
 /** @var $testimonis app\models\HomepageTestimoni[] */
 
-// Ensure $model is an object, not an array
 if (!is_object($model)) {
     $model = new \app\models\HomepageTestimoni();
 }
 ?>
 
-<!-- <h3>Tambah Testimoni</h3> -->
-<?php $form = ActiveForm::begin([
-    'action' => ['homepage/create-testimoni']
-]); ?>
+<div class="form-card">
+    <h2 class="section-title mb-4">Tambah Testimoni</h2>
 
-<?= $form->field($model, 'author')->textInput([
-    'placeholder' => 'Ketik disini...',
-]) ?>
-<?= $form->field($model, 'content')->textarea([
-    'placeholder' => 'Ketik disini...',
-]) ?>
-<?= Html::submitButton('Tambah Testimoni', ['class' => 'btn btn-success']) ?>
-<?php ActiveForm::end(); ?>
+    <?php $form = ActiveForm::begin([
+        'id' => 'form-testimoni', // ✅ WAJIB
+        'action' => ['homepage/create-testimoni'],
+        'enableClientValidation' => true,
+        'enableAjaxValidation' => false,
+    ]); ?>
+
+    <?= $form->field($model, 'author')->textInput([
+        'placeholder' => 'Ketik disini...',
+    ]) ?>
+
+    <?= $form->field($model, 'content')->textarea([
+        'placeholder' => 'Ketik disini...',
+    ]) ?>
+
+    <?= Html::submitButton('Tambah Testimoni', ['class' => 'btn btn-success']) ?>
+
+    <?php ActiveForm::end(); ?>
+</div>
 
 <hr>
+
 <div class="promo-card">
     <h3>Daftar Testimoni</h3>
     <table class="cart-table">
@@ -56,3 +65,24 @@ if (!is_object($model)) {
         </tbody>
     </table>
 </div>
+
+<?php
+$this->registerJs("
+    $('#form-testimoni').on('afterValidate', function (e, messages, errorAttributes) {
+        if (errorAttributes.length > 0) {
+
+            $('.custom-alert').remove();
+
+            var alertBox = $('<div class=\"alert alert-danger custom-alert\">Mohon lengkapi data testimoni dengan benar.</div>');
+
+            $('.form-card .section-title').after(alertBox);
+
+            $('html, body').animate({
+                scrollTop: $('.form-card').offset().top - 20
+            }, 500);
+
+            $('.has-error textarea, .has-error input').first().focus();
+        }
+    });
+");
+?>

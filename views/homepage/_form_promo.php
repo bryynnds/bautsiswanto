@@ -10,18 +10,26 @@ if (!is_object($model)) {
 }
 ?>
 
-<?php $form = ActiveForm::begin([
-    'action' => ['homepage/create-promo'],
-    'options' => ['enctype' => 'multipart/form-data']
-]); ?>
+<div class="form-card">
+    <h2 class="section-title mb-4">Tambah Promo</h2>
 
-<?= $form->field($model, 'title')->textInput(['placeholder' => 'Judul promo...']) ?>
-<?= $form->field($model, 'start_date')->input('date') ?>
-<?= $form->field($model, 'end_date')->input('date') ?>
-<?= $form->field($model, 'imageFile')->fileInput() ?>
+    <?php $form = ActiveForm::begin([
+        'id' => 'form-promo', // ✅ WAJIB
+        'action' => ['homepage/create-promo'],
+        'options' => ['enctype' => 'multipart/form-data'],
+        'enableClientValidation' => true,
+        'enableAjaxValidation' => false,
+    ]); ?>
 
-<?= Html::submitButton('Tambah Promo', ['class' => 'btn btn-success']) ?>
-<?php ActiveForm::end(); ?>
+    <?= $form->field($model, 'title')->textInput(['placeholder' => 'Judul promo...']) ?>
+    <?= $form->field($model, 'start_date')->input('date') ?>
+    <?= $form->field($model, 'end_date')->input('date') ?>
+    <?= $form->field($model, 'imageFile')->fileInput() ?>
+
+    <?= Html::submitButton('Tambah Promo', ['class' => 'btn btn-success']) ?>
+
+    <?php ActiveForm::end(); ?>
+</div>
 
 <hr>
 
@@ -66,3 +74,23 @@ if (!is_object($model)) {
     </table>
 </div>
 
+<?php
+$this->registerJs("
+    $('#form-promo').on('afterValidate', function (e, messages, errorAttributes) {
+        if (errorAttributes.length > 0) {
+
+            $('.custom-alert').remove();
+
+            var alertBox = $('<div class=\"alert alert-danger custom-alert\">Mohon lengkapi data promo dengan benar.</div>');
+
+            $('.form-card .section-title').after(alertBox);
+
+            $('html, body').animate({
+                scrollTop: $('.form-card').offset().top - 20
+            }, 500);
+
+            $('.has-error input, .has-error textarea').first().focus();
+        }
+    });
+");
+?>
