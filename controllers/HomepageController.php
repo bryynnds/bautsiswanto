@@ -56,10 +56,59 @@ class HomepageController extends Controller
             'newTestimoni' => new HomepageTestimoni(),
             'testimonis' => $testimonis,
             'newPromo' => new HomepagePromo(),
-            'promos' => $promos, 
+            'promos' => $promos,
         ]);
     }
 
+    public function actionEditHero()
+    {
+        $hero = HomepageHero::find()->one();
+        if (!$hero) {
+            $hero = new HomepageHero();
+        }
+
+
+        $oldImage = $hero->background_image;
+
+        if ($hero->load(Yii::$app->request->post())) {
+            $file = UploadedFile::getInstance($hero, 'background_image');
+
+            if ($file) {
+
+                $fileName = uniqid() . '-' . $file->baseName . '.' . $file->extension;
+                $path = Yii::getAlias('@webroot') . '/images/' . $fileName;
+
+                if ($file->saveAs($path)) {
+
+                    if (!empty($oldImage)) {
+                        $oldPath = Yii::getAlias('@webroot') . DIRECTORY_SEPARATOR . $oldImage;
+
+                        if (file_exists($oldPath)) {
+                            if (@unlink($oldPath)) {
+                                Yii::debug("File lama berhasil dihapus: {$oldPath}", __METHOD__);
+                            } else {
+                                Yii::debug("Gagal menghapus file lama: {$oldPath}", __METHOD__);
+                            }
+                        } else {
+                            Yii::debug("File lama tidak ditemukan di path: {$oldPath}", __METHOD__);
+                        }
+                    }
+
+
+                    $hero->background_image = 'images/' . $fileName;
+                }
+            } else {
+
+                $hero->background_image = $oldImage;
+            }
+
+            if ($hero->save()) {
+                Yii::$app->session->setFlash('success', 'Slogan utama berhasil diperbarui!');
+            }
+        }
+
+        return $this->redirect(['edit']);
+    }
 
     public function actionCreatePromo()
     {
@@ -111,86 +160,6 @@ class HomepageController extends Controller
         return $this->redirect(['edit']);
     }
 
-    public function actionEditHero()
-    {
-        $hero = HomepageHero::find()->one();
-        if (!$hero) {
-            $hero = new HomepageHero();
-        }
-
-        
-        $oldImage = $hero->background_image;
-
-        if ($hero->load(Yii::$app->request->post())) {
-            $file = UploadedFile::getInstance($hero, 'background_image');
-
-            if ($file) {
-                
-                $fileName = uniqid() . '-' . $file->baseName . '.' . $file->extension;
-                $path = Yii::getAlias('@webroot') . '/images/' . $fileName;
-
-                if ($file->saveAs($path)) {
-                    
-                    if (!empty($oldImage)) {
-                        $oldPath = Yii::getAlias('@webroot') . DIRECTORY_SEPARATOR . $oldImage;
-
-                        if (file_exists($oldPath)) {
-                            if (@unlink($oldPath)) {
-                                Yii::debug("File lama berhasil dihapus: {$oldPath}", __METHOD__);
-                            } else {
-                                Yii::debug("Gagal menghapus file lama: {$oldPath}", __METHOD__);
-                            }
-                        } else {
-                            Yii::debug("File lama tidak ditemukan di path: {$oldPath}", __METHOD__);
-                        }
-                    }
-
-                    
-                    $hero->background_image = 'images/' . $fileName;
-                }
-            } else {
-                
-                $hero->background_image = $oldImage;
-            }
-
-            if ($hero->save()) {
-                Yii::$app->session->setFlash('success', 'Slogan utama berhasil diperbarui!');
-            }
-        }
-
-        return $this->redirect(['edit']);
-    }
-
-
-    public function actionCreateProduk()
-    {
-        $model = new HomepageProduk();
-
-        if ($model->load(Yii::$app->request->post())) {
-            $file = UploadedFile::getInstance($model, 'image');
-
-            if ($file) {
-                
-                $fileName = time() . '-' . $file->baseName . '.' . $file->extension;
-                $path = Yii::getAlias('@webroot') . '/images/' . $fileName;
-
-                if ($file->saveAs($path)) {
-                    $model->image = 'images/' . $fileName;
-                }
-            }
-
-            if ($model->save()) {
-                Yii::$app->session->setFlash('success', 'Produk baru berhasil ditambahkan!');
-                return $this->redirect(['admin/produk']);
-            } else {
-                Yii::$app->session->setFlash('error', 'Gagal menyimpan produk.');
-            }
-        }
-
-        return $this->render('tambah', [
-            'model' => $model,
-        ]);
-    }
 
 
     public function actionCreateKeunggulan()
@@ -202,67 +171,6 @@ class HomepageController extends Controller
         return $this->redirect(['edit']);
     }
 
-    public function actionCreateTestimoni()
-    {
-        $model = new HomepageTestimoni();
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            Yii::$app->session->setFlash('success', 'Testimoni baru ditambahkan!');
-        }
-        return $this->redirect(['edit']);
-    }
-
-
-    public function actionUpdateProduk($id)
-    {
-        $model = HomepageProduk::findOne($id);
-        if (!$model) {
-            throw new NotFoundHttpException("Produk tidak ditemukan.");
-        }
-
-        
-        $oldImage = $model->image;
-
-        if ($model->load(Yii::$app->request->post())) {
-            $file = UploadedFile::getInstance($model, 'image');
-
-            if ($file) {
-                $fileName = time() . '-' . $file->baseName . '.' . $file->extension;
-                $path = Yii::getAlias('@webroot') . '/images/' . $fileName;
-
-                if ($file->saveAs($path)) {
-                    
-                    if (!empty($oldImage) && file_exists(Yii::getAlias('@webroot') . '/' . $oldImage)) {
-                        @unlink(Yii::getAlias('@webroot') . '/' . $oldImage);
-                    }
-                    $model->image = 'images/' . $fileName;
-                }
-            } else {
-                
-                $model->image = $oldImage;
-            }
-
-            if ($model->save()) {
-                Yii::$app->session->setFlash('success', 'Produk berhasil diupdate!');
-            }
-            return $this->redirect(['admin/produk']);
-        }
-
-        return $this->render('update_produk', ['model' => $model]);
-    }
-
-
-
-    public function actionDeleteProduk($id)
-    {
-        $model = HomepageProduk::findOne($id);
-        if ($model) {
-            $model->delete();
-            Yii::$app->session->setFlash('success', 'Produk berhasil dihapus!');
-        }
-        return $this->redirect(['admin/produk']);
-    }
-
-    /* ================= KEUNGGULAN ================= */
     public function actionUpdateKeunggulan($id)
     {
         $model = HomepageKeunggulan::findOne($id);
@@ -288,7 +196,16 @@ class HomepageController extends Controller
         return $this->redirect(['edit']);
     }
 
-    /* ================= TESTIMONI ================= */
+    public function actionCreateTestimoni()
+    {
+        $model = new HomepageTestimoni();
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            Yii::$app->session->setFlash('success', 'Testimoni baru ditambahkan!');
+        }
+        return $this->redirect(['edit']);
+    }
+
+
     public function actionUpdateTestimoni($id)
     {
         $model = HomepageTestimoni::findOne($id);
@@ -314,6 +231,86 @@ class HomepageController extends Controller
         return $this->redirect(['edit']);
     }
 
+    public function actionCreateProduk()
+    {
+        $model = new HomepageProduk();
+
+        if ($model->load(Yii::$app->request->post())) {
+            $file = UploadedFile::getInstance($model, 'image');
+
+            if ($file) {
+
+                $fileName = time() . '-' . $file->baseName . '.' . $file->extension;
+                $path = Yii::getAlias('@webroot') . '/images/' . $fileName;
+
+                if ($file->saveAs($path)) {
+                    $model->image = 'images/' . $fileName;
+                }
+            }
+
+            if ($model->save()) {
+                Yii::$app->session->setFlash('success', 'Produk baru berhasil ditambahkan!');
+                return $this->redirect(['admin/produk']);
+            } else {
+                Yii::$app->session->setFlash('error', 'Gagal menyimpan produk.');
+            }
+        }
+
+        return $this->render('tambah', [
+            'model' => $model,
+        ]);
+    }
+
+    public function actionUpdateProduk($id)
+    {
+        $model = HomepageProduk::findOne($id);
+        if (!$model) {
+            throw new NotFoundHttpException("Produk tidak ditemukan.");
+        }
+
+
+        $oldImage = $model->image;
+
+        if ($model->load(Yii::$app->request->post())) {
+            $file = UploadedFile::getInstance($model, 'image');
+
+            if ($file) {
+                $fileName = time() . '-' . $file->baseName . '.' . $file->extension;
+                $path = Yii::getAlias('@webroot') . '/images/' . $fileName;
+
+                if ($file->saveAs($path)) {
+
+                    if (!empty($oldImage) && file_exists(Yii::getAlias('@webroot') . '/' . $oldImage)) {
+                        @unlink(Yii::getAlias('@webroot') . '/' . $oldImage);
+                    }
+                    $model->image = 'images/' . $fileName;
+                }
+            } else {
+
+                $model->image = $oldImage;
+            }
+
+            if ($model->save()) {
+                Yii::$app->session->setFlash('success', 'Produk berhasil diupdate!');
+            }
+            return $this->redirect(['admin/produk']);
+        }
+
+        return $this->render('update_produk', ['model' => $model]);
+    }
+
+
+
+    public function actionDeleteProduk($id)
+    {
+        $model = HomepageProduk::findOne($id);
+        if ($model) {
+            $model->delete();
+            Yii::$app->session->setFlash('success', 'Produk berhasil dihapus!');
+        }
+        return $this->redirect(['admin/produk']);
+    }
+
     public function actionAdminProduk()
     {
         $produk = HomepageProduk::find()->all();
@@ -337,7 +334,7 @@ class HomepageController extends Controller
             foreach ($data as $id => $jumlah) {
                 $model = HomepageProduk::findOne($id);
                 if ($model) {
-                    $model->stok = (int)$jumlah;
+                    $model->stok = (int) $jumlah;
                     $model->save();
                 }
             }

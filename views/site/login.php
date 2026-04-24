@@ -16,6 +16,8 @@ $this->title = 'Masuk Akun';
 
         <?php $form = ActiveForm::begin([
             'id' => 'login-form',
+            'enableClientValidation' => true, // ✅ TAMBAHAN
+            'enableAjaxValidation' => false,
             'options' => ['class' => 'form-styled'],
             'fieldConfig' => [
                 'template' => "{input}\n{error}",
@@ -55,3 +57,29 @@ $this->title = 'Masuk Akun';
         <?php ActiveForm::end(); ?>
     </div>
 </div>
+
+<?php
+$this->registerJs("
+    $('#login-form').on('afterValidate', function (e, messages, errorAttributes) {
+        if (errorAttributes.length > 0) {
+
+            // Hapus alert lama
+            $('.custom-alert').remove();
+
+            // Buat alert
+            var alertBox = $('<div class=\"alert alert-danger custom-alert text-center\">Mohon lengkapi data login dengan benar.</div>');
+
+            // Letakkan di bawah judul
+            $('.form-card .section-title').after(alertBox);
+
+            // Scroll ke atas
+            $('html, body').animate({
+                scrollTop: $('.form-card').offset().top - 20
+            }, 500);
+
+            // Fokus ke field pertama yang error
+            $('.has-error input').first().focus();
+        }
+    });
+");
+?>
