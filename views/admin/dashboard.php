@@ -56,7 +56,8 @@ $this->title = 'Dashboard Admin';
                                 <img src="<?= Yii::getAlias('@web') ?>/<?= ($p['image']) ?>" alt="<?= ($p['title']) ?>" class="produk-img">
                             <?php endif; ?>
 
-                            <p class="harga">Rp <?= number_format($p['harga'], 0, ',', '.') ?></p>
+                            <p class="harga">Harga per Kg : Rp <?= number_format($p['harga_kg'], 0, ',', '.') ?></p>
+                            <p class="harga">Harga per Biji : Rp <?= number_format($p['harga_bijian'], 0, ',', '.') ?></p>
                             <p>Terjual: <strong><?= $p['jumlah_terjual'] ?></strong></p>
                         </div>
                     <?php endforeach; ?>
@@ -85,7 +86,10 @@ $this->title = 'Dashboard Admin';
                             </td>
                             <td><?= Html::encode($p->title) ?></td>
                             <td><?= Html::encode($p->description) ?></td>
-                            <td>Rp <?= number_format($p->harga, 0, ',', '.') ?></td>
+                            <td>
+                                <p>Kiloan: Rp <?= number_format($p->harga_kg, 0, ',', '.') ?></p>
+                                <p>Bijian : Rp <?= number_format($p->harga_bijian, 0, ',', '.') ?></p>
+                            </td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>

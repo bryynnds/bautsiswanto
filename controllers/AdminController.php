@@ -28,10 +28,10 @@ class AdminController extends Controller
 
         // Produk terlaris (berdasarkan qty di order_items)
         $produkTerlaris = (new \yii\db\Query())
-            ->select(['p.id', 'p.title', 'p.harga', 'p.image', 'SUM(oi.qty) AS jumlah_terjual'])
+            ->select(['p.id', 'p.title', 'p.harga_kg', 'p.harga_bijian', 'p.image', 'SUM(oi.qty) AS jumlah_terjual'])
             ->from(['oi' => 'order_items'])
             ->innerJoin(['p' => 'homepage_produk'], 'oi.produk_id = p.id')
-            ->groupBy(['p.id', 'p.title', 'p.harga', 'p.image'])
+            ->groupBy(['p.id', 'p.title', 'p.harga_kg', 'p.harga_bijian', 'p.image'])
             ->orderBy(['jumlah_terjual' => SORT_DESC])
             ->limit(6)
             ->all();
@@ -118,7 +118,7 @@ class AdminController extends Controller
 
             // lakukan query aman, pakai with() bila relasi benar
             $orders = $orderClass::find()
-                ->where(['user_id' => (int)$user_id])
+                ->where(['user_id' => (int) $user_id])
                 ->with(['items.produk', 'user']) // pastikan relasi ini ada: getOrderItems(), getProduk(), getUser()
                 ->orderBy(['created_at' => SORT_DESC])
                 ->all();
@@ -131,12 +131,13 @@ class AdminController extends Controller
                 foreach ($order->items as $item) {
                     $result[] = [
                         'username' => $theUser ? $theUser->username : null,
-                        'nama'     => $order->nama,
-                        'produk'   => $item->produk ? $item->produk->title : ($item->produk_id ?? '-'),
-                        'harga'    => number_format($item->harga, 0, ',', '.'),
-                        'qty'      => (int)$item->qty,
+                        'nama' => $order->nama,
+                        'produk' => $item->produk ? $item->produk->title : ($item->produk_id ?? '-'),
+                        'harga' => number_format($item->harga, 0, ',', '.'),
+                        'satuan' => ucfirst($item->satuan),
+                        'qty' => (int) $item->qty,
                         'subtotal' => number_format($item->subtotal, 0, ',', '.'),
-                        'tanggal'  => Yii::$app->formatter->asDatetime($item->created_at, 'php:d-m-Y'), // format tanggal
+                        'tanggal' => Yii::$app->formatter->asDatetime($item->created_at, 'php:d-m-Y'), // format tanggal
                     ];
                 }
             }

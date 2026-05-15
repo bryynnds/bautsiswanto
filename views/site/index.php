@@ -74,7 +74,8 @@ $dataProvider = new ArrayDataProvider([
       <?php foreach ($produkTerlaris as $p): ?>
         <div class="card">
           <h3><?= $p['title'] ?></h3>
-          <p>Rp <?= number_format($p['harga'], 0, ',', '.') ?></p>
+          <p>Kiloan: Rp <?= number_format($p['harga_kg'], 0, ',', '.') ?></p>
+          <p>Bijian: Rp <?= number_format($p['harga_bijian'], 0, ',', '.') ?></p>
           <img src="<?= Yii::getAlias('@web') ?>/<?= $p['image'] ?>"
             alt="<?= $p['title'] ?>" class="produk-img">
           <p><?= $p['description'] ?></p>

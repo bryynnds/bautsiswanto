@@ -1,4 +1,5 @@
 <?php
+
 namespace app\models;
 
 use Yii;
@@ -14,8 +15,13 @@ class Keranjang extends ActiveRecord
     public function rules()
     {
         return [
-            [['user_id','produk_id'],'required'],
-            [['user_id','produk_id','jumlah'],'integer'],
+            [['user_id', 'produk_id'], 'required'],
+
+            [['user_id', 'produk_id', 'jumlah'], 'integer'],
+
+            [['satuan'], 'string'],
+
+            [['satuan'], 'in', 'range' => ['kg', 'bijian']],
         ];
     }
 

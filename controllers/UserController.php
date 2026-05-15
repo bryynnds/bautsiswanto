@@ -79,7 +79,8 @@ class UserController extends Controller
             $data[] = [
                 'nama_produk' => $item->produk->title,
                 'qty' => $item->qty,
-                'harga' => $item->harga,
+                'harga_kg' => $item->harga_kg,
+                'harga_bijian' => $item->harga_bijian,
                 'subtotal' => $item->subtotal,
             ];
         }

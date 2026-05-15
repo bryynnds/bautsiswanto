@@ -8,11 +8,12 @@ use yii\helpers\Url;
 
 $this->title = 'Keranjang Saya';
 
-$updateUrl  = Url::to(['cart/update-qty']);
-$deleteUrl  = Url::to(['cart/delete']);
-$clearUrl   = Url::to(['cart/clear']);
+$updateUrl = Url::to(['cart/update-qty']);
+$updateSatuanUrl = Url::to(['cart/update-satuan']);
+$deleteUrl = Url::to(['cart/delete']);
+$clearUrl = Url::to(['cart/clear']);
 $checkoutUrl = Url::to(['cart/checkout']);
-$csrf       = Yii::$app->request->csrfToken;
+$csrf = Yii::$app->request->csrfToken;
 ?>
 
 <div class="container mt-5">
@@ -28,6 +29,7 @@ $csrf       = Yii::$app->request->csrfToken;
                             <th>Gambar</th>
                             <th>Produk</th>
                             <th>Harga</th>
+                            <th>Satuan</th>
                             <th>Jumlah</th>
                             <th>Subtotal</th>
                         </tr>
@@ -37,26 +39,43 @@ $csrf       = Yii::$app->request->csrfToken;
                         <?php foreach ($items as $item): ?>
                             <?php
                             $produk = $item->produk;
-                            if (!$produk) continue;
-                            $harga = (int)$produk->harga;
-                            $subtotal = $harga * (int)$item->jumlah;
+                            if (!$produk)
+                                continue;
+                            $satuan = $item->satuan ?: 'bijian';
+                            $harga = $satuan == 'kg'
+                                ? (int) $produk->harga_kg
+                                : (int) $produk->harga_bijian;
+                            $subtotal = $harga * (int) $item->jumlah;
                             $grandTotal += $subtotal;
                             ?>
-                            <tr data-id="<?= (int)$item->id ?>" data-harga="<?= $harga ?>">
+                            <tr data-id="<?= (int) $item->id ?>" data-harga-kg="<?= (int) $produk->harga_kg ?>"
+                                data-harga-bijian="<?= (int) $produk->harga_bijian ?>">
                                 <td>
                                     <button class="btn-hapus delete-item">Hapus</button>
                                 </td>
                                 <td>
                                     <img src="<?= Html::encode(Yii::getAlias('@web/' . $produk->image)) ?>"
-                                        alt="<?= Html::encode($produk->title) ?>"
-                                        class="cart-img">
+                                        alt="<?= Html::encode($produk->title) ?>" class="cart-img">
                                 </td>
                                 <td><?= Html::encode($produk->title) ?></td>
-                                <td>Rp <?= number_format($harga, 0, ',', '.') ?></td>
+                                <td class="harga-text">
+                                    Rp <?= number_format($harga, 0, ',', '.') ?>
+                                </td>
+                                <td>
+                                    <select class="form-select satuan-select">
+                                        <option value="bijian" <?= $satuan == 'bijian' ? 'selected' : '' ?>>
+                                            Bijian
+                                        </option>
+
+                                        <option value="kg" <?= $satuan == 'kg' ? 'selected' : '' ?>>
+                                            Kg
+                                        </option>
+                                    </select>
+                                </td>
                                 <td>
                                     <div class="qty-control">
                                         <button class="btn-qty minus">-</button>
-                                        <input type="text" class="qty" value="<?= (int)$item->jumlah ?>" readonly>
+                                        <input type="text" class="qty" value="<?= (int) $item->jumlah ?>" readonly>
                                         <button class="btn-qty plus">+</button>
                                     </div>
                                 </td>
@@ -89,12 +108,14 @@ $csrf       = Yii::$app->request->csrfToken;
         <?php endif; ?>
     </section>
     <div class="toast-container position-fixed bottom-0 start-0 p-3">
-        <div id="cartToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div id="cartToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive"
+            aria-atomic="true">
             <div class="d-flex">
                 <div class="toast-body" id="toast-message">
                     <!-- pesan akan diisi dari JS -->
                 </div>
-                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                    aria-label="Close"></button>
             </div>
         </div>
     </div>
@@ -149,6 +170,49 @@ $(document).on('click', '.plus, .minus', function(e){
             console.error('AJAX error', status, err, xhr.responseText);
             alert('Terjadi error pada server. Cek console (F12).');
             location.reload();
+        }
+    });
+});
+
+$(document).on('change', '.satuan-select', function(){
+
+    var row = $(this).closest('tr');
+
+    $.ajax({
+
+        url: '{$updateSatuanUrl}',
+
+        method: 'POST',
+
+        dataType: 'json',
+
+        data: {
+            id: row.data('id'),
+            satuan: $(this).val(),
+            _csrf: '{$csrf}'
+        },
+
+        success: function(res){
+
+            if(res.success){
+
+                row.find('.subtotal')
+                    .text(formatRupiah(res.subtotal));
+
+                row.find('.harga-text')
+                    .text(formatRupiah(res.harga));
+
+                $('#grand-total')
+                    .text(formatRupiah(res.grandTotal));
+
+            } else {
+
+                alert('Gagal update satuan');
+            }
+        },
+
+        error: function(){
+            alert('Terjadi error server');
         }
     });
 });

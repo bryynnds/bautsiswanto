@@ -15,16 +15,14 @@ $this->title = 'Daftar Produk';
         <a href="<?= \yii\helpers\Url::to(['homepage/create-produk']) ?>" class="btn btn-primary mb-4 me-2">
             Tambah Produk
         </a>
-        <a href="<?= \yii\helpers\Url::to(['homepage/tambah-stok']) ?>" class="btn btn-secondary mb-4">
-            Tambah Stok
-        </a>
     </div>
 
     <div class="produk-grid">
         <?php foreach ($produk as $item): ?>
             <div class="card">
                 <h3><?= Html::encode($item->title) ?></h3>
-                <p>Rp <?= number_format($item->harga, 0, ',', '.') ?></p>
+                <p>Harga per Kg : Rp <?= number_format($item->harga_kg, 0, ',', '.') ?></p>
+                <p>Harga per Biji : Rp <?= number_format($item->harga_bijian, 0, ',', '.') ?></p>
 
                 <img src="<?= Yii::getAlias('@web') ?>/<?= Html::encode($item->image) ?>"
                     alt="<?= Html::encode($item->title) ?>"

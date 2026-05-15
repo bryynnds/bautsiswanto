@@ -87,7 +87,8 @@ class SiteController extends Controller
             ->select([
                 'p.id',
                 'p.title',
-                'p.harga',
+                'p.harga_kg',
+                'p.harga_bijian',
                 'p.image',
                 'p.description',
                 'SUM(oi.qty) AS jumlah_terjual'
@@ -97,7 +98,8 @@ class SiteController extends Controller
             ->groupBy([
                 'p.id',
                 'p.title',
-                'p.harga',
+                'p.harga_kg',
+                'p.harga_bijian',
                 'p.image',
                 'p.description',
             ])

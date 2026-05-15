@@ -19,7 +19,11 @@ class CheckoutController extends Controller
 
         $total = 0;
         foreach ($keranjang as $item) {
-            $total += $item->produk->harga * $item->jumlah;
+            $harga = $item->satuan == 'kg'
+                ? $item->produk->harga_kg
+                : $item->produk->harga_bijian;
+
+            $total += $harga * $item->jumlah;
         }
 
         return $this->render('checkout', [
@@ -45,12 +49,16 @@ class CheckoutController extends Controller
     public function actionProcess()
     {
         Config::$serverKey = 'SB-Mid-server-IWLFN5qdGmuxRk-QkCSoaTot';
-        Config::$isProduction = false;       
+        Config::$isProduction = false;
         Config::$isSanitized = true;
         Config::$is3ds = true;
 
         $post = Yii::$app->request->post();
         $userId = Yii::$app->user->id;
+
+        $keranjang = Keranjang::find()
+            ->where(['user_id' => $userId])
+            ->all();
 
         // 1. Simpan ke tabel orders
         $order = new Order();
@@ -59,7 +67,18 @@ class CheckoutController extends Controller
         $order->no_hp = $post['no_hp'];
         $order->alamat = $post['alamat'];
         $order->metode_pembayaran = $post['metode_pembayaran'];
-        $order->total = $post['total'];
+        $total = 0;
+
+        foreach ($keranjang as $item) {
+
+            $harga = $item->satuan == 'kg'
+                ? $item->produk->harga_kg
+                : $item->produk->harga_bijian;
+
+            $total += $harga * $item->jumlah;
+        }
+
+        $order->total = $total;
         $order->status = ($post['metode_pembayaran'] == 'COD') ? 'COD' : 'Pending';
 
         if (!$order->save()) {
@@ -74,8 +93,13 @@ class CheckoutController extends Controller
             $orderItem->order_id = $order->id;
             $orderItem->produk_id = $item->produk_id;
             $orderItem->qty = $item->jumlah;
-            $orderItem->harga = $item->produk->harga;
-            $orderItem->subtotal = $item->produk->harga * $item->jumlah;
+            $orderItem->satuan = $item->satuan;
+            $harga = $item->satuan == 'kg'
+                ? $item->produk->harga_kg
+                : $item->produk->harga_bijian;
+
+            $orderItem->harga = $harga;
+            $orderItem->subtotal = $harga * $item->jumlah;
             $orderItem->save();
         }
 
@@ -89,7 +113,7 @@ class CheckoutController extends Controller
         $params = [
             'transaction_details' => [
                 'order_id' => 'ORDER-' . $order->id,
-                'gross_amount' => (int)$order->total,
+                'gross_amount' => (int) $order->total,
             ],
             'customer_details' => [
                 'first_name' => $order->nama,
@@ -100,7 +124,7 @@ class CheckoutController extends Controller
         $params = [
             'transaction_details' => [
                 'order_id' => 'ORDER-' . $order->id . '-' . time(),
-                'gross_amount' => (int)$order->total,
+                'gross_amount' => (int) $order->total,
             ],
             'customer_details' => [
                 'first_name' => $order->nama,

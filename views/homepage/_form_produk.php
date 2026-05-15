@@ -47,18 +47,6 @@ $this->title = 'Admin - Tambah Produk';
             ]
         ) ?>
 
-
-        <?= $form->field($model, 'satuan')->dropDownList(
-            [
-                'kg' => 'Kg',
-                'bijian' => 'Bijian'
-            ],
-            [
-                'prompt' => 'Pilih satuan produk...',
-                'class' => 'form-control'
-            ]
-        ) ?>
-
         <!-- Deskripsi -->
         <?= $form->field($model, 'description')->textarea([
             'rows' => 4,
@@ -66,17 +54,16 @@ $this->title = 'Admin - Tambah Produk';
             'class' => 'form-control'
         ]) ?>
 
-        <!-- Harga -->
-        <?= $form->field($model, 'harga')->textInput([
+        <?= $form->field($model, 'harga_kg')->textInput([
             'type' => 'number',
-            'placeholder' => 'Masukkan harga produk...',
+            'placeholder' => 'Masukkan harga per kg...',
             'min' => 0,
             'class' => 'form-control'
         ]) ?>
 
-        <?= $form->field($model, 'jumlah')->textInput([
+        <?= $form->field($model, 'harga_bijian')->textInput([
             'type' => 'number',
-            'placeholder' => 'Masukkan jumlah produk...',
+            'placeholder' => 'Masukkan harga per bijian...',
             'min' => 0,
             'class' => 'form-control'
         ]) ?>

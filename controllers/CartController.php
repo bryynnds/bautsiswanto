@@ -18,7 +18,7 @@ class CartController extends Controller
             'access' => [
                 'class' => AccessControl::class,
                 // daftarkan semua action yang butuh proteksi @ (login)
-                'only' => ['index', 'add', 'update', 'clear', 'delete', 'update-qty', 'checkout'],
+                'only' => ['index', 'add', 'update', 'clear', 'delete', 'update-qty', 'update-satuan', 'checkout'],
                 'rules' => [
                     ['allow' => true, 'roles' => ['@']],
                 ],
@@ -26,11 +26,12 @@ class CartController extends Controller
             'verbs' => [
                 'class' => VerbFilter::class,
                 'actions' => [
-                    'add'        => ['post'],
-                    'update'     => ['post'],
-                    'clear'      => ['post'],
-                    'delete'     => ['post'],
+                    'add' => ['post'],
+                    'update' => ['post'],
+                    'clear' => ['post'],
+                    'delete' => ['post'],
                     'update-qty' => ['post'],
+                    'update-satuan' => ['post'],
                     // checkout biasanya GET (render form)
                 ],
             ],
@@ -66,10 +67,11 @@ class CartController extends Controller
             $cart->user_id = Yii::$app->user->id;
             $cart->produk_id = $produkId;
             $cart->jumlah = 1;
+            $cart->satuan = 'bijian';
         }
 
         if ($cart->save()) {
-            $count = (int)Keranjang::find()->where(['user_id' => Yii::$app->user->id])->sum('jumlah');
+            $count = (int) Keranjang::find()->where(['user_id' => Yii::$app->user->id])->sum('jumlah');
             return ['success' => true, 'count' => $count];
         }
 
@@ -80,14 +82,16 @@ class CartController extends Controller
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $cart = Keranjang::findOne($id);
-        if (!$cart || $cart->user_id != Yii::$app->user->id) return ['success' => false];
+        if (!$cart || $cart->user_id != Yii::$app->user->id)
+            return ['success' => false];
 
-        $jumlah = (int)Yii::$app->request->post('jumlah', 1);
-        if ($jumlah < 1) $jumlah = 1;
+        $jumlah = (int) Yii::$app->request->post('jumlah', 1);
+        if ($jumlah < 1)
+            $jumlah = 1;
 
         $cart->jumlah = $jumlah;
         if ($cart->save()) {
-            $total = (int)Keranjang::find()->where(['user_id' => Yii::$app->user->id])->sum('jumlah');
+            $total = (int) Keranjang::find()->where(['user_id' => Yii::$app->user->id])->sum('jumlah');
             return ['success' => true, 'count' => $total];
         }
 
@@ -106,29 +110,88 @@ class CartController extends Controller
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $id = Yii::$app->request->post('id');       // id keranjang
-        $qty = (int)Yii::$app->request->post('qty');     // jumlah baru
+        $qty = (int) Yii::$app->request->post('qty');     // jumlah baru
 
         $item = Keranjang::findOne($id);
         if ($item && $qty > 0 && $item->user_id == Yii::$app->user->id) {
             $item->jumlah = $qty;
             if ($item->save()) {
-                $harga = $item->produk->harga;
-                $subtotal = $harga * $qty;
+                $harga = $item->satuan == 'kg'
+                    ? $item->produk->harga_kg
+                    : $item->produk->harga_bijian;
 
+                $subtotal = $harga * $qty;
                 // hitung grand total
                 $total = 0;
                 $items = Keranjang::find()->where(['user_id' => Yii::$app->user->id])->all();
                 foreach ($items as $i) {
-                    $total += $i->produk->harga * $i->jumlah;
+                    $hargaItem = $i->satuan == 'kg'
+                        ? $i->produk->harga_kg
+                        : $i->produk->harga_bijian;
+
+                    $total += $hargaItem * $i->jumlah;
                 }
 
                 return [
-                    'success'    => true,
-                    'subtotal'   => $subtotal,
+                    'success' => true,
+                    'subtotal' => $subtotal,
                     'grandTotal' => $total
                 ];
             }
         }
+        return ['success' => false];
+    }
+
+    public function actionUpdateSatuan()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        $id = Yii::$app->request->post('id');
+        $satuan = Yii::$app->request->post('satuan');
+
+        $item = Keranjang::findOne($id);
+
+        if (
+            $item &&
+            $item->user_id == Yii::$app->user->id &&
+            in_array($satuan, ['kg', 'bijian'])
+        ) {
+
+            $item->satuan = $satuan;
+
+            if ($item->save()) {
+
+                $harga = $satuan == 'kg'
+                    ? $item->produk->harga_kg
+                    : $item->produk->harga_bijian;
+
+                $subtotal = $harga * $item->jumlah;
+
+                // grand total
+                $grandTotal = 0;
+
+                $items = Keranjang::find()
+                    ->where(['user_id' => Yii::$app->user->id])
+                    ->all();
+
+                foreach ($items as $i) {
+
+                    $hargaItem = $i->satuan == 'kg'
+                        ? $i->produk->harga_kg
+                        : $i->produk->harga_bijian;
+
+                    $grandTotal += $hargaItem * $i->jumlah;
+                }
+
+                return [
+                    'success' => true,
+                    'harga' => $harga,
+                    'subtotal' => $subtotal,
+                    'grandTotal' => $grandTotal
+                ];
+            }
+        }
+
         return ['success' => false];
     }
 
@@ -146,7 +209,11 @@ class CartController extends Controller
             $total = 0;
             $items = Keranjang::find()->where(['user_id' => Yii::$app->user->id])->all();
             foreach ($items as $i) {
-                $total += $i->produk->harga * $i->jumlah;
+                $hargaItem = $i->satuan == 'kg'
+                    ? $i->produk->harga_kg
+                    : $i->produk->harga_bijian;
+
+                $total += $hargaItem * $i->jumlah;
             }
 
             return ['success' => true, 'grandTotal' => $total];
@@ -157,49 +224,54 @@ class CartController extends Controller
 
     // halaman checkout (GET)
     public function actionCheckout()
-{
-    $userId = Yii::$app->user->id;
-    $cartItems = Keranjang::find()->where(['user_id' => $userId])->all();
+    {
+        $userId = Yii::$app->user->id;
+        $cartItems = Keranjang::find()->where(['user_id' => $userId])->all();
 
-    if (Yii::$app->request->isPost) {
-        $post = Yii::$app->request->post();
+        if (Yii::$app->request->isPost) {
+            $post = Yii::$app->request->post();
 
-        // hitung total
-        $total = 0;
-        foreach ($cartItems as $item) {
-            $total += $item->produk->harga * $item->jumlah;
-        }
-
-        // simpan orders
-        $order = new \app\models\Order();
-        $order->user_id = $userId;
-        $order->nama = $post['nama'];
-        $order->no_hp = $post['no_hp'];
-        $order->alamat = $post['alamat'];
-        $order->metode_pembayaran = $post['metode_pembayaran'];
-        $order->total = $total;
-
-        if ($order->save()) {
+            // hitung total
+            $total = 0;
             foreach ($cartItems as $item) {
-                $orderItem = new \app\models\OrderItem();
-                $orderItem->order_id = $order->id;
-                $orderItem->produk_id = $item->produk_id;   
-                $orderItem->qty = $item->jumlah;
-                $orderItem->harga = $item->produk->harga;
-                $orderItem->subtotal = $item->produk->harga * $item->jumlah;
-                $orderItem->save();
+                $total += $item->produk->harga * $item->jumlah;
             }
 
-            // kosongkan keranjang
-            Keranjang::deleteAll(['user_id' => $userId]);
+            // simpan orders
+            $order = new \app\models\Order();
+            $order->user_id = $userId;
+            $order->nama = $post['nama'];
+            $order->no_hp = $post['no_hp'];
+            $order->alamat = $post['alamat'];
+            $order->metode_pembayaran = $post['metode_pembayaran'];
+            $order->total = $total;
 
-            return $this->redirect(['site/index']);
+            if ($order->save()) {
+                foreach ($cartItems as $item) {
+                    $orderItem = new \app\models\OrderItem();
+                    $orderItem->order_id = $order->id;
+                    $orderItem->produk_id = $item->produk_id;
+                    $orderItem->qty = $item->jumlah;
+                    $orderItem->satuan = $item->satuan;
+                    $harga = $item->satuan == 'kg'
+                        ? $item->produk->harga_kg
+                        : $item->produk->harga_bijian;
+
+                    $orderItem->harga = $harga;
+                    $orderItem->subtotal = $harga * $item->jumlah;
+                    $orderItem->save();
+                }
+
+                // kosongkan keranjang
+                Keranjang::deleteAll(['user_id' => $userId]);
+
+                return $this->redirect(['site/index']);
+            }
         }
-    }
 
-    return $this->render('checkout', [
-        'items' => $cartItems,
-    ]);
-}
+        return $this->render('checkout', [
+            'items' => $cartItems,
+        ]);
+    }
 
 }

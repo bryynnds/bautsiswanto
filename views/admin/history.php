@@ -29,6 +29,7 @@ $this->title = 'Riwayat Belanja';
                     <th>Nama</th>
                     <th>Produk</th>
                     <th>Harga</th>
+                    <th>Satuan</th>
                     <th>Jumlah</th>
                     <th>Subtotal</th>
                     <th>Tanggal</th>
@@ -72,6 +73,7 @@ $('#userSelect').on('change', function(){
                                 '<td>'+ (row.nama || '-') +'</td>'+
                                 '<td>'+ (row.produk || '-') +'</td>'+
                                 '<td>Rp '+ (row.harga || '-') +'</td>'+
+                                '<td>'+ (row.satuan || '-') +'</td>'+
                                 '<td>'+ (row.qty || '-') +'</td>'+
                                 '<td>Rp '+ (row.subtotal || '-') +'</td>'+
                                 '<td>'+ (row.tanggal || '-') +'</td>'+
@@ -80,11 +82,11 @@ $('#userSelect').on('change', function(){
                     });
                 } else {
                     wrapper.show();
-                    tbody.append('<tr><td colspan="6" class="text-center">Belum ada riwayat belanja.</td></tr>');
+                    tbody.append('<tr><td colspan="7" class="text-center">Belum ada riwayat belanja.</td></tr>');
                 }
             } else {
                 wrapper.show();
-                tbody.append('<tr><td colspan="6" class="text-center">Error: '+ (res.message || 'unknown') +'</td></tr>');
+                tbody.append('<tr><td colspan="7" class="text-center">Error: '+ (res.message || 'unknown') +'</td></tr>');
                 console.error('Response error:', res);
             }
         },

@@ -19,7 +19,9 @@ $this->title = 'Checkout';
             // Hitung grand total dulu supaya bisa digunakan di form
             $grandTotal = 0;
             foreach ($items as $item) {
-                $harga = (int)$item->produk->harga;
+                $harga = $item->satuan == 'kg'
+                    ? (int) $item->produk->harga_kg
+                    : (int) $item->produk->harga_bijian;
                 $subtotal = $harga * $item->jumlah;
                 $grandTotal += $subtotal;
             }
@@ -56,9 +58,6 @@ $this->title = 'Checkout';
                         </select>
                     </div>
 
-                    <!-- kirim total sebagai hidden -->
-                    <input type="hidden" name="total" value="<?= htmlspecialchars($grandTotal, ENT_QUOTES) ?>">
-
                     <button type="submit" class="btn-checkout btn btn-primary">Bayar</button>
 
                     <?php ActiveForm::end(); ?>
@@ -73,6 +72,7 @@ $this->title = 'Checkout';
                                 <tr>
                                     <th>Produk</th>
                                     <th>Harga</th>
+                                    <th>Satuan</th>
                                     <th>Jumlah</th>
                                     <th>Subtotal</th>
                                 </tr>
@@ -80,12 +80,16 @@ $this->title = 'Checkout';
                             <tbody>
                                 <?php foreach ($items as $item): ?>
                                     <?php
-                                    $harga = (int)$item->produk->harga;
+                                    $harga = $item->satuan == 'kg'
+                                        ? (int) $item->produk->harga_kg
+                                        : (int) $item->produk->harga_bijian;
                                     $subtotal = $harga * $item->jumlah;
                                     ?>
                                     <tr>
                                         <td><?= Html::encode($item->produk->title) ?></td>
                                         <td>Rp <?= number_format($harga, 0, ',', '.') ?></td>
+                                        <td><?= ucfirst($item->satuan) ?></td>
+
                                         <td><?= $item->jumlah ?></td>
                                         <td>Rp <?= number_format($subtotal, 0, ',', '.') ?></td>
                                     </tr>
@@ -93,7 +97,7 @@ $this->title = 'Checkout';
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <th colspan="3" class="text-end">Total</th>
+                                    <th colspan="4" class="text-end">Total</th>
                                     <th>Rp <?= number_format($grandTotal, 0, ',', '.') ?></th>
                                 </tr>
                             </tfoot>

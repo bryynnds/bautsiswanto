@@ -25,7 +25,8 @@ $this->title = 'Kalkulator Kasir';
                                             Html::encode($model->title),
                                             [
                                                 'value' => $model->id,
-                                                'data-harga' => $model->harga,
+                                                'data-harga-kg' => $model->harga_kg,
+                                                'data-harga-bijian' => $model->harga_bijian,
                                                 'data-nama' => Html::encode($model->title),
                                             ]
                                         );
@@ -36,6 +37,12 @@ $this->title = 'Kalkulator Kasir';
                         </div>
                         <div class="col-md-3">
                             <input type="number" id="productPrice" class="form-control" placeholder="Harga" readonly>
+                        </div>
+                        <div class="col-md-2">
+                            <select id="productUnit" class="form-select">
+                                <option value="bijian">Bijian</option>
+                                <option value="kg">Kg</option>
+                            </select>
                         </div>
                         <div class="col-md-3">
                             <input type="number" id="productQty" class="form-control" placeholder="Jumlah" min="1">
@@ -55,10 +62,10 @@ $this->title = 'Kalkulator Kasir';
                     <div class="row g-2">
                         <?php
                         $buttons = [
-                            ['1','2','3','/'],
-                            ['4','5','6','*'],
-                            ['7','8','9','-'],
-                            ['0','.','=','+'],
+                            ['1', '2', '3', '/'],
+                            ['4', '5', '6', '*'],
+                            ['7', '8', '9', '-'],
+                            ['0', '.', '=', '+'],
                         ];
                         foreach ($buttons as $row): ?>
                             <div class="col-12 d-flex gap-2 mb-2">
@@ -83,6 +90,7 @@ $this->title = 'Kalkulator Kasir';
                     <tr>
                         <th>Nama Produk</th>
                         <th>Harga</th>
+                        <th>Satuan</th>
                         <th>Qty</th>
                         <th>Sub Total</th>
                         <th>Aksi</th>
@@ -92,7 +100,7 @@ $this->title = 'Kalkulator Kasir';
                 </tbody>
                 <tfoot>
                     <tr>
-                        <th colspan="3" class="text-end">Grand Total</th>
+                        <th colspan="4" class="text-end">Grand Total</th>
                         <th id="grandTotal">Rp 0</th>
                         <th></th>
                     </tr>
@@ -103,78 +111,99 @@ $this->title = 'Kalkulator Kasir';
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-    const productSelect = document.getElementById('productSelect');
-    const productPrice = document.getElementById('productPrice');
-    const productQty = document.getElementById('productQty');
-    const addBtn = document.getElementById('addItemBtn');
-    const tbody = document.querySelector('#orderTable tbody');
-    const grandTotalEl = document.getElementById('grandTotal');
-    let grandTotal = 0;
+    document.addEventListener('DOMContentLoaded', function () {
+        const productSelect = document.getElementById('productSelect');
+        const productPrice = document.getElementById('productPrice');
+        const productQty = document.getElementById('productQty');
+        const addBtn = document.getElementById('addItemBtn');
+        const tbody = document.querySelector('#orderTable tbody');
+        const grandTotalEl = document.getElementById('grandTotal');
+        let grandTotal = 0;
 
-    productSelect.addEventListener('change', function () {
-        const opt = this.options[this.selectedIndex];
-        productPrice.value = opt ? opt.getAttribute('data-harga') : '';
-    });
+        const productUnit = document.getElementById('productUnit');
 
-    addBtn.addEventListener('click', function () {
-        const opt = productSelect.options[productSelect.selectedIndex];
-        if (!opt.value) return alert('Pilih produk dulu');
+        function updatePrice() {
 
-        const name = opt.getAttribute('data-nama');
-        const price = parseFloat(productPrice.value);
-        const qty = parseInt(productQty.value, 10);
-        if (!price || !qty) return alert('Isi qty dengan benar');
+            const opt = productSelect.options[productSelect.selectedIndex];
 
-        const subtotal = price * qty;
-        grandTotal += subtotal;
+            if (!opt.value) {
+                productPrice.value = '';
+                return;
+            }
 
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
+            const satuan = productUnit.value;
+
+            const harga = satuan === 'kg'
+                ? opt.getAttribute('data-harga-kg')
+                : opt.getAttribute('data-harga-bijian');
+
+            productPrice.value = harga;
+        }
+
+        productSelect.addEventListener('change', updatePrice);
+
+        productUnit.addEventListener('change', updatePrice);
+
+        addBtn.addEventListener('click', function () {
+            const opt = productSelect.options[productSelect.selectedIndex];
+            if (!opt.value) return alert('Pilih produk dulu');
+
+            const name = opt.getAttribute('data-nama');
+            const price = parseFloat(productPrice.value);
+            const qty = parseInt(productQty.value, 10);
+            const satuan = productUnit.value;
+            if (!price || !qty) return alert('Isi qty dengan benar');
+
+            const subtotal = price * qty;
+            grandTotal += subtotal;
+
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
             <td>${name}</td>
             <td>Rp ${price.toLocaleString('id-ID')}</td>
+            <td>${satuan}</td>
             <td>${qty}</td>
             <td>Rp ${subtotal.toLocaleString('id-ID')}</td>
             <td><button type="button" class="btn btn-danger btn-sm btn-remove">Hapus</button></td>
         `;
-        tbody.appendChild(tr);
-        updateGrandTotal();
-
-        productSelect.selectedIndex = 0;
-        productPrice.value = '';
-        productQty.value = '';
-    });
-
-    tbody.addEventListener('click', e => {
-        if (e.target.classList.contains('btn-remove')) {
-            const row = e.target.closest('tr');
-            const subtotalText = row.cells[3].innerText;
-            const subtotalNumber = parseInt(subtotalText.replace(/[^\d]/g,''), 10) || 0;
-            grandTotal -= subtotalNumber;
-            row.remove();
+            tbody.appendChild(tr);
             updateGrandTotal();
-        }
-    });
 
-    function updateGrandTotal() {
-        grandTotalEl.innerText = 'Rp ' + grandTotal.toLocaleString('id-ID');
-    }
+            productSelect.selectedIndex = 0;
+            productPrice.value = '';
+            productQty.value = '';
+        });
 
-    // Kalkulator
-    const calcInput = document.getElementById('calcInput');
-    document.querySelectorAll('.calc-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const val = btn.innerText;
-            if (val === '=') {
-                try { calcInput.value = eval(calcInput.value); }
-                catch { calcInput.value = 'Error'; }
-            } else {
-                calcInput.value += val;
+        tbody.addEventListener('click', e => {
+            if (e.target.classList.contains('btn-remove')) {
+                const row = e.target.closest('tr');
+                const subtotalText = row.cells[3].innerText;
+                const subtotalNumber = parseInt(subtotalText.replace(/[^\d]/g, ''), 10) || 0;
+                grandTotal -= subtotalNumber;
+                row.remove();
+                updateGrandTotal();
             }
         });
+
+        function updateGrandTotal() {
+            grandTotalEl.innerText = 'Rp ' + grandTotal.toLocaleString('id-ID');
+        }
+
+        // Kalkulator
+        const calcInput = document.getElementById('calcInput');
+        document.querySelectorAll('.calc-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const val = btn.innerText;
+                if (val === '=') {
+                    try { calcInput.value = eval(calcInput.value); }
+                    catch { calcInput.value = 'Error'; }
+                } else {
+                    calcInput.value += val;
+                }
+            });
+        });
+        document.getElementById('clearCalc').addEventListener('click', () => {
+            calcInput.value = '';
+        });
     });
-    document.getElementById('clearCalc').addEventListener('click', () => {
-        calcInput.value = '';
-    });
-});
 </script>

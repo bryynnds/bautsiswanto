@@ -12,7 +12,8 @@ $this->title = 'Daftar Produk';
         <?php foreach ($produks as $produk): ?>
             <div class="card">
                 <h3><?= $produk->title ?></h3>
-                <p>Rp <?= number_format($produk->harga, 0, ',', '.') ?></p>
+                <p>Kiloan: Rp <?= number_format($produk->harga_kg, 0, ',', '.') ?></p>
+                <p>Bijian: Rp <?= number_format($produk->harga_bijian, 0, ',', '.') ?></p>
                 <img src="<?= Yii::getAlias('@web') ?>/<?= $produk->image ?>"
                     alt="<?= $produk->title ?>" class="produk-img">
                 <p><?= $produk->description ?></p>
