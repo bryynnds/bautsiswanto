@@ -8,6 +8,8 @@ use yii\web\NotFoundHttpException;
 use yii\web\UploadedFile;
 use app\models\HomepageHero;
 use app\models\HomepageProduk;
+use app\models\KategoriProduk;
+use app\models\JenisProduk;
 use app\models\HomepageKeunggulan;
 use app\models\HomepageTestimoni;
 use yii\filters\AccessControl;
@@ -304,18 +306,75 @@ class HomepageController extends Controller
     public function actionDeleteProduk($id)
     {
         $model = HomepageProduk::findOne($id);
+
         if ($model) {
+
+            // Hapus gambar
+            if (!empty($model->image)) {
+
+                $imagePath = Yii::getAlias('@webroot') . '/' . $model->image;
+
+                if (file_exists($imagePath)) {
+                    @unlink($imagePath);
+                }
+            }
+
             $model->delete();
-            Yii::$app->session->setFlash('success', 'Produk berhasil dihapus!');
+
+            Yii::$app->session->setFlash(
+                'success',
+                'Produk berhasil dihapus!'
+            );
         }
+
         return $this->redirect(['admin/produk']);
     }
 
     public function actionAdminProduk()
     {
-        $produk = HomepageProduk::find()->all();
+        $produk = HomepageProduk::find()
+            ->with(['kategori.jenis'])
+            ->all();
+
         return $this->render('/admin/produk', [
             'produk' => $produk,
         ]);
+    }
+
+    public function actionCreateKategori()
+    {
+        $model = new \app\models\KategoriProduk();
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+
+            Yii::$app->session->setFlash(
+                'success',
+                'Kategori berhasil ditambahkan!'
+            );
+
+            return $this->redirect(['admin/produk']);
+        }
+
+        return $this->render('tambah_kategori', [
+            'model' => $model,
+        ]);
+    }
+
+    public function actionGetKategori($jenis_id)
+    {
+        $kategori = \app\models\KategoriProduk::find()
+            ->where(['jenis_id' => $jenis_id])
+            ->all();
+
+        $output = '<option value="">Pilih kategori produk...</option>';
+
+        foreach ($kategori as $item) {
+
+            $output .= '<option value="' . $item->id . '">'
+                . $item->nama_kategori .
+                '</option>';
+        }
+
+        return $output;
     }
 }
