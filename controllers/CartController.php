@@ -123,19 +123,34 @@ class CartController extends Controller
                 $subtotal = $harga * $qty;
                 // hitung grand total
                 $total = 0;
+                $totalBerat = 0;
                 $items = Keranjang::find()->where(['user_id' => Yii::$app->user->id])->all();
                 foreach ($items as $i) {
+
                     $hargaItem = $i->satuan == 'kg'
                         ? $i->produk->harga_kg
                         : $i->produk->harga_bijian;
 
                     $total += $hargaItem * $i->jumlah;
+
+                    // hitung berat
+                    if ($i->satuan == 'kg') {
+
+                        $beratItem = $i->jumlah * 1000;
+
+                    } else {
+
+                        $beratItem = $i->jumlah * $i->produk->berat;
+                    }
+
+                    $totalBerat += $beratItem;
                 }
 
                 return [
                     'success' => true,
                     'subtotal' => $subtotal,
-                    'grandTotal' => $total
+                    'grandTotal' => $total,
+                    'grandWeight' => $totalBerat
                 ];
             }
         }
@@ -169,6 +184,7 @@ class CartController extends Controller
 
                 // grand total
                 $grandTotal = 0;
+                $totalBerat = 0;
 
                 $items = Keranjang::find()
                     ->where(['user_id' => Yii::$app->user->id])
@@ -181,13 +197,26 @@ class CartController extends Controller
                         : $i->produk->harga_bijian;
 
                     $grandTotal += $hargaItem * $i->jumlah;
+
+                    // hitung berat
+                    if ($i->satuan == 'kg') {
+
+                        $beratItem = $i->jumlah * 1000;
+
+                    } else {
+
+                        $beratItem = $i->jumlah * $i->produk->berat;
+                    }
+
+                    $totalBerat += $beratItem;
                 }
 
                 return [
                     'success' => true,
                     'harga' => $harga,
                     'subtotal' => $subtotal,
-                    'grandTotal' => $grandTotal
+                    'grandTotal' => $grandTotal,
+                    'grandWeight' => $totalBerat
                 ];
             }
         }

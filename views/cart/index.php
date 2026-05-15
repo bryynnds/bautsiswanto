@@ -35,8 +35,13 @@ $csrf = Yii::$app->request->csrfToken;
                         </tr>
                     </thead>
                     <tbody>
-                        <?php $grandTotal = 0; ?>
+                        <?php
+                        $grandTotal = 0;
+                        $totalBerat = 0;
+
+                        ?>
                         <?php foreach ($items as $item): ?>
+
                             <?php
                             $produk = $item->produk;
                             if (!$produk)
@@ -47,6 +52,17 @@ $csrf = Yii::$app->request->csrfToken;
                                 : (int) $produk->harga_bijian;
                             $subtotal = $harga * (int) $item->jumlah;
                             $grandTotal += $subtotal;
+                            if ($satuan == 'kg') {
+
+                                $beratItem = (int) $item->jumlah * 1000;
+
+                            } else {
+
+                                $beratItem = (int) $item->jumlah * (int) $produk->berat;
+                            }
+
+                            $totalBerat += $beratItem;
+
                             ?>
                             <tr data-id="<?= (int) $item->id ?>" data-harga-kg="<?= (int) $produk->harga_kg ?>"
                                 data-harga-bijian="<?= (int) $produk->harga_bijian ?>">
@@ -85,7 +101,16 @@ $csrf = Yii::$app->request->csrfToken;
                     </tbody>
                     <tfoot>
                         <tr>
-                            <th colspan="5" class="text-end">Total</th>
+                            <th colspan="6" class="text-end">
+                                Total Berat
+                            </th>
+
+                            <th id="grand-weight">
+                                <?= number_format($totalBerat, 0, ',', '.') ?> gram
+                            </th>
+                        </tr>
+                        <tr>
+                            <th colspan="6" class="text-end">Total</th>
                             <th id="grand-total">Rp <?= number_format($grandTotal, 0, ',', '.') ?></th>
                         </tr>
                     </tfoot>
@@ -160,6 +185,7 @@ $(document).on('click', '.plus, .minus', function(e){
             if (res && res.success) {
                 row.find('.subtotal').text(formatRupiah(res.subtotal));
                 $('#grand-total').text(formatRupiah(res.grandTotal));
+                $('#grand-weight').text(res.grandWeight + ' gram');
             } else {
                 alert('Gagal update jumlah: ' + (res && res.error ? res.error : 'Unknown'));
                 // optional: revert or reload
@@ -204,6 +230,9 @@ $(document).on('change', '.satuan-select', function(){
 
                 $('#grand-total')
                     .text(formatRupiah(res.grandTotal));
+
+                $('#grand-weight')
+                    .text(res.grandWeight + ' gram');
 
             } else {
 
@@ -257,6 +286,7 @@ $(document).on('click', '.delete-item', function(e){
                     });
                 } else {
                     $('#grand-total').text(formatRupiah(res.grandTotal));
+                    $('#grand-weight').text(res.grandWeight + ' gram');
                     showToast('Produk dihapus dari keranjang');
                 }
             } else {

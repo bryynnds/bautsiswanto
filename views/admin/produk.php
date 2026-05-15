@@ -61,6 +61,11 @@ $this->title = 'Daftar Produk';
                     Rp <?= number_format($item->harga_bijian, 0, ',', '.') ?>
                 </p>
 
+                <p>
+                    Berat per Biji :
+                    <?= number_format($item->berat, 0, ',', '.') ?> gram
+                </p>
+
                 <!-- Gambar -->
                 <img src="<?= Yii::getAlias('@web') ?>/<?= Html::encode($item->image) ?>"
                     alt="<?= Html::encode($item->title) ?>" class="produk-img">
