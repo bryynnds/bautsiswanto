@@ -32,9 +32,6 @@ $this->title = 'Daftar Produk';
 
                 <p><?= Html::encode($item->description) ?></p>
 
-                <p><strong>Merek:</strong> <?= Html::encode($item->brand_name) ?></p>
-                <p><strong>Stok:</strong> <?= Html::encode($item->stok) ?> pcs</p>
-
                 <div class="d-flex justify-content-between mt-2">
                     <?= Html::a('Ubah', ['homepage/update-produk', 'id' => $item->id], [
                         'class' => 'btn btn-warning btn-sm w-50 me-1',

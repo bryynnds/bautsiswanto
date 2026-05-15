@@ -1,4 +1,5 @@
 <?php
+
 namespace app\models;
 
 use Yii;
@@ -14,12 +15,12 @@ class HomepageProduk extends ActiveRecord
     public function rules()
     {
         return [
-            [['title', 'brand_name', 'description', 'harga', 'stok', 'link'], 'required'],
+            [['title', 'jenis', 'description', 'harga', 'jumlah', 'satuan'], 'required'],
             [['description'], 'string'],
-            [['harga', 'stok'], 'integer', 'min' => 0],
-            [['link'], 'url'],
-            [['title', 'brand_name'], 'string', 'max' => 255],
-            [['image'], 'file', 'extensions' => 'png, jpg, jpeg', 'maxSize' => 2 * 1024 * 1024],
+            [['harga'], 'integer', 'min' => 0],
+            [['jumlah'], 'integer', 'min' => 0],
+            [['title', 'jenis', 'satuan'], 'string', 'max' => 255],
+            [['image'], 'file', 'extensions' => 'png, jpg, jpeg'],
         ];
     }
 
@@ -27,12 +28,11 @@ class HomepageProduk extends ActiveRecord
     {
         return [
             'title' => 'Nama Produk',
+            'jenis' => 'Jenis Produk',
             'description' => 'Deskripsi',
-            'image' => 'Gambar Produk',
             'harga' => 'Harga',
-            'stok' => 'Jumlah Stok',
-            'link' => 'Link Produk',
-            'brand_name' => 'Merek',
+            'satuan' => 'Satuan',
+            'image' => 'Gambar Produk',
         ];
     }
 }

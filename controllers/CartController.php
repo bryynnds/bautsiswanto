@@ -58,10 +58,6 @@ class CartController extends Controller
             return ['success' => false, 'error' => 'produk_not_found'];
         }
 
-        if ($produk->stok < 1) {
-            return ['success' => false, 'error' => 'out_of_stock'];
-        }
-
         $cart = Keranjang::findOne(['user_id' => Yii::$app->user->id, 'produk_id' => $produkId]);
         if ($cart) {
             $cart->jumlah += 1;
@@ -88,9 +84,6 @@ class CartController extends Controller
 
         $jumlah = (int)Yii::$app->request->post('jumlah', 1);
         if ($jumlah < 1) $jumlah = 1;
-        if ($cart->produk && $jumlah > $cart->produk->stok) {
-            return ['success' => false, 'error' => 'exceeds_stock'];
-        }
 
         $cart->jumlah = $jumlah;
         if ($cart->save()) {

@@ -87,11 +87,9 @@ class SiteController extends Controller
             ->select([
                 'p.id',
                 'p.title',
-                'p.brand_name',
                 'p.harga',
                 'p.image',
                 'p.description',
-                'p.stok',
                 'SUM(oi.qty) AS jumlah_terjual'
             ])
             ->from(['oi' => 'order_items'])
@@ -99,11 +97,9 @@ class SiteController extends Controller
             ->groupBy([
                 'p.id',
                 'p.title',
-                'p.brand_name',
                 'p.harga',
                 'p.image',
                 'p.description',
-                'p.stok'
             ])
             ->orderBy(['jumlah_terjual' => SORT_DESC])
             ->limit(3)

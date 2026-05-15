@@ -33,11 +33,31 @@ $this->title = 'Admin - Tambah Produk';
             'class' => 'form-control'
         ]) ?>
 
-        <!-- Merek -->
-        <?= $form->field($model, 'brand_name')->textInput([
-            'placeholder' => 'Masukkan merek produk...',
-            'class' => 'form-control'
-        ]) ?>
+        <?= $form->field($model, 'jenis')->dropDownList(
+            [
+                'Baut' => 'Baut',
+                'Mur' => 'Mur',
+                'Ring' => 'Ring',
+                'Sekrup' => 'Sekrup'
+            ]
+            ,
+            [
+                'prompt' => 'Pilih jenis produk...',
+                'class' => 'form-control'
+            ]
+        ) ?>
+
+
+        <?= $form->field($model, 'satuan')->dropDownList(
+            [
+                'kg' => 'Kg',
+                'bijian' => 'Bijian'
+            ],
+            [
+                'prompt' => 'Pilih satuan produk...',
+                'class' => 'form-control'
+            ]
+        ) ?>
 
         <!-- Deskripsi -->
         <?= $form->field($model, 'description')->textarea([
@@ -54,19 +74,13 @@ $this->title = 'Admin - Tambah Produk';
             'class' => 'form-control'
         ]) ?>
 
-        <!-- Jumlah Stok -->
-        <?= $form->field($model, 'stok')->textInput([
+        <?= $form->field($model, 'jumlah')->textInput([
             'type' => 'number',
-            'placeholder' => 'Masukkan jumlah stok...',
+            'placeholder' => 'Masukkan jumlah produk...',
             'min' => 0,
             'class' => 'form-control'
         ]) ?>
 
-        <!-- Link Produk -->
-        <?= $form->field($model, 'link')->textInput([
-            'placeholder' => 'Masukkan link produk...',
-            'class' => 'form-control'
-        ]) ?>
 
         <!-- Upload Gambar -->
         <?= $form->field($model, 'image')->fileInput([]) ?>

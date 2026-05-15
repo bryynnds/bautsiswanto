@@ -74,12 +74,10 @@ $dataProvider = new ArrayDataProvider([
       <?php foreach ($produkTerlaris as $p): ?>
         <div class="card">
           <h3><?= $p['title'] ?></h3>
-          <p>Brand : <?= $p['brand_name'] ?></p>
           <p>Rp <?= number_format($p['harga'], 0, ',', '.') ?></p>
           <img src="<?= Yii::getAlias('@web') ?>/<?= $p['image'] ?>"
             alt="<?= $p['title'] ?>" class="produk-img">
           <p><?= $p['description'] ?></p>
-          <!-- <p><strong>Stok:</strong> <?= $p['stok'] ?> pcs</p> -->
 
           <button class="btn btn-add-cart" data-id="<?= $p['id'] ?>">
             Tambah ke Keranjang

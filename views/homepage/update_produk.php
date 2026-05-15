@@ -27,6 +27,31 @@ $this->title = 'Admin - Ubah Produk';
             'class' => 'form-control'
         ]) ?>
 
+        <?= $form->field($model, 'jenis')->dropDownList(
+            [
+                'Baut' => 'Baut',
+                'Mur' => 'Mur',
+                'Ring' => 'Ring',
+                'Sekrup' => 'Sekrup'
+            ]
+            ,
+            [
+                'prompt' => 'Pilih jenis produk...',
+                'class' => 'form-control'
+            ]
+        ) ?>
+
+        <?= $form->field($model, 'satuan')->dropDownList(
+            [
+                'kg' => 'Kg',
+                'bijian' => 'Bijian'
+            ],
+            [
+                'prompt' => 'Pilih satuan produk...',
+                'class' => 'form-control'
+            ]
+        ) ?>
+
         <?= $form->field($model, 'description')->textarea([
             'rows' => 4,
             'placeholder' => 'Ketik disini',
@@ -39,18 +64,19 @@ $this->title = 'Admin - Ubah Produk';
             'class' => 'form-control'
         ]) ?>
 
-        <?= $form->field($model, 'stok')->textInput([
+        <?= $form->field($model, 'jumlah')->textInput([
             'type' => 'number',
-            'placeholder' => 'Masukkan jumlah stok',
+            'placeholder' => 'Masukkan jumlah produk...',
+            'min' => 0,
             'class' => 'form-control'
         ]) ?>
+
 
         <?= $form->field($model, 'image')->fileInput([]) ?>
 
         <?php if ($model->image): ?>
             <div class="mb-3 text-center">
-                <img src="<?= Yii::getAlias('@web') . '/' . $model->image ?>"
-                    class="img-fluid rounded shadow-sm"
+                <img src="<?= Yii::getAlias('@web') . '/' . $model->image ?>" class="img-fluid rounded shadow-sm"
                     style="max-width:200px;">
             </div>
         <?php endif; ?>

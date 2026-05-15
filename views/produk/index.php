@@ -17,8 +17,6 @@ $this->title = 'Daftar Produk';
                     alt="<?= $produk->title ?>" class="produk-img">
                 <p><?= $produk->description ?></p>
 
-                <!-- Stok opsional -->
-                <!-- <p><strong>Stok:</strong> <?= $produk->stok ?> pcs</p> -->
 
                 <button class="btn btn-add-cart" data-id="<?= $produk->id ?>">
                     Tambah ke Keranjang

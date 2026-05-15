@@ -27,21 +27,13 @@ $this->title = 'Admin - Tambah Stok Produk';
                         <?php foreach ($produk as $item): ?>
                             <tr>
                                 <td><?= Html::encode($item->title) ?></td>
-                                <td><?= Html::encode($item->brand_name) ?></td>
                                 <td>
                                     <div class="d-flex justify-content-center align-items-center">
-                                        <button type="button"
-                                            class="btn btn-sm btn-danger btn-minus me-2"
+                                        <button type="button" class="btn btn-sm btn-danger btn-minus me-2"
                                             data-id="<?= $item->id ?>">−</button>
 
-                                        <input type="number"
-                                            name="stok[<?= $item->id ?>]"
-                                            value="<?= Html::encode($item->stok) ?>"
-                                            class="form-control text-center"
-                                            style="width: 90px;">
 
-                                        <button type="button"
-                                            class="btn btn-sm btn-success btn-plus ms-2"
+                                        <button type="button" class="btn btn-sm btn-success btn-plus ms-2"
                                             data-id="<?= $item->id ?>">+</button>
                                     </div>
                                 </td>

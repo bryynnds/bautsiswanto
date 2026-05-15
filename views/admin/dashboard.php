@@ -75,7 +75,6 @@ $this->title = 'Dashboard Admin';
                         <th>Nama Produk</th>
                         <th>Deskripsi</th>
                         <th>Harga</th>
-                        <th>Stok</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -87,7 +86,6 @@ $this->title = 'Dashboard Admin';
                             <td><?= Html::encode($p->title) ?></td>
                             <td><?= Html::encode($p->description) ?></td>
                             <td>Rp <?= number_format($p->harga, 0, ',', '.') ?></td>
-                            <td><?= $p->stok ?></td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
