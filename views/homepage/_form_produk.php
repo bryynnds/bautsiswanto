@@ -117,6 +117,14 @@ $jenisList = ArrayHelper::map(
             'class' => 'form-control'
         ]) ?>
 
+        <!-- Berat Produk -->
+        <?= $form->field($model, 'berat')->textInput([
+            'type' => 'number',
+            'placeholder' => 'Masukkan berat per biji dalam gram...',
+            'min' => 0,
+            'class' => 'form-control'
+        ]) ?>
+
         <!-- Upload Gambar -->
         <?= $form->field($model, 'image')->fileInput([
             'class' => 'form-control'

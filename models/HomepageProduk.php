@@ -21,7 +21,8 @@ class HomepageProduk extends ActiveRecord
                     'kategori_id',
                     'description',
                     'harga_kg',
-                    'harga_bijian'
+                    'harga_bijian',
+                    'berat'
                 ],
                 'required'
             ],
@@ -30,7 +31,15 @@ class HomepageProduk extends ActiveRecord
 
             [['kategori_id'], 'integer'],
 
-            [['harga_kg', 'harga_bijian'], 'integer', 'min' => 0],
+            [
+                [
+                    'harga_kg',
+                    'harga_bijian',
+                    'berat'
+                ],
+                'integer',
+                'min' => 0
+            ],
 
             [['title'], 'string', 'max' => 255],
 
@@ -53,6 +62,7 @@ class HomepageProduk extends ActiveRecord
             'description' => 'Deskripsi',
             'harga_kg' => 'Harga Kiloan',
             'harga_bijian' => 'Harga Eceran',
+            'berat' => 'Berat per Biji (gram)',
             'image' => 'Gambar Produk',
         ];
     }
