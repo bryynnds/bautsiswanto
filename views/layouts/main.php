@@ -10,6 +10,8 @@ use yii\bootstrap5\Html;
 use yii\bootstrap5\Nav;
 use yii\bootstrap5\NavBar;
 
+use app\models\Notification;
+
 AppAsset::register($this);
 
 $this->registerCsrfMetaTags();
@@ -27,6 +29,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
     <!-- Bootstrap JS Bundle (sudah termasuk Popper) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 
@@ -49,30 +52,51 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
             ],
         ]);
 
+        $notifications = [];
+        $unreadCount = 0;
+
+        if (!Yii::$app->user->isGuest) {
+
+            $notifications = Notification::find()
+                ->where([
+                    'user_id' => Yii::$app->user->id
+                ])
+                ->orderBy(['id' => SORT_DESC])
+                ->limit(3)
+                ->all();
+
+            $unreadCount = Notification::find()
+                ->where([
+                    'user_id' => Yii::$app->user->id,
+                    'is_read' => 0
+                ])
+                ->count();
+        }
+
         // Tentukan menu sesuai kondisi
         if (Yii::$app->user->isGuest) {
             $menuItems = [
                 ['label' => 'Beranda', 'url' => ['/site/index']],
                 ['label' => 'Produk', 'url' => ['/produk/index']],
-                ['label' => 'Kontak', 'url' => ['/site/contact']],
-                ['label' => 'Tentang', 'url' => ['/site/about']],
+                ['label' => 'Keranjang', 'url' => ['/cart/index']],
                 ['label' => 'Masuk', 'url' => ['/site/login']],
             ];
         } elseif (Yii::$app->user->identity->isAdmin()) {
             $menuItems = [
                 ['label' => 'Beranda', 'url' => ['/admin/dashboard']],
                 ['label' => 'Produk', 'url' => ['/homepage/admin-produk']],
+                ['label' => 'Permintaan Produk', 'url' => ['/admin-product-request/index']],
                 ['label' => 'Kasir', 'url' => ['/admin/calculator']],
                 ['label' => 'Riwayat Belanja', 'url' => ['/admin/history']],
                 ['label' => 'CMS Beranda', 'url' => ['/homepage/edit']],
                 '<li class="nav-item">'
-                    . Html::beginForm(['/site/logout'])
-                    . Html::submitButton(
-                        'Keluar (' . Yii::$app->user->identity->username . ')',
-                        ['class' => 'nav-link btn btn-link logout']
-                    )
-                    . Html::endForm()
-                    . '</li>'
+                . Html::beginForm(['/site/logout'])
+                . Html::submitButton(
+                    'Keluar (' . Yii::$app->user->identity->username . ')',
+                    ['class' => 'nav-link btn btn-link logout']
+                )
+                . Html::endForm()
+                . '</li>'
             ];
         } else {
             // untuk user biasa
@@ -82,6 +106,142 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
                 ['label' => 'Pemesanan', 'url' => ['product-request/index']],
                 ['label' => 'Tentang', 'url' => ['/site/about']],
                 ['label' => 'Keranjang', 'url' => ['/cart/index']],
+
+                '<li class="nav-item dropdown" style="position: relative; list-style:none;">
+
+    <a href="#" id="notifToggle" class="nav-link position-relative">
+
+        <i class="bi bi-bell" style="font-size: 20px;"></i>
+
+        ' . ($unreadCount > 0
+                    ? '<span id="notifBadge"
+                style="
+                    position:absolute;
+                    top:5px;
+                    right:0;
+                    background:red;
+                    color:white;
+                    border-radius:50%;
+                    padding:2px 6px;
+                    font-size:10px;
+                ">
+                    ' . $unreadCount . '
+               </span>'
+                    : '') . '
+
+    </a>
+
+    <div id="notifMenu"
+        style="
+            display:none;
+            position:absolute;
+            right:0;
+            top:100%;
+            background:#fff;
+            border-radius:14px;
+            width:360px;
+            border:1px solid #e9ecef;
+            max-height:400px;
+            overflow-y:auto;
+            box-shadow:0 4px 20px rgba(0,0,0,0.15);
+            z-index:999;
+        ">
+
+        <div style="
+    padding:15px;
+    border-bottom:1px solid #eee;
+    font-weight:600;
+    font-size:16px;
+    background:#f8f9fa;
+    border:1px solid #e5e7eb;
+    border-radius:14px 14px 0 0;
+    overflow:hidden;
+">
+    Notifikasi
+</div>
+
+        ' .
+
+                (
+                    empty($notifications)
+
+                    ?
+
+                    '<div style="padding:15px; color:gray;">
+                Belum ada notifikasi
+            </div>'
+
+                    :
+
+                    implode("", array_map(function ($notif) {
+
+                        $bgColor = $notif->is_read
+                            ? '#ffffff'
+                            : '#eef4ff';
+
+                        return \yii\helpers\Html::a(
+
+                            '
+        <div style="
+            padding:14px 16px;
+            border-bottom:1px solid #f1f1f1;
+            background:' . $bgColor . ';
+            transition:0.2s;
+        ">
+
+            <div style="
+                font-weight:600;
+                font-size:14px;
+                color:#222;
+                margin-bottom:6px;
+            ">
+                ' . $notif->title . '
+            </div>
+
+            <div style="
+                font-size:13px;
+                color:#666;
+                line-height:1.5;
+            ">
+                ' . $notif->message . '
+            </div>
+
+            <div style="
+                font-size:11px;
+                color:#999;
+                margin-top:8px;
+            ">
+                ' . date('d M Y H:i', strtotime($notif->created_at)) . '
+            </div>
+
+        </div>
+        ',
+
+                            ['/produk/index'],
+
+                            [
+                                'style' => '
+                text-decoration:none;
+                color:inherit;
+                display:block;
+            ',
+
+                                'onmouseover' =>
+                                    "this.firstElementChild.style.background='#f5f7fa'",
+
+                                'onmouseout' =>
+                                    "this.firstElementChild.style.background='" . $bgColor . "'",
+                            ]
+                        );
+
+                    }, $notifications))
+                )
+
+                . '
+
+    </div>
+
+</li>',
 
                 // Dropdown manual bootstrap
                 '<li class="nav-item dropdown" style="position: relative; list-style: none;">
@@ -148,12 +308,14 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
     </footer>
 
     <div class="toast-container position-fixed bottom-0 start-0 p-3">
-        <div id="cartToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div id="cartToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive"
+            aria-atomic="true">
             <div class="d-flex">
                 <div class="toast-body">
                     Produk berhasil ditambahkan ke keranjang!
                 </div>
-                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                    aria-label="Close"></button>
             </div>
         </div>
     </div>
@@ -161,22 +323,66 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
 
     <?php $this->endBody() ?>
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
             const toggle = document.getElementById("accountToggle");
             const menu = document.getElementById("accountMenu");
+            const notifToggle = document.getElementById("notifToggle");
+            const notifMenu = document.getElementById("notifMenu");
 
-            toggle.addEventListener("click", function(e) {
+            toggle.addEventListener("click", function (e) {
                 e.preventDefault();
                 menu.style.display = (menu.style.display === "none" || menu.style.display === "") ?
                     "block" :
                     "none";
             });
 
-            document.addEventListener("click", function(e) {
+            document.addEventListener("click", function (e) {
                 if (!toggle.contains(e.target) && !menu.contains(e.target)) {
                     menu.style.display = "none";
                 }
             });
+
+            if (notifToggle && notifMenu) {
+
+                notifToggle.addEventListener("click", function (e) {
+
+                    e.preventDefault();
+
+                    notifMenu.style.display =
+                        (notifMenu.style.display === "none" ||
+                            notifMenu.style.display === "")
+                            ? "block"
+                            : "none";
+
+                    // otomatis hilangkan badge
+                    const notifBadge = document.getElementById("notifBadge");
+
+                    if (notifBadge) {
+                        notifBadge.remove();
+                    }
+
+                    // request ajax tandai dibaca
+                    fetch("/notification/read-all", {
+                        method: "POST",
+                        headers: {
+                            "X-CSRF-Token":
+                                yii.getCsrfToken()
+                        }
+                    });
+
+                });
+
+                document.addEventListener("click", function (e) {
+
+                    if (
+                        !notifToggle.contains(e.target) &&
+                        !notifMenu.contains(e.target)
+                    ) {
+                        notifMenu.style.display = "none";
+                    }
+
+                });
+            }
         });
     </script>
 
