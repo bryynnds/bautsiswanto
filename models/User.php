@@ -24,9 +24,14 @@ class User extends ActiveRecord implements IdentityInterface
             [['username'], 'required'],
 
             // password lama wajib jika password baru diisi
-            ['old_password', 'required', 'when' => function ($model) {
-                return !empty($model->new_password);
-            }, 'whenClient' => "function(){ return $('#user-new_password').val() !== ''; }"],
+            [
+                'old_password',
+                'required',
+                'when' => function ($model) {
+                    return !empty($model->new_password);
+                },
+                'whenClient' => "function(){ return $('#user-new_password').val() !== ''; }"
+            ],
 
             // Validasi password lama
             ['old_password', 'validateOldPassword'],
@@ -101,5 +106,15 @@ class User extends ActiveRecord implements IdentityInterface
     public function isAdmin()
     {
         return $this->getRole() === 'admin';
+    }
+
+    public function getProductRequests()
+    {
+        return $this->hasMany(ProductRequest::class, ['user_id' => 'id']);
+    }
+
+    public function getNotifications()
+    {
+        return $this->hasMany(Notification::class, ['user_id' => 'id']);
     }
 }

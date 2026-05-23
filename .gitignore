@@ -27,6 +27,8 @@ phpunit.phar
 /phpunit.xml
 /web/images/
 
+/phpunit.xml
+/web/uploads/request-products/
 
 tests/_output/*
 tests/_support/_generated
