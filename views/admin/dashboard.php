@@ -28,19 +28,21 @@ $this->title = 'Dashboard Admin';
 <div class="container mt-5">
 
     <section class="dashboard">
-        <!-- <h2><?= Html::encode($this->title) ?></h2> -->
         <!-- Statistik Singkat -->
         <div class="statistik-wrapper">
             <div class="statistik-card">
+                <div class="stat-icon">📦</div>
                 <h3>Total Produk</h3>
                 <p class="angka"><?= $totalProduk ?></p>
             </div>
             <div class="statistik-card">
-                <h3>Total Order</h3>
+                <div class="stat-icon">🛒</div>
+                <h3>Total Pesanan</h3>
                 <p class="angka"><?= $totalOrder ?></p>
             </div>
             <div class="statistik-card">
-                <h3>Total Customer</h3>
+                <div class="stat-icon">👤</div>
+                <h3>Total Akun</h3>
                 <p class="angka"><?= $jumlahCustomer ?></p>
             </div>
         </div>
@@ -51,18 +53,32 @@ $this->title = 'Dashboard Admin';
                 <?php if (!empty($produkTerlaris)): ?>
                     <?php foreach ($produkTerlaris as $p): ?>
                         <div class="produk-card">
-                            <h4><?= Html::encode($p['title']) ?></h4>
                             <?php if ($p['image']): ?>
-                                <img src="<?= Yii::getAlias('@web') ?>/<?= ($p['image']) ?>" alt="<?= ($p['title']) ?>" class="produk-img">
+                                <img src="<?= Yii::getAlias('@web') ?>/<?= ($p['image']) ?>" alt="<?= ($p['title']) ?>"
+                                    class="produk-img">
                             <?php endif; ?>
 
-                            <p class="harga">Harga per Kg : Rp <?= number_format($p['harga_kg'], 0, ',', '.') ?></p>
-                            <p class="harga">Harga per Biji : Rp <?= number_format($p['harga_bijian'], 0, ',', '.') ?></p>
-                            <p>Terjual: <strong><?= $p['jumlah_terjual'] ?></strong></p>
+                            <h4><?= Html::encode($p['title']) ?></h4>
+
+                            <div class="produk-terjual">
+                                Terjual <?= $p['jumlah_terjual'] ?> kali
+                            </div>
+
+                            <p class="harga">
+                                Rp <?= number_format($p['harga_bijian'], 0, ',', '.') ?>/biji
+                            </p>
+
+                            <p class="harga">
+                                Rp <?= number_format($p['harga_kg'], 0, ',', '.') ?>/kg
+                            </p>
                         </div>
                     <?php endforeach; ?>
                 <?php else: ?>
-                    <p>Belum ada data penjualan.</p>
+                    <div class="empty-request">
+                        <div class="empty-icon">📊</div>
+                        <h4>Belum Ada Data Penjualan</h4>
+                        <p>Produk terlaris akan muncul setelah ada transaksi.</p>
+                    </div>
                 <?php endif; ?>
             </div>
         </div>
@@ -82,7 +98,8 @@ $this->title = 'Dashboard Admin';
                     <?php foreach ($produk as $p): ?>
                         <tr>
                             <td>
-                                <img src="<?= Yii::getAlias('@web') ?>/<?= $p->image ?>" alt="<?= $p->title ?>" class="cart-img">
+                                <img src="<?= Yii::getAlias('@web') ?>/<?= $p->image ?>" alt="<?= $p->title ?>"
+                                    class="cart-img">
                             </td>
                             <td><?= Html::encode($p->title) ?></td>
                             <td><?= Html::encode($p->description) ?></td>
@@ -97,7 +114,7 @@ $this->title = 'Dashboard Admin';
         </div>
 
 
-        <h3>Daftar Order</h3>
+        <h3>Daftar Pesanan</h3>
         <div class="dashboard-card">
             <?= GridView::widget([
                 'summary' => false,
@@ -112,8 +129,8 @@ $this->title = 'Dashboard Admin';
                     [
                         'attribute' => 'total',
                         'value' => function ($model) {
-                            return 'Rp ' . number_format($model->total, 0, ',', '.');
-                        }
+                                        return 'Rp ' . number_format($model->total, 0, ',', '.');
+                                    }
                     ],
                     'created_at',
                 ],

@@ -173,13 +173,10 @@ body {
   align-items: flex-end; /* gambar nempel bawah */
 }
 
-.hero-image img {
-  max-width: 90%;
-  height: auto;
-  display: block;
-  margin: 0;
-  padding: 0;
-  margin-bottom: -1px; /* hilangkan celah kecil */
+.hero-image img{
+    max-width:100%;
+    max-height:500px;
+    object-fit:contain;
 }
 
 .hero-text {
@@ -1054,4 +1051,113 @@ html {
   border-radius: 10px;
   margin-bottom: 30px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.harga-wrapper{
+    margin:12px 0;
+}
+
+.harga-item{
+    background:#f0faf9;
+    border-radius:8px;
+    padding:8px;
+    margin-bottom:6px;
+    color:#006666;
+    font-size:14px;
+}
+
+.harga-item strong{
+    display:block;
+    margin-top:2px;
+    font-size:15px;
+}
+
+.produk-desc{
+    color:#666;
+    font-size:14px;
+    min-height:60px;
+}
+
+.point-icon{
+    font-size:40px;
+    margin-bottom:10px;
+}
+
+.testimoni-grid .testi{
+    border-top:4px solid #008b8b;
+}
+
+.stat-icon{
+    font-size:32px;
+    margin-bottom:10px;
+}
+
+.statistik-card{
+    transition:.3s;
+}
+
+.statistik-card:hover{
+    transform:translateY(-5px);
+    box-shadow:0 8px 20px rgba(0,0,0,.1);
+}
+
+.produk-terjual{
+    background:#e0f7f6;
+    color:#006666;
+    padding:6px 10px;
+    border-radius:20px;
+    font-size:13px;
+    margin-bottom:10px;
+    display:inline-block;
+}
+
+.statistik-card{
+    border-top:4px solid #008b8b;
+}
+
+.produk-action{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    justify-content: center;
+}
+
+.produk-info{
+    margin:10px 0;
+    text-align:left;
+}
+
+.produk-info p{
+    margin-bottom:8px;
+}
+
+.harga-box{
+    background:#f0faf9;
+    border-radius:10px;
+    padding:10px;
+    margin:12px 0;
+}
+
+.harga-box div{
+    margin-bottom:8px;
+}
+
+.harga-box small{
+    display:block;
+    color:#666;
+}
+
+.harga-box strong{
+    color:#006666;
+}
+
+.berat-produk{
+    font-weight:600;
+    color:#006666;
+}
+
+.produk-desc{
+    font-size:14px;
+    color:#666;
+    min-height:60px;
 }

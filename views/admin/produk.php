@@ -13,14 +13,14 @@ $this->title = 'Daftar Produk';
 
     <h2 style="margin-bottom: 20px;">Daftar Produk</h2>
 
-    <div class="mb-4">
+    <div class="produk-action mb-4">
 
-        <a href="<?= Url::to(['homepage/create-produk']) ?>" class="btn btn-primary me-2">
-            Tambah Produk
+        <a href="<?= Url::to(['homepage/create-produk']) ?>" class="btn btn-primary">
+            + Tambah Produk
         </a>
 
-        <a href="<?= Url::to(['homepage/create-kategori']) ?>" class="btn btn-success">
-            Tambah Kategori
+        <a href="<?= Url::to(['homepage/create-kategori']) ?>" class="btn btn-primary">
+            + Tambah Kategori
         </a>
 
     </div>
@@ -31,56 +31,40 @@ $this->title = 'Daftar Produk';
 
             <div class="card">
 
-                <!-- Nama Produk -->
                 <h3><?= Html::encode($item->title) ?></h3>
 
-                <!-- Jenis Produk -->
-                <p>
-                    <strong>Jenis:</strong>
-                    <?= Html::encode(
-                        $item->kategori->jenis->nama_jenis ?? '-'
-                    ) ?>
-                </p>
-
-                <!-- Kategori Produk -->
-                <p>
-                    <strong>Kategori:</strong>
-                    <?= Html::encode(
-                        $item->kategori->nama_kategori ?? '-'
-                    ) ?>
-                </p>
-
-                <!-- Harga -->
-                <p>
-                    Harga per Kg :
-                    Rp <?= number_format($item->harga_kg, 0, ',', '.') ?>
-                </p>
-
-                <p>
-                    Harga per Biji :
-                    Rp <?= number_format($item->harga_bijian, 0, ',', '.') ?>
-                </p>
-
-                <p>
-                    Berat per Biji :
-                    <?= number_format($item->berat, 0, ',', '.') ?> gram
-                </p>
-
-                <!-- Gambar -->
                 <img src="<?= Yii::getAlias('@web') ?>/<?= Html::encode($item->image) ?>"
                     alt="<?= Html::encode($item->title) ?>" class="produk-img">
 
-                <!-- Deskripsi -->
-                <p><?= Html::encode($item->description) ?></p>
+                
+
+                <div class="harga-box">
+
+                    <div>
+                        <small>Harga / Kg</small>
+                        <strong>
+                            Rp <?= number_format($item->harga_kg, 0, ',', '.') ?>
+                        </strong>
+                    </div>
+
+                    <div>
+                        <small>Harga / Biji</small>
+                        <strong>
+                            Rp <?= number_format($item->harga_bijian, 0, ',', '.') ?>
+                        </strong>
+                    </div>
+
+                </div>
+
 
                 <!-- Tombol -->
-                <div class="d-flex justify-content-between mt-2">
+                <div class="btn-wrapper">
 
                     <?= Html::a(
                         'Ubah',
                         ['homepage/update-produk', 'id' => $item->id],
                         [
-                            'class' => 'btn btn-warning btn-sm w-50 me-1',
+                            'class' => 'btn-edit',
                         ]
                     ) ?>
 
@@ -88,7 +72,7 @@ $this->title = 'Daftar Produk';
                         'Hapus',
                         ['homepage/delete-produk', 'id' => $item->id],
                         [
-                            'class' => 'btn btn-danger btn-sm w-50',
+                            'class' => 'btn-hapus',
                             'data' => [
                                 'confirm' => 'Yakin ingin menghapus produk ini?',
                                 'method' => 'post',

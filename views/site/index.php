@@ -21,11 +21,15 @@ $dataProvider = new ArrayDataProvider([
 <section class="hero">
   <div class="container-hero">
     <div class="hero-image">
-      <img src="<?= Yii::getAlias('@web') ?>/<?= $hero->background_image ?? 'images/background.jpg' ?>" alt="Hero Image">
+      <img src="<?= Yii::getAlias('@web') ?>/<?= $hero->background_image ?? 'images/background.jpg' ?>"
+        alt="Hero Image">
     </div>
     <div class="hero-text">
-      <h1><?= $hero->title ?? 'Kecantikan Natural Bersama Wardah' ?></h1>
-      <p><?= $hero->subtitle ?? 'Kosmetik halal, natural, dan terpercaya untuk mendukung pesona cantikmu setiap hari.' ?></p>
+      <h1><?= $hero->title ?? 'Pusat Baut dan Mur Berkualitas' ?></h1>
+
+      <p>
+        <?= $hero->subtitle ?? 'Menyediakan berbagai jenis baut, mur, ring, dan perlengkapan teknik dengan harga kompetitif dan kualitas terpercaya.' ?>
+      </p>
       <a href="#produk" class="btn">Lihat Produk</a>
     </div>
   </div>
@@ -73,16 +77,41 @@ $dataProvider = new ArrayDataProvider([
     <?php if (!empty($produkTerlaris)): ?>
       <?php foreach ($produkTerlaris as $p): ?>
         <div class="card">
+
+          <img src="<?= Yii::getAlias('@web') ?>/<?= $p['image'] ?>" alt="<?= $p['title'] ?>" class="produk-img">
+
           <h3><?= $p['title'] ?></h3>
-          <p>Kiloan: Rp <?= number_format($p['harga_kg'], 0, ',', '.') ?></p>
-          <p>Bijian: Rp <?= number_format($p['harga_bijian'], 0, ',', '.') ?></p>
-          <img src="<?= Yii::getAlias('@web') ?>/<?= $p['image'] ?>"
-            alt="<?= $p['title'] ?>" class="produk-img">
-          <p><?= $p['description'] ?></p>
+
+          <div class="harga-wrapper">
+
+            <?php if ($p['harga_bijian']): ?>
+              <div class="harga-item">
+                Bijian:
+                <strong>
+                  Rp <?= number_format($p['harga_bijian'], 0, ',', '.') ?>
+                </strong>
+              </div>
+            <?php endif; ?>
+
+            <?php if ($p['harga_kg']): ?>
+              <div class="harga-item">
+                Kiloan:
+                <strong>
+                  Rp <?= number_format($p['harga_kg'], 0, ',', '.') ?>
+                </strong>
+              </div>
+            <?php endif; ?>
+
+          </div>
+
+          <p class="produk-desc">
+            <?= $p['description'] ?>
+          </p>
 
           <button class="btn btn-add-cart" data-id="<?= $p['id'] ?>">
             Tambah ke Keranjang
           </button>
+
         </div>
       <?php endforeach; ?>
     <?php else: ?>
@@ -98,6 +127,9 @@ $dataProvider = new ArrayDataProvider([
   <div class="keunggulan-grid">
     <?php foreach ($keunggulans as $k): ?>
       <div class="point">
+        <div class="point-icon">
+          🔩
+        </div>
         <h3><?= $k->title ?></h3>
         <p><?= $k->subtitle ?></p>
       </div>
