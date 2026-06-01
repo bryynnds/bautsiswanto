@@ -323,24 +323,40 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
     <?php $this->endBody() ?>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
+
             const toggle = document.getElementById("accountToggle");
             const menu = document.getElementById("accountMenu");
             const notifToggle = document.getElementById("notifToggle");
             const notifMenu = document.getElementById("notifMenu");
 
-            toggle.addEventListener("click", function (e) {
-                e.preventDefault();
-                menu.style.display = (menu.style.display === "none" || menu.style.display === "") ?
-                    "block" :
-                    "none";
-            });
+            // Dropdown akun
+            if (toggle && menu) {
 
-            document.addEventListener("click", function (e) {
-                if (!toggle.contains(e.target) && !menu.contains(e.target)) {
-                    menu.style.display = "none";
-                }
-            });
+                toggle.addEventListener("click", function (e) {
 
+                    e.preventDefault();
+
+                    menu.style.display =
+                        (menu.style.display === "none" || menu.style.display === "")
+                            ? "block"
+                            : "none";
+
+                });
+
+                document.addEventListener("click", function (e) {
+
+                    if (
+                        !toggle.contains(e.target) &&
+                        !menu.contains(e.target)
+                    ) {
+                        menu.style.display = "none";
+                    }
+
+                });
+
+            }
+
+            // Dropdown notifikasi
             if (notifToggle && notifMenu) {
 
                 notifToggle.addEventListener("click", function (e) {
@@ -353,19 +369,17 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
                             ? "block"
                             : "none";
 
-                    // otomatis hilangkan badge
-                    const notifBadge = document.getElementById("notifBadge");
+                    const notifBadge =
+                        document.getElementById("notifBadge");
 
                     if (notifBadge) {
                         notifBadge.remove();
                     }
 
-                    // request ajax tandai dibaca
                     fetch("/notification/read-all", {
                         method: "POST",
                         headers: {
-                            "X-CSRF-Token":
-                                yii.getCsrfToken()
+                            "X-CSRF-Token": yii.getCsrfToken()
                         }
                     });
 
@@ -381,7 +395,9 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
                     }
 
                 });
+
             }
+
         });
     </script>
 
