@@ -2,9 +2,14 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use yii\helpers\Url;
 
 /** @var yii\web\View $this */
 /** @var app\models\Keranjang[] $items */
+
+$searchDestinationUrl = Url::to(['cart/get-provinces']);
+$searchUrl = Url::to(['cart/get-provinces']);
+$ongkirUrl = Url::to(['cart/calculate-ongkir']);
 
 $this->title = 'Checkout';
 ?>
@@ -25,7 +30,25 @@ $this->title = 'Checkout';
                 $subtotal = $harga * $item->jumlah;
                 $grandTotal += $subtotal;
             }
+
+            $grandTotalJs = $grandTotal;
+            $totalBerat = 0;
+
+            foreach ($items as $item) {
+
+                if ($item->satuan == 'kg') {
+
+                    $beratItem = $item->jumlah * 1000;
+
+                } else {
+
+                    $beratItem = $item->jumlah * $item->produk->berat;
+                }
+
+                $totalBerat += $beratItem;
+            }
             ?>
+            <input type="hidden" id="total-berat" value="<?= $totalBerat ?>">
 
             <div class="row mt-4">
                 <!-- Form Data -->
@@ -43,6 +66,27 @@ $this->title = 'Checkout';
                     <div class="mb-3">
                         <label class="form-label">Alamat</label>
                         <textarea name="alamat" class="form-control" rows="3" required></textarea>
+                    </div>
+
+                    <input type="hidden" name="shipping_cost" id="shipping-cost-input" value="0">
+
+                    <input type="hidden" name="destination_id" id="destination-id">
+                    <input type="hidden" name="province" id="province-name">
+                    <input type="hidden" name="city" id="city-name">
+                    <input type="hidden" name="postal_code" id="postal-code">
+
+
+
+                    <div class="mb-3">
+                        <label class="form-label">
+                            Cari Tujuan Pengiriman
+                        </label>
+
+                        <input type="text" id="search-destination" class="form-control"
+                            placeholder="Contoh: Solo, Surabaya, Jakarta">
+
+                        <div id="destination-results" class="list-group mt-2">
+                        </div>
                     </div>
 
                     <div class="mb-3">
@@ -97,8 +141,22 @@ $this->title = 'Checkout';
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <th colspan="4" class="text-end">Total</th>
-                                    <th>Rp <?= number_format($grandTotal, 0, ',', '.') ?></th>
+                                    <th colspan="4" class="text-end">
+                                        Ongkir
+                                    </th>
+
+                                    <th id="shipping-cost">
+                                        -
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th colspan="4" class="text-end">
+                                        Total Bayar
+                                    </th>
+
+                                    <th id="final-total">
+                                        Rp <?= number_format($grandTotal, 0, ',', '.') ?>
+                                    </th>
                                 </tr>
                             </tfoot>
                         </table>
@@ -113,3 +171,127 @@ $this->title = 'Checkout';
         <?php endif; ?>
     </section>
 </div>
+
+<?php
+
+$script = <<<JS
+
+function formatRupiah(num) {
+
+    return 'Rp ' + Number(num)
+        .toLocaleString('id-ID');
+}
+
+let searchTimeout;
+
+$('#search-destination').on('input', function(){
+
+    clearTimeout(searchTimeout);
+
+    let keyword = $(this).val();
+
+    if(keyword.length < 5){
+
+        $('#destination-results').html('');
+        return;
+    }
+
+    searchTimeout = setTimeout(function(){
+
+        $.ajax({
+
+            url: '$searchUrl',
+
+            method: 'GET',
+
+            data: {
+                search: keyword
+            },
+
+            success: function(res){
+
+                let html = '';
+
+                if(res.data && res.data.data){
+
+                    res.data.data.forEach(function(item){
+
+                        html += `
+                            <button type="button"
+                                    class="list-group-item list-group-item-action destination-item"
+                                    data-id="\${item.id}"
+                                    data-province="\${item.province_name}"
+                                    data-city="\${item.city_name}"
+                                    data-postal="\${item.zip_code}">
+                                    
+                                \${item.label}
+                            </button>
+                        `;
+                    });
+                }
+
+                $('#destination-results').html(html);
+            }
+        });
+
+    }, 800); // tunggu 0.8 detik setelah user berhenti mengetik
+});
+
+$(document).on('click', '.destination-item', function(){
+
+    $('#destination-id').val($(this).data('id'));
+
+    $('#province-name').val($(this).data('province'));
+
+    $('#city-name').val($(this).data('city'));
+
+    $('#postal-code').val($(this).data('postal'));
+
+    $('#search-destination').val($(this).text());
+
+    $('#destination-results').html('');
+
+    let destinationId = $(this).data('id');
+
+    let weight = $('#total-berat').val();
+
+    $.ajax({
+
+        url: '$ongkirUrl',
+
+        method: 'POST',
+
+        data: {
+            destination: destinationId,
+            weight: weight
+        },
+
+        success: function(res){
+
+            console.log(res);
+
+            if(res.data){
+
+                let ongkir = res.data[0].cost;
+
+                $('#shipping-cost')
+                    .text(formatRupiah(ongkir));
+
+                $('#shipping-cost-input')
+                    .val(ongkir);
+
+                let grandTotal = $grandTotalJs;
+
+                let finalTotal = grandTotal + ongkir;
+
+                $('#final-total')
+                    .text(formatRupiah(finalTotal));
+            }
+        }
+    });
+});
+
+JS;
+
+$this->registerJs($script);
+?>

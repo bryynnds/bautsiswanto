@@ -9,6 +9,7 @@ use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use app\models\Keranjang;
 use app\models\HomepageProduk;
+use yii\httpclient\Client;
 
 class CartController extends Controller
 {
@@ -262,9 +263,17 @@ class CartController extends Controller
 
             // hitung total
             $total = 0;
+
             foreach ($cartItems as $item) {
-                $total += $item->produk->harga * $item->jumlah;
+
+                $harga = $item->satuan == 'kg'
+                    ? $item->produk->harga_kg
+                    : $item->produk->harga_bijian;
+
+                $total += $harga * $item->jumlah;
             }
+
+            $shippingCost = (int) $post['shipping_cost'];
 
             // simpan orders
             $order = new \app\models\Order();
@@ -273,7 +282,9 @@ class CartController extends Controller
             $order->no_hp = $post['no_hp'];
             $order->alamat = $post['alamat'];
             $order->metode_pembayaran = $post['metode_pembayaran'];
-            $order->total = $total;
+            $order->shipping_cost = $shippingCost;
+
+            $order->total = $total + $shippingCost;
 
             if ($order->save()) {
                 foreach ($cartItems as $item) {
@@ -301,6 +312,65 @@ class CartController extends Controller
         return $this->render('checkout', [
             'items' => $cartItems,
         ]);
+    }
+
+    public function actionGetProvinces()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        $client = new Client([
+            'transport' => 'yii\httpclient\CurlTransport'
+        ]);
+
+        $search = Yii::$app->request->get('search', 'Jawa');
+
+        $response = $client->createRequest()
+            ->setMethod('GET')
+            ->setUrl('https://rajaongkir.komerce.id/api/v1/destination/domestic-destination?search=' . urlencode($search))
+            ->addHeaders([
+                'key' => Yii::$app->params['rajaongkirApiKey']
+            ])
+            ->send();
+
+        return [
+            'status' => $response->statusCode,
+            'data' => $response->data,
+            'content' => $response->content,
+        ];
+    }
+
+    public function actionCalculateOngkir()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        $destination = Yii::$app->request->post('destination');
+
+        $weight = (int) Yii::$app->request->post('weight');
+
+        $client = new Client([
+            'transport' => 'yii\httpclient\CurlTransport'
+        ]);
+
+        $response = $client->createRequest()
+            ->setMethod('POST')
+            ->setUrl('https://rajaongkir.komerce.id/api/v1/calculate/domestic-cost')
+            ->addHeaders([
+                'key' => Yii::$app->params['rajaongkirApiKey']
+            ])
+            ->setData([
+
+                // GANTI dengan destination ID tokomu
+                'origin' => 62075,
+
+                'destination' => $destination,
+
+                'weight' => $weight,
+
+                'courier' => 'jne'
+            ])
+            ->send();
+
+        return $response->data;
     }
 
 }

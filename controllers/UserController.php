@@ -71,20 +71,37 @@ class UserController extends Controller
     {
         Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 
+
+
         $items = OrderItem::find()->where(['order_id' => $id])->all();
 
         $data = [];
+
+        $order = Order::findOne($id);
 
         foreach ($items as $item) {
             $data[] = [
                 'nama_produk' => $item->produk->title,
                 'qty' => $item->qty,
-                'harga_kg' => $item->harga_kg,
-                'harga_bijian' => $item->harga_bijian,
+                'harga' => $item->harga,
                 'subtotal' => $item->subtotal,
+                'satuan' => $item->satuan,
             ];
         }
 
-        return $data;
+        return [
+            'order' => [
+                'id' => $order->id,
+                'status' => $order->status,
+                'metode' => $order->metode_pembayaran,
+
+                'shipping_cost' => $order->shipping_cost,
+                'total' => $order->total,
+
+                'courier' => $order->courier,
+                'subtotal_produk' => $order->total - $order->shipping_cost,
+            ],
+            'items' => $data,
+        ];
     }
 }

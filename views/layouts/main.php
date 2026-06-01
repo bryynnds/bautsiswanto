@@ -103,8 +103,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
             $menuItems = [
                 ['label' => 'Beranda', 'url' => ['/site/index']],
                 ['label' => 'Produk', 'url' => ['/produk/index']],
-                ['label' => 'Pemesanan', 'url' => ['product-request/index']],
-                ['label' => 'Tentang', 'url' => ['/site/about']],
+                ['label' => 'Permintaan Produk', 'url' => ['product-request/index']],
                 ['label' => 'Keranjang', 'url' => ['/cart/index']],
 
                 '<li class="nav-item dropdown" style="position: relative; list-style:none;">

@@ -67,6 +67,11 @@ class CheckoutController extends Controller
         $order->no_hp = $post['no_hp'];
         $order->alamat = $post['alamat'];
         $order->metode_pembayaran = $post['metode_pembayaran'];
+        $order->province = $post['province'] ?? null;
+        $order->city = $post['city'] ?? null;
+        $order->postal_code = $post['postal_code'] ?? null;
+
+        $order->courier = 'jne';
         $total = 0;
 
         foreach ($keranjang as $item) {
@@ -78,7 +83,11 @@ class CheckoutController extends Controller
             $total += $harga * $item->jumlah;
         }
 
-        $order->total = $total;
+        $shippingCost = (int) ($post['shipping_cost'] ?? 0);
+
+        $order->shipping_cost = $shippingCost;
+
+        $order->total = $total + $shippingCost;
         $order->status = ($post['metode_pembayaran'] == 'COD') ? 'COD' : 'Pending';
 
         if (!$order->save()) {
@@ -183,5 +192,53 @@ class CheckoutController extends Controller
         $order->save(false);
 
         return "OK";
+    }
+
+    public function actionRepay($id)
+    {
+        Config::$serverKey = 'SB-Mid-server-IWLFN5qdGmuxRk-QkCSoaTot';
+        Config::$isProduction = false;
+        Config::$isSanitized = true;
+        Config::$is3ds = true;
+
+        $order = Order::findOne($id);
+
+        if (
+            !$order ||
+            $order->user_id != Yii::$app->user->id
+        ) {
+            throw new \yii\web\NotFoundHttpException();
+        }
+
+        if ($order->status === 'paid') {
+
+            return $this->redirect(['/user/profile']);
+        }
+
+        $snapToken = Snap::getSnapToken([
+
+            'transaction_details' => [
+
+                'order_id' => $order->midtrans_order_id,
+
+                'gross_amount' => (int) $order->total,
+            ],
+
+            'customer_details' => [
+
+                'first_name' => $order->nama,
+
+                'phone' => $order->no_hp,
+            ],
+        ]);
+
+        return $this->render('snap', [
+
+            'snapToken' => $snapToken,
+
+            'clientKey' => 'SB-Mid-client-b6veAVTs1n2MqX-T',
+
+            'order' => $order,
+        ]);
     }
 }
