@@ -129,11 +129,40 @@ $this->title = 'Profil Saya';
                         <td><?= $order->metode_pembayaran ?></td>
                         <td>Rp <?= number_format($order->total) ?></td>
                         <td><?= $order->created_at ?></td>
-                        <td><?= $order->status ?></td>
+                        <td>
+
+                            <?php
+
+                            $statusLabel = [
+                                'pending' => 'Tertunda',
+                                'paid' => 'Sudah Dibayar',
+                                'shipped' => 'Dikirim',
+                                'completed' => 'Selesai',
+                                'failed' => 'Gagal',
+                                'cancelled' => 'Dibatalkan',
+                            ];
+
+                            echo $statusLabel[$order->status] ?? $order->status;
+
+                            ?>
+
+                        </td>
                         <td>
                             <button class="btn btn-info btn-detail" data-id="<?= $order->id ?>">
                                 Lihat
                             </button>
+
+                            <?php if ($order->status === 'shipped'): ?>
+
+                                <a href="<?= Url::to([
+                                    'user/pesanan-diterima',
+                                    'id' => $order->id
+                                ]) ?>" class="btn btn-success btn-sm">
+
+                                    Pesanan Diterima
+                                </a>
+
+                            <?php endif; ?>
 
                             <?php if (
                                 $order->status === 'Pending'
@@ -242,6 +271,15 @@ $(".btn-detail").on("click", function() {
                     : '-'}
             </strong>
         </div>
+
+        <div class="summary-row">
+    <span>Nomor Resi</span>
+    <strong>
+        \${data.order.tracking_number
+            ? data.order.tracking_number
+            : '-'}
+    </strong>
+</div>
 
         <hr>
 

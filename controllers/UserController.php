@@ -99,9 +99,37 @@ class UserController extends Controller
                 'total' => $order->total,
 
                 'courier' => $order->courier,
+                'tracking_number' => $order->tracking_number,
                 'subtotal_produk' => $order->total - $order->shipping_cost,
             ],
             'items' => $data,
         ];
+    }
+
+    public function actionPesananDiterima($id)
+    {
+        $order = Order::findOne($id);
+
+        if (!$order) {
+            throw new \yii\web\NotFoundHttpException();
+        }
+
+        if ($order->user_id != Yii::$app->user->id) {
+            throw new \yii\web\ForbiddenHttpException();
+        }
+
+        if ($order->status === 'shipped') {
+
+            $order->status = 'completed';
+
+            $order->save(false);
+        }
+
+        Yii::$app->session->setFlash(
+            'success',
+            'Pesanan berhasil diselesaikan.'
+        );
+
+        return $this->redirect(['profile']);
     }
 }

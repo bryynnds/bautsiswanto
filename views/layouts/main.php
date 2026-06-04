@@ -86,7 +86,8 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
                 ['label' => 'Beranda', 'url' => ['/admin/dashboard']],
                 ['label' => 'Produk', 'url' => ['/homepage/admin-produk']],
                 ['label' => 'Permintaan Produk', 'url' => ['/admin-product-request/index']],
-                ['label' => 'Kasir', 'url' => ['/admin/calculator']],
+                ['label' => 'Pesanan', 'url' => ['/admin/pesanan']],
+                // ['label' => 'Kasir', 'url' => ['/admin/calculator']],
                 ['label' => 'Riwayat Belanja', 'url' => ['/admin/history']],
                 ['label' => 'CMS Beranda', 'url' => ['/homepage/edit']],
                 '<li class="nav-item">'

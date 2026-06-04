@@ -155,4 +155,92 @@ class AdminController extends Controller
             ];
         }
     }
+
+    public function actionPesanan()
+    {
+        if (Yii::$app->user->isGuest || Yii::$app->user->identity->role !== 'admin') {
+            throw new \yii\web\ForbiddenHttpException('Anda tidak memiliki akses.');
+        }
+
+        $orders = Order::find()
+            ->orderBy(['created_at' => SORT_DESC])
+            ->all();
+
+        return $this->render('pesanan/index', [
+            'orders' => $orders,
+        ]);
+    }
+
+    public function actionOrderDetail($id)
+    {
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        $order = Order::findOne($id);
+
+        if (!$order) {
+            return ['success' => false];
+        }
+
+        $items = [];
+
+        foreach ($order->items as $item) {
+
+            $items[] = [
+                'produk' => $item->produk->title ?? '-',
+                'qty' => $item->qty,
+                'harga' => $item->harga,
+                'subtotal' => $item->subtotal,
+            ];
+        }
+
+        return [
+            'success' => true,
+
+            'order' => [
+                'id' => $order->id,
+                'nama' => $order->nama,
+                'no_hp' => $order->no_hp,
+                'alamat' => $order->alamat,
+                'status' => $order->status,
+                'metode' => $order->metode_pembayaran,
+                'courier' => $order->courier,
+                'shipping_cost' => $order->shipping_cost,
+                'total' => $order->total,
+                'created_at' => $order->created_at,
+            ],
+
+            'items' => $items,
+        ];
+    }
+
+    public function actionKirimPesanan()
+    {
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        $id = Yii::$app->request->post('id');
+
+        $resi = Yii::$app->request->post('resi');
+
+        $order = Order::findOne($id);
+
+        if (!$order) {
+            return [
+                'success' => false
+            ];
+        }
+
+        $order->status = 'shipped';
+        $order->tracking_number = $resi;
+
+        if ($order->save(false)) {
+
+            return [
+                'success' => true
+            ];
+        }
+
+        return [
+            'success' => false
+        ];
+    }
 }
