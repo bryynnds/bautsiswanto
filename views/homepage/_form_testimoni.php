@@ -38,32 +38,35 @@ if (!is_object($model)) {
 
 <div class="promo-card">
     <h3>Daftar Testimoni</h3>
-    <table class="cart-table">
-        <thead>
-            <tr>
-                <th>Isi Testimoni</th>
-                <th>Penulis</th>
-                <th>Aksi</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($testimonis as $t): ?>
+    <div class="table-responsive">
+
+        <table class="cart-table">
+            <thead>
                 <tr>
-                    <td>"<?= Html::encode($t->content) ?>"</td>
-                    <td><i><?= Html::encode($t->author) ?></i></td>
-                    <td>
-                        <div class="btn-wrapper">
-                            <?= Html::a('Edit', ['homepage/update-testimoni', 'id' => $t->id], ['class' => 'btn-edit']) ?>
-                            <?= Html::a('Hapus', ['homepage/delete-testimoni', 'id' => $t->id], [
-                                'class' => 'btn-hapus',
-                                'data' => ['confirm' => 'Yakin hapus testimoni ini?']
-                            ]) ?>
-                        </div>
-                    </td>
+                    <th>Isi Testimoni</th>
+                    <th>Penulis</th>
+                    <th>Aksi</th>
                 </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                <?php foreach ($testimonis as $t): ?>
+                    <tr>
+                        <td>"<?= Html::encode($t->content) ?>"</td>
+                        <td><i><?= Html::encode($t->author) ?></i></td>
+                        <td>
+                            <div class="btn-wrapper">
+                                <?= Html::a('Edit', ['homepage/update-testimoni', 'id' => $t->id], ['class' => 'btn-edit']) ?>
+                                <?= Html::a('Hapus', ['homepage/delete-testimoni', 'id' => $t->id], [
+                                    'class' => 'btn-hapus',
+                                    'data' => ['confirm' => 'Yakin hapus testimoni ini?']
+                                ]) ?>
+                            </div>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <?php

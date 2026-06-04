@@ -22,21 +22,23 @@ $this->title = 'Riwayat Belanja';
     </div>
 
     <div class="dashboard-card">
-        <table class="cart-table" id="historyTable">
-            <thead>
-                <tr>
-                    <th>Username</th>
-                    <th>Nama</th>
-                    <th>Produk</th>
-                    <th>Harga</th>
-                    <th>Satuan</th>
-                    <th>Jumlah</th>
-                    <th>Subtotal</th>
-                    <th>Tanggal</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
+        <div class="table-responsive">
+            <table class="cart-table" id="historyTable">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Nama</th>
+                        <th>Produk</th>
+                        <th>Harga</th>
+                        <th>Satuan</th>
+                        <th>Jumlah</th>
+                        <th>Subtotal</th>
+                        <th>Tanggal</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
     </div>
 </div>
 

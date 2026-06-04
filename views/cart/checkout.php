@@ -16,7 +16,13 @@ $this->title = 'Checkout';
 
 <div class="container mt-5">
     <section class="checkout-section loading">
-        <h2><?= Html::encode($this->title) ?></h2>
+        <h2 class="section-title">
+            Checkout Pesanan
+        </h2>
+
+        <p class="checkout-subtitle">
+            Lengkapi data pengiriman dan lakukan pembayaran.
+        </p>
 
         <?php if (!empty($items)): ?>
 
@@ -53,113 +59,117 @@ $this->title = 'Checkout';
             <div class="row mt-4">
                 <!-- Form Data -->
                 <div class="col-md-6">
-                    <?php $form = ActiveForm::begin([
-                        'action' => ['/checkout/process'], // sesuaikan route jika beda
-                        'method' => 'post',
-                    ]); ?>
+                    <div class="checkout-card">
+                        <?php $form = ActiveForm::begin([
+                            'action' => ['/checkout/process'], // sesuaikan route jika beda
+                            'method' => 'post',
+                        ]); ?>
 
-                    <div class="mb-3">
-                        <label class="form-label">Nama Lengkap</label>
-                        <input type="text" name="nama" class="form-control" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Alamat</label>
-                        <textarea name="alamat" class="form-control" rows="3" required></textarea>
-                    </div>
-
-                    <input type="hidden" name="shipping_cost" id="shipping-cost-input" value="0">
-
-                    <input type="hidden" name="destination_id" id="destination-id">
-                    <input type="hidden" name="province" id="province-name">
-                    <input type="hidden" name="city" id="city-name">
-                    <input type="hidden" name="postal_code" id="postal-code">
-
-
-
-                    <div class="mb-3">
-                        <label class="form-label">
-                            Cari Tujuan Pengiriman
-                        </label>
-
-                        <input type="text" id="search-destination" class="form-control"
-                            placeholder="Contoh: Solo, Surabaya, Jakarta">
-
-                        <div id="destination-results" class="list-group mt-2">
+                        <div class="mb-3">
+                            <label class="form-label">Nama Lengkap</label>
+                            <input type="text" name="nama" class="form-control" required>
                         </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Alamat</label>
+                            <textarea name="alamat" class="form-control" rows="3" required></textarea>
+                        </div>
+
+                        <input type="hidden" name="shipping_cost" id="shipping-cost-input" value="0">
+
+                        <input type="hidden" name="destination_id" id="destination-id">
+                        <input type="hidden" name="province" id="province-name">
+                        <input type="hidden" name="city" id="city-name">
+                        <input type="hidden" name="postal_code" id="postal-code">
+
+
+
+                        <div class="mb-3">
+                            <label class="form-label">
+                                Cari Tujuan Pengiriman
+                            </label>
+
+                            <input type="text" id="search-destination" class="form-control"
+                                placeholder="Contoh: Solo, Surabaya, Jakarta">
+
+                            <div id="destination-results" class="list-group mt-2">
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="no_hp" class="form-label">No HP</label>
+                            <input type="text" class="form-control" id="no_hp" name="no_hp" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Metode Pembayaran</label>
+                            <select name="metode_pembayaran" class="form-select" required>
+                                <option value="COD">COD</option>
+                                <option value="Transfer Bank">Transfer Bank</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn-checkout btn btn-primary">Bayar</button>
+
+                        <?php ActiveForm::end(); ?>
                     </div>
-
-                    <div class="mb-3">
-                        <label for="no_hp" class="form-label">No HP</label>
-                        <input type="text" class="form-control" id="no_hp" name="no_hp" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Metode Pembayaran</label>
-                        <select name="metode_pembayaran" class="form-select" required>
-                            <option value="COD">COD</option>
-                            <option value="Transfer Bank">Transfer Bank</option>
-                        </select>
-                    </div>
-
-                    <button type="submit" class="btn-checkout btn btn-primary">Bayar</button>
-
-                    <?php ActiveForm::end(); ?>
                 </div>
 
                 <!-- Ringkasan Order -->
                 <div class="col-md-6">
-                    <h4>Ringkasan Pesanan</h4>
-                    <div class="cart-table-wrapper">
-                        <table class="cart-table table">
-                            <thead>
-                                <tr>
-                                    <th>Produk</th>
-                                    <th>Harga</th>
-                                    <th>Satuan</th>
-                                    <th>Jumlah</th>
-                                    <th>Subtotal</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach ($items as $item): ?>
-                                    <?php
-                                    $harga = $item->satuan == 'kg'
-                                        ? (int) $item->produk->harga_kg
-                                        : (int) $item->produk->harga_bijian;
-                                    $subtotal = $harga * $item->jumlah;
-                                    ?>
+                    <div class="checkout-card">
+                        <h4>Ringkasan Pesanan</h4>
+                        <div class="cart-table-wrapper">
+                            <table class="cart-table table">
+                                <thead>
                                     <tr>
-                                        <td><?= Html::encode($item->produk->title) ?></td>
-                                        <td>Rp <?= number_format($harga, 0, ',', '.') ?></td>
-                                        <td><?= ucfirst($item->satuan) ?></td>
-
-                                        <td><?= $item->jumlah ?></td>
-                                        <td>Rp <?= number_format($subtotal, 0, ',', '.') ?></td>
+                                        <th>Produk</th>
+                                        <th>Harga</th>
+                                        <th>Satuan</th>
+                                        <th>Jumlah</th>
+                                        <th>Subtotal</th>
                                     </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th colspan="4" class="text-end">
-                                        Ongkir
-                                    </th>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($items as $item): ?>
+                                        <?php
+                                        $harga = $item->satuan == 'kg'
+                                            ? (int) $item->produk->harga_kg
+                                            : (int) $item->produk->harga_bijian;
+                                        $subtotal = $harga * $item->jumlah;
+                                        ?>
+                                        <tr>
+                                            <td><?= Html::encode($item->produk->title) ?></td>
+                                            <td>Rp <?= number_format($harga, 0, ',', '.') ?></td>
+                                            <td><?= ucfirst($item->satuan) ?></td>
 
-                                    <th id="shipping-cost">
-                                        -
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <th colspan="4" class="text-end">
-                                        Total Bayar
-                                    </th>
+                                            <td><?= $item->jumlah ?></td>
+                                            <td>Rp <?= number_format($subtotal, 0, ',', '.') ?></td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th colspan="4" class="text-end">
+                                            Ongkir
+                                        </th>
 
-                                    <th id="final-total">
-                                        Rp <?= number_format($grandTotal, 0, ',', '.') ?>
-                                    </th>
-                                </tr>
-                            </tfoot>
-                        </table>
+                                        <th id="shipping-cost">
+                                            -
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="4" class="text-end">
+                                            Total Bayar
+                                        </th>
+
+                                        <th id="final-total">
+                                            Rp <?= number_format($grandTotal, 0, ',', '.') ?>
+                                        </th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -85,56 +85,60 @@ $this->title = 'Dashboard Admin';
 
         <h3>Daftar Produk</h3>
         <div class="dashboard-card">
-            <table class="cart-table">
-                <thead>
-                    <tr>
-                        <th>Gambar</th>
-                        <th>Nama Produk</th>
-                        <th>Deskripsi</th>
-                        <th>Harga</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($produk as $p): ?>
+            <div class="table-responsive">
+                <table class="cart-table">
+                    <thead>
                         <tr>
-                            <td>
-                                <img src="<?= Yii::getAlias('@web') ?>/<?= $p->image ?>" alt="<?= $p->title ?>"
-                                    class="cart-img">
-                            </td>
-                            <td><?= Html::encode($p->title) ?></td>
-                            <td><?= Html::encode($p->description) ?></td>
-                            <td>
-                                <p>Kiloan: Rp <?= number_format($p->harga_kg, 0, ',', '.') ?></p>
-                                <p>Bijian : Rp <?= number_format($p->harga_bijian, 0, ',', '.') ?></p>
-                            </td>
+                            <th>Gambar</th>
+                            <th>Nama Produk</th>
+                            <th>Deskripsi</th>
+                            <th>Harga</th>
                         </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($produk as $p): ?>
+                            <tr>
+                                <td>
+                                    <img src="<?= Yii::getAlias('@web') ?>/<?= $p->image ?>" alt="<?= $p->title ?>"
+                                        class="cart-img">
+                                </td>
+                                <td><?= Html::encode($p->title) ?></td>
+                                <td><?= Html::encode($p->description) ?></td>
+                                <td>
+                                    <p>Kiloan: Rp <?= number_format($p->harga_kg, 0, ',', '.') ?></p>
+                                    <p>Bijian : Rp <?= number_format($p->harga_bijian, 0, ',', '.') ?></p>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
 
         <h3>Daftar Pesanan</h3>
         <div class="dashboard-card">
-            <?= GridView::widget([
-                'summary' => false,
-                'dataProvider' => $orderDataProvider,
-                'tableOptions' => ['class' => 'cart-table'],
-                'columns' => [
-                    ['class' => 'yii\grid\SerialColumn'],
-                    'nama',
-                    'no_hp',
-                    'alamat:ntext',
-                    'metode_pembayaran',
-                    [
-                        'attribute' => 'total',
-                        'value' => function ($model) {
-                                        return 'Rp ' . number_format($model->total, 0, ',', '.');
-                                    }
+            <div class="table-responsive">
+                <?= GridView::widget([
+                    'summary' => false,
+                    'dataProvider' => $orderDataProvider,
+                    'tableOptions' => ['class' => 'cart-table'],
+                    'columns' => [
+                        ['class' => 'yii\grid\SerialColumn'],
+                        'nama',
+                        'no_hp',
+                        'alamat:ntext',
+                        'metode_pembayaran',
+                        [
+                            'attribute' => 'total',
+                            'value' => function ($model) {
+                                                return 'Rp ' . number_format($model->total, 0, ',', '.');
+                                            }
+                        ],
+                        'created_at',
                     ],
-                    'created_at',
-                ],
-            ]); ?>
+                ]); ?>
+            </div>
         </div>
 
         <!-- Grafik -->

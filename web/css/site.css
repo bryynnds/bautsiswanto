@@ -147,7 +147,8 @@ body {
 }
 
 /* Style untuk menu navbar aktif */
-.navbar-nav .nav-link.active { /* contoh: pink */
+.navbar-nav .nav-link.active {
+  /* contoh: pink */
   border-bottom: 2px solid #008b8b; /* garis bawah cantik */
 }
 
@@ -173,10 +174,10 @@ body {
   align-items: flex-end; /* gambar nempel bawah */
 }
 
-.hero-image img{
-    max-width:100%;
-    max-height:500px;
-    object-fit:contain;
+.hero-image img {
+  max-width: 100%;
+  max-height: 500px;
+  object-fit: contain;
 }
 
 .hero-text {
@@ -291,7 +292,9 @@ section.promo h2 {
   flex-direction: column;
   justify-content: space-between;
   text-align: center;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .card .produk-img {
@@ -422,7 +425,9 @@ section.promo h2 {
   flex-direction: column;
   justify-content: space-between;
   vertical-align: middle;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .keunggulan-grid .point:hover {
@@ -479,7 +484,9 @@ section.promo h2 {
   flex-direction: column;
   justify-content: space-between;
   text-align: left;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
   position: relative;
 }
 
@@ -668,7 +675,6 @@ html {
 }
 
 .btn-secondary {
-  
   background-color: #ef4444;
   border-color: #ef4444;
   border-radius: 8px;
@@ -822,7 +828,9 @@ html {
   border-radius: 6px;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.4s ease, transform 0.4s ease;
+  transition:
+    opacity 0.4s ease,
+    transform 0.4s ease;
   z-index: 9999;
 }
 
@@ -1053,111 +1061,171 @@ html {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
-.harga-wrapper{
-    margin:12px 0;
+.harga-wrapper {
+  margin: 12px 0;
 }
 
-.harga-item{
-    background:#f0faf9;
-    border-radius:8px;
-    padding:8px;
-    margin-bottom:6px;
-    color:#006666;
-    font-size:14px;
+.harga-item {
+  background: #f0faf9;
+  border-radius: 8px;
+  padding: 8px;
+  margin-bottom: 6px;
+  color: #006666;
+  font-size: 14px;
 }
 
-.harga-item strong{
-    display:block;
-    margin-top:2px;
-    font-size:15px;
+.harga-item strong {
+  display: block;
+  margin-top: 2px;
+  font-size: 15px;
 }
 
-.produk-desc{
-    color:#666;
-    font-size:14px;
-    min-height:60px;
+.produk-desc {
+  color: #666;
+  font-size: 14px;
+  min-height: 60px;
 }
 
-.point-icon{
-    font-size:40px;
-    margin-bottom:10px;
+.point-icon {
+  font-size: 40px;
+  margin-bottom: 10px;
 }
 
-.testimoni-grid .testi{
-    border-top:4px solid #008b8b;
+.testimoni-grid .testi {
+  border-top: 4px solid #008b8b;
 }
 
-.stat-icon{
-    font-size:32px;
-    margin-bottom:10px;
+.stat-icon {
+  font-size: 32px;
+  margin-bottom: 10px;
 }
 
-.statistik-card{
-    transition:.3s;
+.statistik-card {
+  transition: 0.3s;
 }
 
-.statistik-card:hover{
-    transform:translateY(-5px);
-    box-shadow:0 8px 20px rgba(0,0,0,.1);
+.statistik-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
 }
 
-.produk-terjual{
-    background:#e0f7f6;
-    color:#006666;
-    padding:6px 10px;
-    border-radius:20px;
-    font-size:13px;
-    margin-bottom:10px;
-    display:inline-block;
+.produk-terjual {
+  background: #e0f7f6;
+  color: #006666;
+  padding: 6px 10px;
+  border-radius: 20px;
+  font-size: 13px;
+  margin-bottom: 10px;
+  display: inline-block;
 }
 
-.statistik-card{
-    border-top:4px solid #008b8b;
+.statistik-card {
+  border-top: 4px solid #008b8b;
 }
 
-.produk-action{
-    display:flex;
-    gap:10px;
-    flex-wrap:wrap;
-    justify-content: center;
+.produk-action {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
-.produk-info{
-    margin:10px 0;
-    text-align:left;
+.produk-info {
+  margin: 10px 0;
+  text-align: left;
 }
 
-.produk-info p{
-    margin-bottom:8px;
+.produk-info p {
+  margin-bottom: 8px;
 }
 
-.harga-box{
-    background:#f0faf9;
-    border-radius:10px;
-    padding:10px;
-    margin:12px 0;
+.harga-box {
+  background: #f0faf9;
+  border-radius: 10px;
+  padding: 10px;
+  margin: 12px 0;
 }
 
-.harga-box div{
-    margin-bottom:8px;
+.harga-box div {
+  margin-bottom: 8px;
 }
 
-.harga-box small{
-    display:block;
-    color:#666;
+.harga-box small {
+  display: block;
+  color: #666;
 }
 
-.harga-box strong{
-    color:#006666;
+.harga-box strong {
+  color: #006666;
 }
 
-.berat-produk{
-    font-weight:600;
-    color:#006666;
+.berat-produk {
+  font-weight: 600;
+  color: #006666;
 }
 
-.produk-desc{
-    font-size:14px;
-    color:#666;
-    min-height:60px;
+.produk-desc {
+  font-size: 14px;
+  color: #666;
+  min-height: 60px;
+}
+
+.checkout-subtitle {
+  text-align: center;
+  color: #666;
+  margin-bottom: 30px;
+}
+
+.checkout-card {
+  background: #fff;
+  border-radius: 15px;
+  padding: 25px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  margin-bottom: 20px;
+}
+
+.checkout-card h4 {
+  color: #006666;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+#search-destination {
+  border-radius: 10px;
+}
+
+#destination-results {
+  max-height: 250px;
+  overflow-y: auto;
+}
+
+.order-summary {
+  background: #f0faf9;
+  border-radius: 10px;
+  padding: 15px;
+}
+
+.checkout-section .cart-table {
+  background: #fff;
+}
+
+.checkout-section .cart-table thead tr {
+  border-bottom: 2px solid #006666;
+}
+
+.checkout-section .cart-table tbody tr:hover {
+  background: #f7fdfd;
+}
+
+.checkout-section .btn-checkout {
+  width: 100%;
+  font-size: 16px;
+  font-weight: 600;
+  padding: 12px;
+}
+
+.testimoni-content {
+  max-width: 400px;
+  white-space: normal;
+  word-break: break-word;
 }

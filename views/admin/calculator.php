@@ -85,27 +85,29 @@ $this->title = 'Kalkulator Kasir';
         <!-- Tabel Order -->
         <h3 class="mt-4">Daftar Belanja</h3>
         <div class="dashboard-card">
-            <table class="cart-table" id="orderTable">
-                <thead>
-                    <tr>
-                        <th>Nama Produk</th>
-                        <th>Harga</th>
-                        <th>Satuan</th>
-                        <th>Qty</th>
-                        <th>Sub Total</th>
-                        <th>Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <th colspan="4" class="text-end">Grand Total</th>
-                        <th id="grandTotal">Rp 0</th>
-                        <th></th>
-                    </tr>
-                </tfoot>
-            </table>
+            <div class="table-responsive">
+                <table class="cart-table" id="orderTable">
+                    <thead>
+                        <tr>
+                            <th>Nama Produk</th>
+                            <th>Harga</th>
+                            <th>Satuan</th>
+                            <th>Qty</th>
+                            <th>Sub Total</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th colspan="4" class="text-end">Grand Total</th>
+                            <th id="grandTotal">Rp 0</th>
+                            <th></th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
         </div>
     </section>
 </div>
@@ -177,7 +179,7 @@ $this->title = 'Kalkulator Kasir';
         tbody.addEventListener('click', e => {
             if (e.target.classList.contains('btn-remove')) {
                 const row = e.target.closest('tr');
-                const subtotalText = row.cells[3].innerText;
+                const subtotalText = row.cells[4].innerText;
                 const subtotalNumber = parseInt(subtotalText.replace(/[^\d]/g, ''), 10) || 0;
                 grandTotal -= subtotalNumber;
                 row.remove();

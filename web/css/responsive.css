@@ -1,0 +1,292 @@
+/* ====================================
+   TABLET
+==================================== */
+@media (max-width: 992px) {
+  .container-hero {
+    padding: 20px;
+  }
+
+  .hero-text h1 {
+    font-size: 2.2rem;
+  }
+
+  .produk,
+  .keunggulan,
+  .testimoni,
+  .edit-section {
+    padding-left: 5%;
+    padding-right: 5%;
+  }
+}
+
+/* ====================================
+   MOBILE
+==================================== */
+@media (max-width: 768px) {
+  /* NAVBAR */
+
+  .custom-navbar {
+    padding: 10px 15px !important;
+  }
+
+  /* HERO */
+
+  .container-hero {
+    flex-direction: column;
+    text-align: center;
+    gap: 20px;
+  }
+
+  .hero-image,
+  .hero-text {
+    flex: 1 1 100%;
+  }
+
+  .hero-image img {
+    max-width: 80%;
+    margin: auto;
+  }
+
+  .hero-text {
+    padding: 10px;
+  }
+
+  .hero-text h1 {
+    font-size: 1.9rem;
+  }
+
+  /* CARD GLOBAL */
+
+  .card,
+  .produk-card,
+  .keunggulan-grid .point,
+  .testimoni-grid .testi {
+    flex: 1 1 100%;
+    max-width: 100%;
+  }
+
+  /* PRODUK */
+
+  .produk-grid {
+    gap: 15px;
+  }
+
+  .card .produk-img {
+    width: 120px;
+    height: 120px;
+  }
+
+  /* FORM */
+
+  .form-card {
+    margin: 10px;
+    padding: 20px;
+  }
+
+  /* BUTTON */
+
+  .btn-wrapper {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .btn-wrapper a,
+  .btn-wrapper button {
+    width: 100%;
+  }
+
+  /* DASHBOARD */
+
+  .statistik-wrapper {
+    flex-direction: column;
+  }
+
+  .graphic-wrapper {
+    flex-direction: column;
+  }
+
+  .graphic-card {
+    width: 100%;
+  }
+
+  /* KERANJANG */
+
+  .cart-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .btn-clear,
+  .btn-checkout {
+    width: 100%;
+    text-align: center;
+  }
+
+  /* PRODUK ACTION */
+
+  .produk-action {
+    flex-direction: column;
+  }
+
+  .produk-action a {
+    width: 100%;
+  }
+
+  /* TABLE */
+
+  .cart-table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .cart-table {
+    min-width: 800px;
+  }
+
+  .cart-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .btn-clear,
+  .btn-checkout {
+    width: 100%;
+    text-align: center;
+  }
+
+  .keranjang {
+    padding: 15px;
+  }
+
+  .checkout-card {
+    padding: 15px;
+  }
+
+  .checkout-subtitle {
+    font-size: 14px;
+  }
+
+  .checkout-section h4 {
+    font-size: 1.2rem;
+  }
+
+  .row {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .col-md-6 {
+    width: 100%;
+    max-width: 100%;
+    flex: 0 0 100%;
+  }
+
+  #productSelect,
+  #productPrice,
+  #productUnit,
+  #productQty {
+    margin-bottom: 8px;
+  }
+
+  #addItemBtn {
+    width: 100%;
+  }
+
+  .calc-btn {
+    min-height: 50px;
+    font-size: 18px;
+  }
+
+  #clearCalc {
+    min-height: 50px;
+  }
+
+  #calcInput {
+    font-size: 20px;
+    text-align: right;
+  }
+
+  #orderTable {
+    min-width: 700px;
+  }
+
+  .dashboard-card {
+    padding: 15px;
+  }
+
+  .dashboard-card h3 {
+    font-size: 1.3rem;
+  }
+
+  #userSelect {
+    width: 100%;
+    font-size: 14px;
+  }
+
+  #historyTable {
+    min-width: 900px;
+  }
+
+  .promo-card {
+    padding: 15px;
+  }
+
+  .promo-card h3 {
+    text-align: center;
+    font-size: 1.3rem;
+  }
+
+  .promo-card .cart-table {
+    min-width: 500px;
+  }
+
+  .promo-card .btn-wrapper {
+    flex-direction: row;
+    justify-content: center;
+    gap: 5px;
+  }
+
+  .promo-card .btn-edit,
+  .promo-card .btn-hapus {
+    padding: 5px 10px;
+    font-size: 12px;
+  }
+}
+
+/* ====================================
+   SMALL MOBILE
+==================================== */
+@media (max-width: 576px) {
+  h1 {
+    font-size: 1.7rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  h3 {
+    font-size: 1.2rem;
+  }
+
+  .hero-text .btn {
+    width: 100%;
+  }
+
+  .card {
+    padding: 15px;
+  }
+
+  .statistik-card {
+    padding: 15px;
+  }
+}
+
+/* ====================================
+   IMAGE SAFETY
+==================================== */
+
+img {
+  max-width: 100%;
+  height: auto;
+}
