@@ -4,6 +4,7 @@ use yii\grid\GridView;
 use yii\helpers\Html;
 use app\models\HomepageProduk;
 use yii\data\ArrayDataProvider;
+use yii\widgets\Pjax;
 
 /** @var yii\web\View $this */
 /** @var app\models\HomepageProduk[] $produk */
@@ -12,15 +13,11 @@ use yii\data\ArrayDataProvider;
 /** @var int $totalProduk */
 /** @var int $totalOrder */
 /** @var array $produkTerlaris */
+/** @var array $produkTerlarisGrafik */
 /** @var array $pieLabels */
 /** @var array $pieData */
 /** @var array $bulanLabels */
 /** @var array $bulanData */
-
-$dataProvider = new ArrayDataProvider([
-    'allModels' => $produk,
-    'pagination' => false, // kalau mau disable pagination
-]);
 
 $this->title = 'Dashboard Admin';
 ?>
@@ -84,41 +81,52 @@ $this->title = 'Dashboard Admin';
         </div>
 
         <h3>Daftar Produk</h3>
-        <div class="dashboard-card">
+        <div class="dashboard-card" id="produk-section">
             <div class="table-responsive">
-                <table class="cart-table">
-                    <thead>
-                        <tr>
-                            <th>Gambar</th>
-                            <th>Nama Produk</th>
-                            <th>Deskripsi</th>
-                            <th>Harga</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($produk as $p): ?>
-                            <tr>
-                                <td>
-                                    <img src="<?= Yii::getAlias('@web') ?>/<?= $p->image ?>" alt="<?= $p->title ?>"
-                                        class="cart-img">
-                                </td>
-                                <td><?= Html::encode($p->title) ?></td>
-                                <td><?= Html::encode($p->description) ?></td>
-                                <td>
-                                    <p>Kiloan: Rp <?= number_format($p->harga_kg, 0, ',', '.') ?></p>
-                                    <p>Bijian : Rp <?= number_format($p->harga_bijian, 0, ',', '.') ?></p>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
+                <?php Pjax::begin([
+                    'id' => 'produk-grid',
+                    'enablePushState' => false,
+                ]); ?>
+                <?= GridView::widget([
+                    'summary' => false,
+                    'dataProvider' => $produkDataProvider,
+                    'tableOptions' => ['class' => 'cart-table'],
+                    'columns' => [
+                        [
+                            'label' => 'Gambar',
+                            'format' => 'raw',
+                            'value' => function ($model) {
+                                return Html::img(
+                                    Yii::getAlias('@web') . '/' . $model->image,
+                                    ['class' => 'cart-img']
+                                );
+                            }
+                        ],
+                        'title',
+                        'description',
+                        [
+                            'label' => 'Harga',
+                            'format' => 'raw',
+                            'value' => function ($model) {
+                                return
+                                    '<p>Kiloan: Rp ' . number_format($model->harga_kg, 0, ',', '.') . '</p>' .
+                                    '<p>Bijian : Rp ' . number_format($model->harga_bijian, 0, ',', '.') . '</p>';
+                            }
+                        ],
+                    ],
+                ]); ?>
+                <?php Pjax::end(); ?>
             </div>
         </div>
 
 
         <h3>Daftar Pesanan</h3>
-        <div class="dashboard-card">
+        <div class="dashboard-card" id="order-section">
             <div class="table-responsive">
+                <?php Pjax::begin([
+                    'id' => 'order-grid',
+                    'enablePushState' => false,
+                ]); ?>
                 <?= GridView::widget([
                     'summary' => false,
                     'dataProvider' => $orderDataProvider,
@@ -132,12 +140,13 @@ $this->title = 'Dashboard Admin';
                         [
                             'attribute' => 'total',
                             'value' => function ($model) {
-                                                return 'Rp ' . number_format($model->total, 0, ',', '.');
-                                            }
+                                return 'Rp ' . number_format($model->total, 0, ',', '.');
+                            }
                         ],
                         'created_at',
                     ],
                 ]); ?>
+                <?php Pjax::end(); ?>
             </div>
         </div>
 
@@ -161,13 +170,42 @@ $this->title = 'Dashboard Admin';
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     const pieChart = new Chart(document.getElementById('pieChart'), {
-        type: 'pie',
+        type: 'bar',
         data: {
             labels: <?= json_encode($pieLabels) ?>,
             datasets: [{
+                label: 'Jumlah Terjual',
                 data: <?= json_encode($pieData) ?>,
-                backgroundColor: ['#f87171', '#60a5fa', '#34d399', '#fbbf24', '#a78bfa'],
+                backgroundColor: '#0f766e',
+                borderRadius: 8
             }]
+        },
+        options: {
+            indexAxis: 'y',
+            responsive: true,
+            maintainAspectRatio: false,
+
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+
+            scales: {
+                x: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Jumlah Produk Terjual (x)'
+                    }
+                },
+                y: {
+                    title: {
+                        display: false,
+                        text: 'Nama Produk'
+                    }
+                }
+            }
         }
     });
 
@@ -181,8 +219,59 @@ $this->title = 'Dashboard Admin';
                 borderColor: '#006666',
                 backgroundColor: '#008b8b',
                 fill: false,
-                tension: 0.3
+                tension: 0
             }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function (context) {
+                            return 'Rp ' + context.raw.toLocaleString('id-ID');
+                        }
+                    }
+                },
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Periode Bulan'
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Total Penjualan (Rp)'
+                    }
+                }
+            }
+        }
+    });
+
+    $(document).on('pjax:end', function (event) {
+        const container = event.target.id;
+
+        if (container === 'produk-grid') {
+            document.getElementById('produk-section')
+                .scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+        }
+
+        if (container === 'order-grid') {
+            document.getElementById('pesanan-section')
+                .scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
         }
     });
 </script>

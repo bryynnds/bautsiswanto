@@ -15,11 +15,21 @@ class AdminController extends Controller
 {
     public function actionDashboard()
     {
-        $produk = HomepageProduk::find()->all();
+        $produkDataProvider = new ActiveDataProvider([
+            'query' => HomepageProduk::find()->orderBy(['id' => SORT_DESC]),
+            'pagination' => [
+                'pageSize' => 3,
+                'pageParam' => 'produk-page'
+            ],
+        ]);
 
         $orderDataProvider = new ActiveDataProvider([
             'query' => Order::find()->orderBy(['created_at' => SORT_DESC]),
-            'pagination' => ['pageSize' => 5],
+            'pagination' => [
+                'pageSize' => 3,
+                'pageParam' => 'order-page'
+            ],
+
         ]);
 
         $jumlahCustomer = User::find()->where(['role' => 'user'])->count();
@@ -33,31 +43,64 @@ class AdminController extends Controller
             ->innerJoin(['p' => 'homepage_produk'], 'oi.produk_id = p.id')
             ->groupBy(['p.id', 'p.title', 'p.harga_kg', 'p.harga_bijian', 'p.image'])
             ->orderBy(['jumlah_terjual' => SORT_DESC])
-            ->limit(6)
+            ->limit(3)
+            ->all();
+
+        $produkTerlarisGrafik = (new \yii\db\Query())
+            ->select(['p.id', 'p.title', 'p.harga_kg', 'p.harga_bijian', 'p.image', 'SUM(oi.qty) AS jumlah_terjual'])
+            ->from(['oi' => 'order_items'])
+            ->innerJoin(['p' => 'homepage_produk'], 'oi.produk_id = p.id')
+            ->groupBy(['p.id', 'p.title', 'p.harga_kg', 'p.harga_bijian', 'p.image'])
+            ->orderBy(['jumlah_terjual' => SORT_DESC])
+            ->limit(10)
             ->all();
 
         // Pie chart
-        $pieLabels = array_column($produkTerlaris, 'title');
-        $pieData = array_column($produkTerlaris, 'jumlah_terjual');
+        $pieLabels = array_column($produkTerlarisGrafik, 'title');
+        $pieData = array_column($produkTerlarisGrafik, 'jumlah_terjual');
 
         // Line chart penjualan per bulan
         $bulanDataRaw = (new \yii\db\Query())
-            ->select(["MONTH(created_at) as bulan", "SUM(total) as total"])
+            ->select([
+                "MONTH(created_at) as bulan",
+                "SUM(total) as total"
+            ])
             ->from('orders')
+            ->where(['YEAR(created_at)' => date('Y')])
             ->groupBy(['bulan'])
-            ->orderBy(['bulan' => SORT_ASC])
             ->all();
 
-        $bulanLabels = array_map(fn($row) => date('F', mktime(0, 0, 0, $row['bulan'], 1)), $bulanDataRaw);
-        $bulanData = array_column($bulanDataRaw, 'total');
+        $dataBulanan = array_fill(1, 12, 0);
+
+        foreach ($bulanDataRaw as $row) {
+            $dataBulanan[(int) $row['bulan']] = (float) $row['total'];
+        }
+
+        $bulanLabels = [
+            'Jan',
+            'Feb',
+            'Mar',
+            'Apr',
+            'Mei',
+            'Jun',
+            'Jul',
+            'Agu',
+            'Sep',
+            'Okt',
+            'Nov',
+            'Des'
+        ];
+
+        $bulanData = array_values($dataBulanan);
 
         return $this->render('dashboard', compact(
-            'produk',
+            'produkDataProvider',
             'orderDataProvider',
             'jumlahCustomer',
             'totalProduk',
             'totalOrder',
             'produkTerlaris',
+            'produkTerlarisGrafik',
             'pieLabels',
             'pieData',
             'bulanLabels',
