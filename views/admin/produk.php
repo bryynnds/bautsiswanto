@@ -13,6 +13,80 @@ $this->title = 'Daftar Produk';
 
     <h2 style="margin-bottom: 20px;">Daftar Produk</h2>
 
+    <form id="filterForm" method="get" class="filter-box">
+
+        <input type="text" name="search" id="searchProduk" placeholder="Cari produk..."
+            value="<?= Yii::$app->request->get('search') ?>">
+
+        <div class="jenis-filter">
+
+            <a href="<?= \yii\helpers\Url::to([
+                'homepage/admin-produk',
+                'search' => Yii::$app->request->get('search'),
+                'sort' => Yii::$app->request->get('sort')
+            ]) ?>" class="jenis-btn <?= empty(Yii::$app->request->get('jenis')) ? 'active' : '' ?>">
+                Semua
+            </a>
+
+            <?php foreach ($jenisList as $jenis): ?>
+
+                <a href="<?= \yii\helpers\Url::to([
+                    'homepage/admin-produk',
+                    'jenis' => $jenis->id,
+                    'search' => Yii::$app->request->get('search'),
+                    'sort' => Yii::$app->request->get('sort')
+                ]) ?>" class="jenis-btn <?= Yii::$app->request->get('jenis') == $jenis->id ? 'active' : '' ?>">
+                    <?= $jenis->nama_jenis ?>
+                </a>
+
+            <?php endforeach; ?>
+
+        </div>
+
+        <input type="hidden" name="jenis" value="<?= Yii::$app->request->get('jenis') ?>">
+
+        <select name="kategori" id="kategoriFilter">
+
+            <option value="">
+                <?= $jenisAktif ? 'Pilih Kategori ' . $jenisAktif->nama_jenis : 'Semua Kategori' ?>
+            </option>
+
+            <?php foreach ($kategoriList as $kategori): ?>
+
+                <option value="<?= $kategori->id ?>" <?= Yii::$app->request->get('kategori') == $kategori->id ? 'selected' : '' ?>>
+                    <?= $kategori->nama_kategori ?>
+                </option>
+
+            <?php endforeach; ?>
+
+        </select>
+
+        <select name="sort" id="sortFilter">
+
+            <option value="">
+                Urutkan
+            </option>
+
+            <option value="nama_asc">
+                Nama A-Z
+            </option>
+
+            <option value="nama_desc">
+                Nama Z-A
+            </option>
+
+            <option value="harga_asc">
+                Harga Termurah
+            </option>
+
+            <option value="harga_desc">
+                Harga Termahal
+            </option>
+
+        </select>
+
+    </form>
+
     <div class="produk-action mb-4">
 
         <a href="<?= Url::to(['homepage/create-produk']) ?>" class="btn btn-primary">
@@ -25,67 +99,58 @@ $this->title = 'Daftar Produk';
 
     </div>
 
-    <div class="produk-grid">
+    <div class="produk-grid" id="produkGrid">
 
-        <?php foreach ($produk as $item): ?>
-
-            <div class="card">
-
-                <h3><?= Html::encode($item->title) ?></h3>
-
-                <img src="<?= Yii::getAlias('@web') ?>/<?= Html::encode($item->image) ?>"
-                    alt="<?= Html::encode($item->title) ?>" class="produk-img">
-
-                
-
-                <div class="harga-box">
-
-                    <div>
-                        <small>Harga / Kg</small>
-                        <strong>
-                            Rp <?= number_format($item->harga_kg, 0, ',', '.') ?>
-                        </strong>
-                    </div>
-
-                    <div>
-                        <small>Harga / Biji</small>
-                        <strong>
-                            Rp <?= number_format($item->harga_bijian, 0, ',', '.') ?>
-                        </strong>
-                    </div>
-
-                </div>
-
-
-                <!-- Tombol -->
-                <div class="btn-wrapper">
-
-                    <?= Html::a(
-                        'Ubah',
-                        ['homepage/update-produk', 'id' => $item->id],
-                        [
-                            'class' => 'btn-edit',
-                        ]
-                    ) ?>
-
-                    <?= Html::a(
-                        'Hapus',
-                        ['homepage/delete-produk', 'id' => $item->id],
-                        [
-                            'class' => 'btn-hapus',
-                            'data' => [
-                                'confirm' => 'Yakin ingin menghapus produk ini?',
-                                'method' => 'post',
-                            ],
-                        ]
-                    ) ?>
-
-                </div>
-
-            </div>
-
-        <?php endforeach; ?>
+        <?= $this->render('_produk_grid', [
+            'produk' => $produk
+        ]) ?>
 
     </div>
 
 </section>
+
+<?php
+
+$this->registerJs("
+
+$('#kategoriFilter').change(function() {
+    loadProduk();
+});
+
+$('#sortFilter').change(function() {
+    loadProduk();
+});
+
+function loadProduk() {
+
+    $.ajax({
+
+        url: window.location.pathname,
+
+        type: 'GET',
+
+        data: $('#filterForm').serialize(),
+
+        success: function(response) {
+
+            $('#produkGrid').html(response);
+
+        }
+
+    });
+
+}
+
+$('#searchProduk').on('keyup', function() {
+
+    clearTimeout(window.searchTimer);
+
+    window.searchTimer = setTimeout(function() {
+
+        loadProduk();
+
+    }, 300);
+
+});
+");
+?>

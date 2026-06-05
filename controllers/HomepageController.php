@@ -332,12 +332,104 @@ class HomepageController extends Controller
 
     public function actionAdminProduk()
     {
-        $produk = HomepageProduk::find()
-            ->with(['kategori.jenis'])
-            ->all();
+        $query = HomepageProduk::find()
+            ->joinWith(['kategori.jenis']);
+
+        $search = Yii::$app->request->get('search');
+        $jenisId = Yii::$app->request->get('jenis');
+        $kategoriId = Yii::$app->request->get('kategori');
+        $sort = Yii::$app->request->get('sort');
+
+        // Search nama produk
+        if (!empty($search)) {
+
+            $query->andWhere([
+                'or',
+
+                ['like', 'homepage_produk.title', $search],
+
+                ['like', 'kategori_produk.nama_kategori', $search],
+
+                ['like', 'jenis_produk.nama_jenis', $search],
+            ]);
+        }
+
+        // Filter jenis
+        if (!empty($jenisId)) {
+            $query->andWhere([
+                'kategori_produk.jenis_id' => $jenisId
+            ]);
+        }
+
+        // Filter kategori
+        if (!empty($kategoriId)) {
+            $query->andWhere([
+                'homepage_produk.kategori_id' => $kategoriId
+            ]);
+        }
+
+        // Sorting
+        switch ($sort) {
+
+            case 'nama_asc':
+                $query->orderBy([
+                    'homepage_produk.title' => SORT_ASC
+                ]);
+                break;
+
+            case 'nama_desc':
+                $query->orderBy([
+                    'homepage_produk.title' => SORT_DESC
+                ]);
+                break;
+
+            case 'harga_asc':
+                $query->orderBy([
+                    'homepage_produk.harga_kg' => SORT_ASC
+                ]);
+                break;
+
+            case 'harga_desc':
+                $query->orderBy([
+                    'homepage_produk.harga_kg' => SORT_DESC
+                ]);
+                break;
+
+            default:
+                $query->orderBy([
+                    'homepage_produk.id' => SORT_DESC
+                ]);
+        }
+
+        $produk = $query->all();
+
+        $jenisAktif = null;
+
+        if (!empty($jenisId)) {
+            $jenisAktif = JenisProduk::findOne($jenisId);
+        }
+
+        $kategoriList = !empty($jenisId)
+            ? KategoriProduk::find()
+                ->where(['jenis_id' => $jenisId])
+                ->all()
+            : KategoriProduk::find()->all();
+
+        if (Yii::$app->request->isAjax) {
+
+            return $this->renderPartial(
+                '/admin/_produk_grid',
+                [
+                    'produk' => $produk
+                ]
+            );
+        }
 
         return $this->render('/admin/produk', [
             'produk' => $produk,
+            'jenisList' => JenisProduk::find()->all(),
+            'kategoriList' => $kategoriList,
+            'jenisAktif' => $jenisAktif,
         ]);
     }
 
@@ -366,7 +458,7 @@ class HomepageController extends Controller
             ->where(['jenis_id' => $jenis_id])
             ->all();
 
-        $output = '<option value="">Pilih kategori produk...</option>';
+        $output = '<option value="">Semua Kategori</option>';
 
         foreach ($kategori as $item) {
 
@@ -376,5 +468,17 @@ class HomepageController extends Controller
         }
 
         return $output;
+    }
+
+    public function actionAutocompleteProduk($term)
+    {
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        return HomepageProduk::find()
+            ->select(['title AS value'])
+            ->where(['like', 'title', $term])
+            ->limit(10)
+            ->asArray()
+            ->all();
     }
 }

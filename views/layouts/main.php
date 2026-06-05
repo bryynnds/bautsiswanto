@@ -27,6 +27,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
 
 <head>
     <title><?= Html::encode($this->title) ?></title>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
     <?php $this->head() ?>
     <!-- Bootstrap JS Bundle (sudah termasuk Popper) -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -320,7 +321,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
         </div>
     </div>
 
-
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
     <?php $this->endBody() ?>
     <script>
         document.addEventListener("DOMContentLoaded", function () {

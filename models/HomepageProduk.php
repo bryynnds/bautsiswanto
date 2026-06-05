@@ -71,4 +71,13 @@ class HomepageProduk extends ActiveRecord
     {
         return $this->hasOne(KategoriProduk::class, ['id' => 'kategori_id']);
     }
+
+    public function getJenis()
+    {
+        return $this->hasOne(
+            JenisProduk::class,
+            ['id' => 'jenis_id']
+        )->via('kategori');
+    }
 }
+

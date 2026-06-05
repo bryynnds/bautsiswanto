@@ -1622,3 +1622,66 @@ html {
 .grid-view .pagination {
   margin-top: 25px;
 }
+
+.filter-box {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
+}
+
+.filter-box input,
+.filter-box select {
+  padding: 10px 14px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  min-width: 180px;
+}
+
+.jenis-filter {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.jenis-btn {
+  padding: 8px 16px;
+  border-radius: 20px;
+  text-decoration: none;
+  border: 1px solid #ddd;
+  background: #fff;
+  color: #333;
+  transition: 0.2s;
+}
+
+.jenis-btn:hover {
+  background: #f5f5f5;
+}
+
+.jenis-btn.active {
+  background: #0d6efd;
+  color: white;
+  border-color: #0d6efd;
+}
+
+.ui-autocomplete {
+  max-height: 250px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  z-index: 9999;
+}
+
+.ui-menu-item-wrapper {
+  padding: 10px 15px;
+  font-size: 14px;
+}
+
+.ui-state-active {
+  border: none !important;
+  background: #0d6efd !important;
+  color: white !important;
+}
