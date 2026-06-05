@@ -1,5 +1,9 @@
 <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="<?= $clientKey ?>"></script>
 
+<?php
+$this->title = "Proses Pembayaran";
+?>
+
 <script>
     snap.pay('<?= $snapToken ?>', {
 

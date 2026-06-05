@@ -1194,6 +1194,15 @@ html {
   border-radius: 10px;
 }
 
+#search-destination {
+  text-align: left !important;
+  direction: ltr !important;
+}
+
+#search-destination:focus {
+  text-align: left !important;
+}
+
 #destination-results {
   max-height: 250px;
   overflow-y: auto;

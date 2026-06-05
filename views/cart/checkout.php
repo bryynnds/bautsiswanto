@@ -257,7 +257,14 @@ $(document).on('click', '.destination-item', function(){
 
     $('#postal-code').val($(this).data('postal'));
 
-    $('#search-destination').val($(this).text());
+    $('#search-destination').val(
+    $(this).text().trim()
+);
+
+$('#search-destination').css({
+    'text-align': 'left',
+    'direction': 'ltr'
+});
 
     $('#destination-results').html('');
 
