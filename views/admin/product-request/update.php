@@ -83,11 +83,6 @@ $this->title = 'Proses Permintaan Produk';
             'tidak_ditemukan' => 'Tidak Ditemukan',
         ]) ?>
 
-        <?= $form->field($model, 'admin_note')->textarea([
-            'rows' => 5,
-            'placeholder' => 'Tambahkan catatan untuk pengguna...'
-        ]) ?>
-
         <div class="btn-group-custom">
 
             <?= Html::submitButton(
