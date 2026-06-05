@@ -106,83 +106,99 @@ $this->title = 'Profil Saya';
     <!-- CARD RIWAYAT PEMESANAN -->
     <div class="dashboard-card">
         <h3>Riwayat Pemesanan</h3>
-
-        <table class="cart-table">
-            <thead>
-                <tr>
-                    <th>Nama</th>
-                    <th>No HP</th>
-                    <th>Alamat</th>
-                    <th>Metode</th>
-                    <th>Total</th>
-                    <th>Tanggal</th>
-                    <th>Status</th>
-                    <th>Aksi</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($orders as $order): ?>
+        <div class="table-responsive mt-4">
+            <table class="cart-table">
+                <thead>
                     <tr>
-                        <td><?= $order->nama ?></td>
-                        <td><?= $order->no_hp ?></td>
-                        <td><?= $order->alamat ?></td>
-                        <td><?= $order->metode_pembayaran ?></td>
-                        <td>Rp <?= number_format($order->total) ?></td>
-                        <td><?= $order->created_at ?></td>
-                        <td>
-
-                            <?php
-
-                            $statusLabel = [
-                                'pending' => 'Tertunda',
-                                'paid' => 'Sudah Dibayar',
-                                'shipped' => 'Dikirim',
-                                'completed' => 'Selesai',
-                                'failed' => 'Gagal',
-                                'cancelled' => 'Dibatalkan',
-                            ];
-
-                            echo $statusLabel[$order->status] ?? $order->status;
-
-                            ?>
-
-                        </td>
-                        <td>
-                            <button class="btn-detail-order" data-id="<?= $order->id ?>">
-                                Lihat
-                            </button>
-
-                            <?php if ($order->status === 'shipped'): ?>
-
-                                <a href="<?= Url::to([
-                                    'user/pesanan-diterima',
-                                    'id' => $order->id
-                                ]) ?>" class="btn btn-success btn-sm">
-
-                                    Pesanan Diterima
-                                </a>
-
-                            <?php endif; ?>
-
-                            <?php if (
-                                $order->status === 'Pending'
-                                && $order->metode_pembayaran === 'Transfer Bank'
-                            ): ?>
-
-                                <a href="<?= Url::to([
-                                    'checkout/repay',
-                                    'id' => $order->id
-                                ]) ?>" class="btn btn-warning btn-sm mt-1">
-
-                                    Bayar Lagi
-                                </a>
-
-                            <?php endif; ?>
-                        </td>
+                        <th>Nama</th>
+                        <th>No HP</th>
+                        <th>Alamat</th>
+                        <th>Metode</th>
+                        <th>Total</th>
+                        <th>Tanggal</th>
+                        <th>Status</th>
+                        <th>Aksi</th>
                     </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    <?php foreach ($orders as $order): ?>
+                        <tr>
+                            <td><?= $order->nama ?></td>
+                            <td><?= $order->no_hp ?></td>
+                            <td><?= $order->alamat ?></td>
+                            <td><?= $order->metode_pembayaran ?></td>
+                            <td>Rp <?= number_format($order->total) ?></td>
+                            <td><?= $order->created_at ?></td>
+                            <td>
+
+                                <?php
+
+                                $statusLabel = [
+                                    'pending' => 'Tertunda',
+                                    'paid' => 'Sudah Dibayar',
+                                    'shipped' => 'Dikirim',
+                                    'completed' => 'Selesai',
+                                    'failed' => 'Gagal',
+                                    'cancelled' => 'Dibatalkan',
+                                ];
+
+                                $statusClass = [
+                                    'pending' => 'status-pending',
+                                    'paid' => 'status-paid',
+                                    'shipped' => 'status-shipped',
+                                    'completed' => 'status-completed',
+                                    'failed' => 'status-failed',
+                                    'cancelled' => 'status-cancelled',
+                                ];
+
+                                ?>
+
+                                <span class="<?= $statusClass[$order->status] ?? 'status-default' ?>">
+
+                                    <?= $statusLabel[$order->status] ?? $order->status ?>
+
+                                </span>
+
+                            </td>
+                            <td>
+                                <button class="btn-detail-order" data-id="<?= $order->id ?>">
+                                    Lihat
+                                </button>
+
+                                <?php if ($order->status === 'shipped'): ?>
+
+                                    <a href="<?= Url::to([
+                                        'user/pesanan-diterima',
+                                        'id' => $order->id
+                                    ]) ?>" class="btn btn-success btn-sm">
+
+                                        Pesanan Diterima
+                                    </a>
+
+
+
+                                <?php endif; ?>
+
+                                <?php if (
+                                    $order->status === 'Pending'
+                                    && $order->metode_pembayaran === 'Transfer Bank'
+                                ): ?>
+
+                                    <a href="<?= Url::to([
+                                        'checkout/repay',
+                                        'id' => $order->id
+                                    ]) ?>" class="btn btn-warning btn-sm mt-1">
+
+                                        Bayar Lagi
+                                    </a>
+
+                                <?php endif; ?>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
     </div>
 
 </div>

@@ -1520,3 +1520,16 @@ html {
 
   font-weight: 700;
 }
+
+.btn-success.btn-sm {
+  color: #fff !important;
+  background: #2d59fa;
+
+  border: none;
+
+  padding: 8px 15px;
+
+  border-radius: 8px;
+
+  transition: 0.3s;
+}
