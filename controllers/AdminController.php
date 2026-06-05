@@ -183,6 +183,12 @@ class AdminController extends Controller
 
         $items = [];
 
+        $subtotalProduk = 0;
+
+        foreach ($order->items as $item) {
+            $subtotalProduk += $item->subtotal;
+        }
+
         foreach ($order->items as $item) {
 
             $items[] = [
@@ -203,6 +209,7 @@ class AdminController extends Controller
                 'alamat' => $order->alamat,
                 'status' => $order->status,
                 'metode' => $order->metode_pembayaran,
+                'subtotal_produk' => $subtotalProduk,
                 'courier' => $order->courier,
                 'shipping_cost' => $order->shipping_cost,
                 'total' => $order->total,

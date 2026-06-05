@@ -1229,3 +1229,294 @@ html {
   white-space: normal;
   word-break: break-word;
 }
+
+.btn-detail-order {
+  background: #008b8b;
+
+  color: #fff;
+
+  border: none;
+
+  padding: 8px 15px;
+
+  border-radius: 8px;
+
+  transition: 0.3s;
+}
+
+.btn-detail-order:hover {
+  background: #006666;
+}
+
+.status-pending {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.status-paid {
+  background: #d1fae5;
+  color: #06d49a;
+}
+
+.status-shipped {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.status-completed {
+  background: #4cff8b;
+  color: #316c48;
+}
+
+.status-failed {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.status-cancelled {
+  background: #f3f4f6;
+  color: #4b5563;
+}
+
+.status-default {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.status-pending,
+.status-paid,
+.status-shipped,
+.status-completed,
+.status-failed,
+.status-cancelled,
+.status-default {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.order-info {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.order-info div {
+  background: #f0faf9;
+  padding: 12px;
+  border-radius: 10px;
+}
+
+.order-address {
+  background: #fff;
+  border-left: 4px solid #008b8b;
+  padding: 12px;
+  margin-bottom: 20px;
+}
+
+.order-total-box {
+  margin-top: 20px;
+  background: #f0faf9;
+  border-radius: 12px;
+  padding: 15px;
+  text-align: center;
+}
+
+.order-total-title {
+  color: #666;
+  margin-bottom: 5px;
+}
+
+.order-total-value {
+  color: #006666;
+  font-size: 26px;
+  font-weight: bold;
+}
+
+/* =========================
+   MODAL DETAIL PESANAN
+========================= */
+
+#detailModal .modal-content {
+  border: none;
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+#detailModal .modal-header {
+  background: #f0faf9;
+  border-bottom: 1px solid #d9f0ef;
+}
+
+#detailModal .modal-title,
+#detailModal h5 {
+  color: #006666;
+  font-weight: bold;
+  margin: 0;
+}
+
+#detailModal .modal-body {
+  padding: 20px;
+}
+
+/* Info Pesanan */
+
+.order-info {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.order-info > div {
+  flex: 1;
+  background: #f8fdfd;
+  border: 1px solid #e5f4f3;
+  border-radius: 10px;
+  padding: 12px;
+}
+
+/* Alamat */
+
+.order-address {
+  background: #f8fdfd;
+  border: 1px solid #e5f4f3;
+  border-left: 4px solid #008b8b;
+  border-radius: 10px;
+  padding: 12px;
+  margin-bottom: 20px;
+}
+
+/* Tabel Produk */
+
+#detailModal .cart-table {
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+/* Total */
+
+.order-total-box {
+  background: #f0faf9;
+  border-radius: 10px;
+  padding: 15px;
+  text-align: center;
+  margin-top: 15px;
+}
+
+.order-total-title {
+  color: #666;
+  font-size: 14px;
+}
+
+.order-total-value {
+  color: #006666;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+/* Tombol Kirim */
+
+.btn-kirim {
+  background: #008b8b;
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  transition: 0.3s;
+}
+
+.btn-kirim:hover {
+  background: #006666;
+}
+
+/* Modal Resi */
+
+#resiModal .modal-content {
+  border: none;
+  border-radius: 15px;
+}
+
+#resiModal .modal-header {
+  background: #f0faf9;
+  color: #006666;
+  border-bottom: 1px solid #d9f0ef;
+}
+
+#simpan-resi {
+  background: #008b8b;
+  border-color: #008b8b;
+}
+
+#simpan-resi:hover {
+  background: #006666;
+  border-color: #006666;
+}
+
+/* CARD MIRIP PROFILE */
+
+.order-summary-card {
+  background: #f8f9fa;
+
+  border: 1px solid #e5e7eb;
+
+  border-radius: 12px;
+
+  padding: 15px;
+
+  margin-bottom: 15px;
+}
+
+.summary-row {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  padding: 10px 0;
+
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.summary-row:last-child {
+  border-bottom: none;
+}
+
+.summary-row span {
+  color: #6b7280;
+}
+
+.summary-row strong {
+  color: #111827;
+}
+
+/* TOTAL BAYAR */
+
+.order-total-modern {
+  margin-top: 20px;
+
+  background: #f8f9fa;
+
+  border-radius: 12px;
+
+  padding: 18px;
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  font-size: 18px;
+}
+
+.order-total-modern strong {
+  color: #008b8b;
+
+  font-size: 28px;
+
+  font-weight: 700;
+}

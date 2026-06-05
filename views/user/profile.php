@@ -148,7 +148,7 @@ $this->title = 'Profil Saya';
 
                         </td>
                         <td>
-                            <button class="btn btn-info btn-detail" data-id="<?= $order->id ?>">
+                            <button class="btn-detail-order" data-id="<?= $order->id ?>">
                                 Lihat
                             </button>
 
@@ -188,7 +188,7 @@ $this->title = 'Profil Saya';
 </div>
 
 <!-- Modal Detail Pesanan -->
-<div class="modal fade" id="orderItemsModal" tabindex="-1">
+<div class="modal fade" id="detailModal" tabindex="-1">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -223,7 +223,7 @@ $this->title = 'Profil Saya';
 $ajaxUrl = Url::to(['user/order-items']);
 
 $js = <<<JS
-$(".btn-detail").on("click", function() {
+$(".btn-detail-order").on("click", function() {
 
     var orderId = $(this).data("id");
 
@@ -261,62 +261,63 @@ $(".btn-detail").on("click", function() {
         }
 
         let summaryHtml = `
-    <div class="order-summary-card">
 
-        <div class="summary-row">
-            <span>Kurir</span>
-            <strong>
-                \${data.order.courier
-                    ? data.order.courier.toUpperCase()
-                    : '-'}
-            </strong>
-        </div>
+<div class="order-summary-card">
 
-        <div class="summary-row">
-    <span>Nomor Resi</span>
-    <strong>
-        \${data.order.tracking_number
-            ? data.order.tracking_number
-            : '-'}
-    </strong>
+    <div class="summary-row">
+        <span>Kurir</span>
+        <strong>
+            \${data.order.courier
+                ? data.order.courier.toUpperCase()
+                : '-'}
+        </strong>
+    </div>
+
+    <div class="summary-row">
+        <span>Nomor Resi</span>
+        <strong>
+            \${data.order.tracking_number
+                ? data.order.tracking_number
+                : '-'}
+        </strong>
+    </div>
+
+    <div class="summary-row">
+        <span>Subtotal Produk</span>
+        <strong>
+            Rp \${Number(data.order.subtotal_produk)
+                .toLocaleString('id-ID')}
+        </strong>
+    </div>
+
+    <div class="summary-row">
+        <span>Ongkir</span>
+        <strong>
+            Rp \${Number(data.order.shipping_cost)
+                .toLocaleString('id-ID')}
+        </strong>
+    </div>
+
 </div>
 
-        <hr>
+<div class="order-total-modern">
 
-        <div class="summary-row">
-            <span>Subtotal Produk</span>
-            <strong>
-                Rp \${Number(data.order.subtotal_produk)
-                    .toLocaleString('id-ID')}
-            </strong>
-        </div>
+    <span>Total Bayar</span>
 
-        <div class="summary-row">
-            <span>Ongkir</span>
-            <strong>
-                Rp \${Number(data.order.shipping_cost)
-                    .toLocaleString('id-ID')}
-            </strong>
-        </div>
+    <strong>
+        Rp \${Number(data.order.total)
+            .toLocaleString('id-ID')}
+    </strong>
 
-        <hr>
+</div>
 
-        <div class="summary-row total-row">
-            <span>Total Bayar</span>
-            <strong>
-                Rp \${Number(data.order.total)
-                    .toLocaleString('id-ID')}
-            </strong>
-        </div>
-
-    </div>
 `;
 
 $('#order-summary').html(summaryHtml);
 
         $('#repay-container').html(tombol);
 
-        $("#orderItemsModal").modal("show");
+        $("#detailModal").modal("show");
     });
 });
 JS;

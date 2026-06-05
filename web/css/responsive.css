@@ -251,6 +251,28 @@
     padding: 5px 10px;
     font-size: 12px;
   }
+
+  .order-info {
+    flex-direction: column;
+  }
+
+  .order-total-value {
+    font-size: 20px;
+  }
+
+  .summary-row {
+    font-size: 14px;
+  }
+
+  .order-total-modern {
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+  }
+
+  .order-total-modern strong {
+    font-size: 22px;
+  }
 }
 
 /* ====================================
