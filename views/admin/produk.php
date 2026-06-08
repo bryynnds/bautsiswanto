@@ -67,14 +67,6 @@ $this->title = 'Daftar Produk';
                 Urutkan
             </option>
 
-            <option value="nama_asc">
-                Nama A-Z
-            </option>
-
-            <option value="nama_desc">
-                Nama Z-A
-            </option>
-
             <option value="harga_asc">
                 Harga Termurah
             </option>
