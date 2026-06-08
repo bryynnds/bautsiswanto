@@ -9,10 +9,55 @@ $this->title = 'Permintaan Produk';
 <div class="container mt-5">
 
     <div class="form-card">
+        <div class="adminrequest-header">
+            <h1 class="produk-title">
+                Permintaan Produk
+            </h1>
+            <form id="filterForm">
+                <div class="filter-toolbar">
 
-        <h2 class="section-title mb-4">
-            Permintaan Produk
-        </h2>
+                    <input type="text" id="searchRequest" name="search" class="filter-input"
+                        placeholder="Cari produk, user, status..." value="<?= Yii::$app->request->get('search') ?>">
+
+                    <select name="status" id="statusFilter" class="filter-select">
+
+                        <option value="">
+                            Semua Status
+                        </option>
+
+                        <option value="pending">
+                            Pending
+                        </option>
+
+                        <option value="diproses">
+                            Diproses
+                        </option>
+
+                        <option value="tersedia">
+                            Tersedia
+                        </option>
+
+                        <option value="tidak_ditemukan">
+                            Tidak Ditemukan
+                        </option>
+
+                    </select>
+
+                    <select name="sort" id="sortFilter" class="filter-select">
+
+                        <option value="latest">
+                            Terbaru
+                        </option>
+
+                        <option value="oldest">
+                            Terlama
+                        </option>
+
+                    </select>
+                </div>
+            </form>
+        </div>
+
 
         <?php if (Yii::$app->session->hasFlash('success')): ?>
             <div class="alert alert-success">
@@ -21,103 +66,18 @@ $this->title = 'Permintaan Produk';
         <?php endif; ?>
 
         <div class="request-info">
-            Total Request:
-            <strong><?= count($requests) ?></strong>
+            Total Permintaan:
+            <strong><?= $totalRequests ?></strong>
         </div>
 
         <?php if (!empty($requests)): ?>
 
-            <div class="table-responsive">
+            <div class="table-responsive" id="requestTable">
 
-                <table class="request-table">
-
-                    <thead>
-                        <tr>
-                            <th>User</th>
-                            <th>Produk</th>
-                            <th>Jenis</th>
-                            <th>Status</th>
-                            <th>Tanggal</th>
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-
-                    <?php foreach ($requests as $request): ?>
-
-                        <tr>
-
-                            <td>
-                                <?= Html::encode(
-                                    $request->user->username ?? '-'
-                                ) ?>
-                            </td>
-
-                            <td>
-                                <strong>
-                                    <?= Html::encode(
-                                        $request->nama_produk
-                                    ) ?>
-                                </strong>
-                            </td>
-
-                            <td>
-                                <?= $request->jenisProduk
-                                    ? Html::encode(
-                                        $request->jenisProduk->nama_jenis
-                                    )
-                                    : '-' ?>
-                            </td>
-
-                            <td>
-
-                                <?php
-                                $status = strtolower($request->status);
-
-                                if ($status === 'tersedia') {
-                                    $class = 'status-success';
-                                } elseif ($status === 'pending') {
-                                    $class = 'status-warning';
-                                } elseif ($status === 'ditolak') {
-                                    $class = 'status-danger';
-                                } else {
-                                    $class = 'status-primary';
-                                }
-                                ?>
-
-                                <span class="status-badge <?= $class ?>">
-                                    <?= ucfirst($request->status) ?>
-                                </span>
-
-                            </td>
-
-                            <td>
-                                <?= date(
-                                    'd-m-Y H:i',
-                                    strtotime($request->created_at)
-                                ) ?>
-                            </td>
-
-                            <td>
-
-                                <?= Html::a(
-                                    'Proses',
-                                    ['update', 'id' => $request->id],
-                                    [
-                                        'class' => 'btn btn-primary btn-sm'
-                                    ]
-                                ) ?>
-
-                            </td>
-
-                        </tr>
-
-                    <?php endforeach; ?>
-
-                    </tbody>
-
-                </table>
+                <?= $this->render('_table', [
+                    'requests' => $requests,
+                    'pages' => $pages,
+                ]) ?>
 
             </div>
 
@@ -143,87 +103,152 @@ $this->title = 'Permintaan Produk';
 
 </div>
 
+<?php
+
+$this->registerJs("
+function loadRequests() {
+
+    $.ajax({
+
+        url: window.location.href.split('?')[0],
+
+        type: 'GET',
+
+        data: $('#filterForm').serialize(),
+
+        success: function(response) {
+
+            $('#requestTable').html(response);
+
+        }
+
+    });
+
+}
+
+$('#searchRequest').on('keyup', function() {
+
+    clearTimeout(window.requestTimer);
+
+    window.requestTimer = setTimeout(function() {
+
+        loadRequests();
+
+    }, 300);
+
+});
+
+$('#statusFilter').change(function() {
+
+    loadRequests();
+
+});
+
+$('#sortFilter').change(function() {
+
+    loadRequests();
+
+});
+");
+?>
+
 <style>
+    .filter-box {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-bottom: 20px;
+    }
 
-.request-info{
-    background:#e0f7f6;
-    color:#006666;
-    padding:12px 16px;
-    border-radius:10px;
-    margin-bottom:20px;
-    font-weight:500;
-}
+    .filter-box input,
+    .filter-box select {
+        padding: 10px 14px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+    }
 
-.request-table{
-    width:100%;
-    border-collapse:collapse;
-}
+    .filter-box input {
+        min-width: 250px;
+    }
 
-.request-table th,
-.request-table td{
-    padding:14px;
-    border-bottom:1px solid #e5e5e5;
-}
+    .request-info {
+        background: #e0f7f6;
+        color: #006666;
+        padding: 12px 16px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        font-weight: 500;
+    }
 
-.request-table th{
-    color:#006666;
-    font-weight:600;
-    border-bottom:2px solid #006666;
-    background:#fff;
-}
+    .request-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
 
-.request-table tbody tr{
-    transition:all .2s ease;
-}
+    .request-table th,
+    .request-table td {
+        padding: 14px;
+        border-bottom: 1px solid #e5e5e5;
+    }
 
-.request-table tbody tr:hover{
-    background:#f7fdfd;
-}
+    .request-table th {
+        color: #006666;
+        font-weight: 600;
+        border-bottom: 2px solid #006666;
+        background: #fff;
+    }
 
-.status-badge{
-    padding:6px 12px;
-    border-radius:20px;
-    font-size:13px;
-    font-weight:600;
-}
+    .request-table tbody tr {
+        transition: all .2s ease;
+    }
 
-.status-success{
-    background:#d1fae5;
-    color:#065f46;
-}
+    .request-table tbody tr:hover {
+        background: #f7fdfd;
+    }
 
-.status-warning{
-    background:#fef3c7;
-    color:#92400e;
-}
+    .status-badge {
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 600;
+    }
 
-.status-danger{
-    background:#fee2e2;
-    color:#991b1b;
-}
+    .status-success {
+        background: #d1fae5;
+        color: #065f46;
+    }
 
-.status-primary{
-    background:#dbeafe;
-    color:#1e40af;
-}
+    .status-warning {
+        background: #fef3c7;
+        color: #92400e;
+    }
 
-.empty-request{
-    text-align:center;
-    padding:50px 20px;
-}
+    .status-danger {
+        background: #fee2e2;
+        color: #991b1b;
+    }
 
-.empty-icon{
-    font-size:60px;
-    margin-bottom:15px;
-}
+    .status-primary {
+        background: #dbeafe;
+        color: #1e40af;
+    }
 
-.empty-request h4{
-    color:#006666;
-    margin-bottom:10px;
-}
+    .empty-request {
+        text-align: center;
+        padding: 50px 20px;
+    }
 
-.empty-request p{
-    color:#666;
-}
+    .empty-icon {
+        font-size: 60px;
+        margin-bottom: 15px;
+    }
 
+    .empty-request h4 {
+        color: #006666;
+        margin-bottom: 10px;
+    }
+
+    .empty-request p {
+        color: #666;
+    }
 </style>

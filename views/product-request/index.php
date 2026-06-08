@@ -16,7 +16,7 @@ $this->title = "Permintaan Produk";
             </h2>
 
             <?= Html::a(
-                'Tambah Request',
+                'Tambah Permintaan',
                 ['create'],
                 ['class' => 'btn btn-success']
             ) ?>
@@ -30,7 +30,7 @@ $this->title = "Permintaan Produk";
         <?php endif; ?>
 
         <div class="request-info">
-            Total Request:
+            Total Permintaan:
             <strong><?= count($requests) ?></strong>
         </div>
 
@@ -44,6 +44,7 @@ $this->title = "Permintaan Produk";
                         <tr>
                             <th>Produk</th>
                             <th>Jenis</th>
+                            <th>Keterangan</th>
                             <th>Status</th>
                             <th>Tanggal</th>
                         </tr>
@@ -80,6 +81,12 @@ $this->title = "Permintaan Produk";
                                 <td>
                                     <?= $request->jenisProduk
                                         ? Html::encode($request->jenisProduk->nama_jenis)
+                                        : '-' ?>
+                                </td>
+
+                                <td>
+                                    <?= $request->keterangan
+                                        ? Html::encode($request->keterangan)
                                         : '-' ?>
                                 </td>
 

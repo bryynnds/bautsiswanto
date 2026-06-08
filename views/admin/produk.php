@@ -13,9 +13,9 @@ $this->title = 'Daftar Produk';
 
     <div class="produk-header">
 
-        <h2 class="produk-title">
+        <h1 class="produk-title">
             Daftar Produk
-        </h2>
+        </h1>
 
         <div class="produk-action">
 

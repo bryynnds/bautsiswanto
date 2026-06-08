@@ -287,6 +287,46 @@
   .request-table {
     min-width: 600px;
   }
+
+  .produk-header {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+  }
+
+  .produk-action {
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .produk-title {
+    font-size: 2rem;
+  }
+
+  .filter-input,
+  .filter-select {
+    width: 100%;
+  }
+
+  .jenis-filter {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    padding-bottom: 5px;
+  }
+
+  .jenis-btn {
+    white-space: nowrap;
+  }
+
+  .produk-action {
+    flex-direction: column;
+  }
+
+  .produk-action .btn {
+    width: 100%;
+  }
 }
 
 /* ====================================

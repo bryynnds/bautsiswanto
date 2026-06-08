@@ -1771,6 +1771,15 @@ html {
   align-items: center;
 }
 
+.adminrequest-header {
+  max-width: 1150px;
+  margin: 0 auto auto auto;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .produk-header-user {
   margin: auto;
   align-items: center;
