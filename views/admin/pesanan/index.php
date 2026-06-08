@@ -8,106 +8,100 @@ $this->title = 'Daftar Pesanan';
 <div class="container mt-5">
 
     <div class="dashboard-card">
-        <h2 class="section-title mb-4">
+        <h2 class="section-title mb-3">
             Daftar Pesanan
         </h2>
 
-        <div class="table-responsive">
+        <form id="filterForm">
+            <div class="filter-toolbar">
 
-            <table class="cart-table">
+                <input type="text" id="searchOrder" name="search" class="filter-input"
+                    placeholder="Cari ID, pembeli, status...">
 
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Pembeli</th>
-                        <th>No HP</th>
-                        <th>Total</th>
-                        <th>Metode</th>
-                        <th>Status</th>
-                        <th>Tanggal</th>
-                        <th>Aksi</th>
-                    </tr>
-                </thead>
+                <select name="status" id="statusFilter" class="filter-select">
 
-                <tbody>
+                    <option value="">
+                        Semua Status
+                    </option>
 
-                    <?php foreach ($orders as $order): ?>
+                    <option value="pending">
+                        Tertunda
+                    </option>
 
-                        <tr>
+                    <option value="paid">
+                        Sudah Dibayar
+                    </option>
 
-                            <td>
-                                <?= $order->id ?>
-                            </td>
+                    <option value="shipped">
+                        Dikirim
+                    </option>
 
-                            <td>
-                                <?= Html::encode($order->nama) ?>
-                            </td>
+                    <option value="completed">
+                        Selesai
+                    </option>
 
-                            <td>
-                                <?= Html::encode($order->no_hp) ?>
-                            </td>
+                </select>
 
-                            <td>
-                                Rp
-                                <?= number_format($order->total, 0, ',', '.') ?>
-                            </td>
+                <select name="bulan" id="bulanFilter" class="filter-select">
 
-                            <td>
-                                <?= $order->metode_pembayaran ?>
-                            </td>
+                    <option value="">
+                        Semua Bulan
+                    </option>
 
-                            <td>
+                    <?php for ($i = 1; $i <= 12; $i++): ?>
 
-                                <?php
+                        <option value="<?= $i ?>">
+                            <?= date('F', mktime(0, 0, 0, $i, 1)) ?>
+                        </option>
 
-                                $statusLabel = [
-                                    'pending' => 'Tertunda',
-                                    'paid' => 'Sudah Dibayar',
-                                    'shipped' => 'Dikirim',
-                                    'completed' => 'Selesai',
-                                    'failed' => 'Gagal',
-                                    'cancelled' => 'Dibatalkan',
-                                ];
+                    <?php endfor; ?>
 
-                                $statusClass = [
-                                    'pending' => 'status-pending',
-                                    'paid' => 'status-paid',
-                                    'shipped' => 'status-shipped',
-                                    'completed' => 'status-completed',
-                                    'failed' => 'status-failed',
-                                    'cancelled' => 'status-cancelled',
-                                ];
+                </select>
 
-                                ?>
+                <select name="tahun" id="tahunFilter" class="filter-select">
 
-                                <span class="<?= $statusClass[$order->status] ?? 'status-default' ?>">
+                    <option value="">
+                        Semua Tahun
+                    </option>
 
-                                    <?= $statusLabel[$order->status] ?? $order->status ?>
+                    <?php
+                    $currentYear = date('Y');
 
-                                </span>
+                    for (
+                        $year = $currentYear;
+                        $year >= 2024;
+                        $year--
+                    ):
+                        ?>
 
-                            </td>
+                        <option value="<?= $year ?>">
+                            <?= $year ?>
+                        </option>
 
-                            <td>
-                                <?= Yii::$app->formatter->asDatetime(
-                                    $order->created_at,
-                                    'php:d-m-Y H:i'
-                                ) ?>
-                            </td>
-                            <td>
-                                <button class="btn-detail-order" data-id="<?= $order->id ?>">
+                    <?php endfor; ?>
 
-                                    Detail
-                                </button>
-                            </td>
+                </select>
 
-                        </tr>
+                <select name="sort" id="sortFilter" class="filter-select">
 
-                    <?php endforeach; ?>
+                    <option value="latest">
+                        Terbaru
+                    </option>
 
-                </tbody>
+                    <option value="oldest">
+                        Terlama
+                    </option>
 
-            </table>
+                </select>
+            </div>
+        </form>
+
+        <div class="table-responsive" id="orderTable">
+
+            <?= $this->render('_table', [
+                'orders' => $orders,
+                'pages' => $pages,
+            ]) ?>
 
         </div>
     </div>
@@ -217,7 +211,10 @@ $("#simpan-resi").on("click",function(){
     );
 });
 
-$(".btn-detail-order").on("click", function(){
+$(document).on(
+    "click",
+    ".btn-detail-order",
+    function(){
 
     let id = $(this).data("id");
 
@@ -364,6 +361,65 @@ $(".btn-detail-order").on("click", function(){
         $("#detailModal").modal("show");
     });
 });
+
+function loadOrders() {
+
+    $.ajax({
+
+        url: window.location.href.split('?')[0],
+
+        type: 'GET',
+
+        data: $('#filterForm').serialize(),
+
+        success: function(response) {
+
+            $('#orderTable').html(response);
+
+        }
+
+    });
+
+}
+
+$('#searchOrder').on('keyup', function() {
+
+    clearTimeout(window.orderTimer);
+
+    window.orderTimer = setTimeout(function() {
+
+        loadOrders();
+
+    }, 300);
+
+});
+
+$('#statusFilter').change(loadOrders);
+$('#bulanFilter').change(loadOrders);
+$('#tahunFilter').change(loadOrders);
+$('#sortFilter').change(loadOrders);
+
+$(document).on(
+    'click',
+    '.pagination a',
+    function(e) {
+
+        e.preventDefault();
+
+        $.ajax({
+
+            url: $(this).attr('href'),
+
+            success: function(response) {
+
+                $('#orderTable').html(response);
+
+            }
+
+        });
+
+    }
+);
 
 JS;
 

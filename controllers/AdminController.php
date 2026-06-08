@@ -10,6 +10,7 @@ use app\models\Order;
 use app\models\OrderItems;
 use app\models\User;
 use yii\web\Response;
+use yii\data\Pagination;
 
 class AdminController extends Controller
 {
@@ -201,17 +202,130 @@ class AdminController extends Controller
 
     public function actionPesanan()
     {
-        if (Yii::$app->user->isGuest || Yii::$app->user->identity->role !== 'admin') {
-            throw new \yii\web\ForbiddenHttpException('Anda tidak memiliki akses.');
+        if (
+            Yii::$app->user->isGuest ||
+            Yii::$app->user->identity->role !== 'admin'
+        ) {
+            throw new \yii\web\ForbiddenHttpException(
+                'Anda tidak memiliki akses.'
+            );
         }
 
-        $orders = Order::find()
-            ->orderBy(['created_at' => SORT_DESC])
+        $query = Order::find();
+
+        $search = Yii::$app->request->get('search');
+
+        $statusMap = [
+            'tertunda' => 'pending',
+            'sudah dibayar' => 'paid',
+            'dibayar' => 'paid',
+            'dikirim' => 'shipped',
+            'selesai' => 'completed',
+            'gagal' => 'failed',
+            'dibatalkan' => 'cancelled',
+        ];
+        $status = Yii::$app->request->get('status');
+        $sort = Yii::$app->request->get('sort');
+        $bulan = Yii::$app->request->get('bulan');
+        $tahun = Yii::$app->request->get('tahun');
+
+        // Search
+        if (!empty($search)) {
+
+            $searchLower = strtolower(trim($search));
+
+            $queryCondition = [
+                'or',
+
+                ['like', 'id', $search],
+
+                ['like', 'nama', $search],
+
+                ['like', 'status', $search],
+            ];
+
+            if (isset($statusMap[$searchLower])) {
+
+                $queryCondition[] = [
+                    'status' => $statusMap[$searchLower]
+                ];
+            }
+
+            $query->andWhere($queryCondition);
+        }
+
+        // Status
+        if (!empty($status)) {
+
+            $query->andWhere([
+                'status' => $status
+            ]);
+        }
+
+        // Bulan
+        if (!empty($bulan)) {
+
+            $query->andWhere([
+                'MONTH(created_at)' => $bulan
+            ]);
+        }
+
+        // Tahun
+        if (!empty($tahun)) {
+
+            $query->andWhere([
+                'YEAR(created_at)' => $tahun
+            ]);
+        }
+
+        // Sorting
+        switch ($sort) {
+
+            case 'oldest':
+                $query->orderBy([
+                    'created_at' => SORT_ASC
+                ]);
+                break;
+
+            default:
+                $query->orderBy([
+                    'created_at' => SORT_DESC
+                ]);
+        }
+
+        $countQuery = clone $query;
+
+        $totalOrders = $countQuery->count();
+
+        $pages = new Pagination([
+            'totalCount' => $totalOrders,
+            'pageSize' => 5,
+        ]);
+
+        $orders = $query
+            ->offset($pages->offset)
+            ->limit($pages->limit)
             ->all();
 
-        return $this->render('pesanan/index', [
-            'orders' => $orders,
-        ]);
+        if (Yii::$app->request->isAjax) {
+
+            return $this->renderPartial(
+                'pesanan/_table',
+                [
+                    'orders' => $orders,
+                    'pages' => $pages,
+                ]
+            );
+        }
+
+        return $this->render(
+            'pesanan/index',
+            [
+                'orders' => $orders,
+                'pages' => $pages,
+                'totalOrders' => $totalOrders,
+            ]
+        );
     }
 
     public function actionOrderDetail($id)
