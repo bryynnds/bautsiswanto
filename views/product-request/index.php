@@ -9,7 +9,7 @@ $this->title = "Permintaan Produk";
 
     <div class="form-card">
 
-        <div class="d-flex justify-content-between align-items-center mb-4 request-header">
+        <div class="d-flex justify-content-between align-items-center mb-3 request-header">
 
             <h2 class="section-title mb-0">
                 Riwayat Permintaan Produk
@@ -29,93 +29,65 @@ $this->title = "Permintaan Produk";
             </div>
         <?php endif; ?>
 
+        <form id="filterForm">
+            <div class="filter-toolbar">
+                <input type="text" id="searchRequest" name="search" class="filter-input"
+                    placeholder="Cari produk, jenis, status..." value="<?= Yii::$app->request->get('search') ?>">
+
+                <select name="status" id="statusFilter" class="filter-select">
+
+                    <option value="">
+                        Semua Status
+                    </option>
+
+                    <option value="pending">
+                        Pending
+                    </option>
+
+                    <option value="diproses">
+                        Diproses
+                    </option>
+
+                    <option value="tersedia">
+                        Tersedia
+                    </option>
+
+                    <option value="tidak_ditemukan">
+                        Tidak Ditemukan
+                    </option>
+
+                </select>
+
+                <select name="sort" id="sortFilter" class="filter-select">
+
+                    <option value="latest">
+                        Terbaru
+                    </option>
+
+                    <option value="oldest">
+                        Terlama
+                    </option>
+
+                </select>
+            </div>
+
+        </form>
+
         <div class="request-info">
             Total Permintaan:
-            <strong><?= count($requests) ?></strong>
+            <strong><?= $totalRequests ?></strong>
         </div>
+
+
 
         <?php if (!empty($requests)): ?>
 
-            <div class="table-responsive">
+            <div class="table-responsive" id="requestTable">
 
-                <table class="request-table">
-
-                    <thead>
-                        <tr>
-                            <th>Produk</th>
-                            <th>Jenis</th>
-                            <th>Keterangan</th>
-                            <th>Status</th>
-                            <th>Tanggal</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-
-                        <?php foreach ($requests as $request): ?>
-
-                            <?php
-
-                            $status = strtolower($request->status);
-
-                            if ($status === 'tersedia') {
-                                $class = 'status-success';
-                            } elseif ($status === 'pending') {
-                                $class = 'status-warning';
-                            } elseif ($status === 'tidak_ditemukan') {
-                                $class = 'status-danger';
-                            } else {
-                                $class = 'status-primary';
-                            }
-
-                            ?>
-
-                            <tr>
-
-                                <td>
-                                    <strong>
-                                        <?= Html::encode($request->nama_produk) ?>
-                                    </strong>
-                                </td>
-
-                                <td>
-                                    <?= $request->jenisProduk
-                                        ? Html::encode($request->jenisProduk->nama_jenis)
-                                        : '-' ?>
-                                </td>
-
-                                <td>
-                                    <?= $request->keterangan
-                                        ? Html::encode($request->keterangan)
-                                        : '-' ?>
-                                </td>
-
-                                <td>
-
-                                    <span class="status-badge <?= $class ?>">
-
-                                        <?= ucfirst(
-                                            str_replace('_', ' ', $request->status)
-                                        ) ?>
-
-                                    </span>
-
-                                </td>
-
-                                <td>
-                                    <?= date(
-                                        'd-m-Y H:i',
-                                        strtotime($request->created_at)
-                                    ) ?>
-                                </td>
-
-                            </tr>
-
-                        <?php endforeach; ?>
-
-                    </tbody>
-
-                </table>
+                <?= $this->render('_table', [
+                    'requests' => $requests,
+                    'pages' => $pages,
+                ]) ?>
 
             </div>
 
@@ -140,6 +112,55 @@ $this->title = "Permintaan Produk";
     </div>
 
 </div>
+
+<?php
+
+$this->registerJs("
+function loadRequests() {
+
+    $.ajax({
+
+        url: window.location.href.split('?')[0],
+
+        type: 'GET',
+
+        data: $('#filterForm').serialize(),
+
+        success: function(response) {
+
+            $('#requestTable').html(response);
+
+        }
+
+    });
+
+}
+
+$('#searchRequest').on('keyup', function() {
+
+    clearTimeout(window.requestTimer);
+
+    window.requestTimer = setTimeout(function() {
+
+        loadRequests();
+
+    }, 300);
+
+});
+
+$('#statusFilter').change(function() {
+
+    loadRequests();
+
+});
+
+$('#sortFilter').change(function() {
+
+    loadRequests();
+
+});
+");
+?>
 
 <style>
     .request-info {
