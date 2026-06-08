@@ -11,6 +11,7 @@ use app\models\OrderItems;
 use app\models\User;
 use yii\web\Response;
 use yii\data\Pagination;
+use app\models\ProductRequest;
 
 class AdminController extends Controller
 {
@@ -36,6 +37,38 @@ class AdminController extends Controller
         $jumlahCustomer = User::find()->where(['role' => 'user'])->count();
         $totalProduk = HomepageProduk::find()->count();
         $totalOrder = Order::find()->count();
+
+        $totalPesananAktif = Order::find()
+            ->where([
+                'status' => [
+                    'pending',
+                    'paid',
+                    'shipped'
+                ]
+            ])
+            ->count();
+
+        $totalPesananSelesai = Order::find()
+            ->where(['status' => 'completed'])
+            ->count();
+
+        $totalRequestAktif = ProductRequest::find()
+            ->where([
+                'status' => [
+                    ProductRequest::STATUS_PENDING,
+                    ProductRequest::STATUS_DIPROSES
+                ]
+            ])
+            ->count();
+
+        $totalRequestSelesai = ProductRequest::find()
+            ->where([
+                'status' => [
+                    ProductRequest::STATUS_TERSEDIA,
+                    ProductRequest::STATUS_TIDAK_DITEMUKAN
+                ]
+            ])
+            ->count();
 
         // Produk terlaris (berdasarkan qty di order_items)
         $produkTerlaris = (new \yii\db\Query())
@@ -100,6 +133,10 @@ class AdminController extends Controller
             'jumlahCustomer',
             'totalProduk',
             'totalOrder',
+            'totalPesananAktif',
+            'totalPesananSelesai',
+            'totalRequestAktif',
+            'totalRequestSelesai',
             'produkTerlaris',
             'produkTerlarisGrafik',
             'pieLabels',

@@ -27,21 +27,83 @@ $this->title = 'Dashboard Admin';
     <section class="dashboard">
         <!-- Statistik Singkat -->
         <div class="statistik-wrapper">
-            <div class="statistik-card">
-                <div class="stat-icon">📦</div>
-                <h3>Total Produk</h3>
-                <p class="angka"><?= $totalProduk ?></p>
+
+            <!-- Baris 1 -->
+            <div class="statistik-row top-row">
+
+                <div class="statistik-card">
+                    <div class="stat-icon">📦</div>
+
+                    <div class="stat-content">
+                        <span class="stat-label">Total Produk</span>
+                        <span class="stat-value"><?= $totalProduk ?></span>
+                    </div>
+                </div>
+
+                <div class="statistik-card">
+                    <div class="stat-icon">👤</div>
+
+                    <div class="stat-content">
+                        <span class="stat-label">Total Pelanggan</span>
+                        <span class="stat-value">
+                            <?= $jumlahCustomer ?>
+                        </span>
+                    </div>
+                </div>
+
+
+
             </div>
-            <div class="statistik-card">
-                <div class="stat-icon">🛒</div>
-                <h3>Total Pesanan</h3>
-                <p class="angka"><?= $totalOrder ?></p>
+
+            <!-- Baris 2 -->
+            <div class="statistik-row bottom-row">
+
+                <div class="statistik-card">
+                    <div class="stat-icon">🛒</div>
+
+                    <div class="stat-content">
+                        <span class="stat-label">Pesanan Aktif</span>
+                        <span class="stat-value">
+                            <?= $totalPesananAktif ?>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="statistik-card">
+                    <div class="stat-icon">✅</div>
+
+                    <div class="stat-content">
+                        <span class="stat-label">Pesanan Selesai</span>
+                        <span class="stat-value">
+                            <?= $totalPesananSelesai ?>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="statistik-card">
+                    <div class="stat-icon">📋</div>
+
+                    <div class="stat-content">
+                        <span class="stat-label">Permintaan Aktif</span>
+                        <span class="stat-value">
+                            <?= $totalRequestAktif ?>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="statistik-card">
+                    <div class="stat-icon">📄</div>
+
+                    <div class="stat-content">
+                        <span class="stat-label">Permintaan Selesai</span>
+                        <span class="stat-value">
+                            <?= $totalRequestSelesai ?>
+                        </span>
+                    </div>
+                </div>
+
             </div>
-            <div class="statistik-card">
-                <div class="stat-icon">👤</div>
-                <h3>Total Akun</h3>
-                <p class="angka"><?= $jumlahCustomer ?></p>
-            </div>
+
         </div>
 
         <h3>Produk Terlaris</h3>
