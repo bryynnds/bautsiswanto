@@ -80,7 +80,8 @@ $this->title = 'Daftar Produk';
     <div class="produk-grid" id="produkGrid">
 
         <?= $this->render('_produk_grid', [
-            'produks' => $produks
+            'produks' => $produks,
+            'pages' => $pages,
         ]) ?>
 
     </div>
@@ -111,6 +112,28 @@ $(document).on('click', '.btn-add-cart', function() {
         }
     });
 });
+
+$(document).on(
+    'click',
+    '.pagination a',
+    function(e) {
+
+        e.preventDefault();
+
+        $.ajax({
+
+            url: $(this).attr('href'),
+
+            success: function(response) {
+
+                $('#produkGrid').html(response);
+
+            }
+
+        });
+
+    }
+);
 
 $(".btn-add-cart").click(function() {
     var produkId = $(this).data("id");

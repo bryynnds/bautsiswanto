@@ -1796,3 +1796,15 @@ html {
   display: flex;
   gap: 12px;
 }
+
+.produk-pagination {
+  width: 100%;
+  flex-basis: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 25px;
+}
+
+.produk-pagination .pagination {
+  margin: 0;
+}

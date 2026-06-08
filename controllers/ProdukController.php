@@ -7,6 +7,7 @@ use Yii;
 use app\models\HomepageProduk;
 use app\models\JenisProduk;
 use app\models\KategoriProduk;
+use yii\data\Pagination;
 
 class ProdukController extends Controller
 {
@@ -64,7 +65,19 @@ class ProdukController extends Controller
                 $query->orderBy(['homepage_produk.id' => SORT_DESC]);
         }
 
-        $produks = $query->all();
+        $countQuery = clone $query;
+
+        $totalProduks = $countQuery->count();
+
+        $pages = new Pagination([
+            'totalCount' => $totalProduks,
+            'pageSize' => 3,
+        ]);
+
+        $produks = $query
+            ->offset($pages->offset)
+            ->limit($pages->limit)
+            ->all();
 
         $jenisAktif = null;
 
@@ -81,13 +94,16 @@ class ProdukController extends Controller
         if (Yii::$app->request->isAjax) {
 
             return $this->renderPartial('_produk_grid', [
-                'produks' => $produks
+                'produks' => $produks,
+                'pages' => $pages,
             ]);
         }
 
         return $this->render('index', [
             'produks' => $produks,
             'jenisList' => JenisProduk::find()->all(),
+            'pages' => $pages,
+            'totalProduks' => $totalProduks,
             'kategoriList' => $kategoriList,
             'jenisAktif' => $jenisAktif,
         ]);

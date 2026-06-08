@@ -1,3 +1,7 @@
+<?php
+use yii\widgets\LinkPager;
+?>
+
 <?php foreach ($produks as $produk): ?>
 
     <div class="card">
@@ -33,3 +37,11 @@
     </div>
 
 <?php endforeach; ?>
+
+<div class="produk-pagination">
+
+    <?= LinkPager::widget([
+        'pagination' => $pages,
+    ]) ?>
+
+</div>
