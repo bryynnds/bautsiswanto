@@ -125,7 +125,7 @@ function loadProduk() {
 
     $.ajax({
 
-        url: window.location.pathname,
+        url: window.location.href.split('?')[0],
 
         type: 'GET',
 

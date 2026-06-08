@@ -8,22 +8,87 @@ $this->title = 'Daftar Produk';
 
 <section class="produk mt-2" id="produk">
     <h2>Daftar Produk</h2>
-    <div class="produk-grid">
-        <?php foreach ($produks as $produk): ?>
-            <div class="card">
-                <h3><?= $produk->title ?></h3>
-                <p>Kiloan: Rp <?= number_format($produk->harga_kg, 0, ',', '.') ?></p>
-                <p>Bijian: Rp <?= number_format($produk->harga_bijian, 0, ',', '.') ?></p>
-                <img src="<?= Yii::getAlias('@web') ?>/<?= $produk->image ?>"
-                    alt="<?= $produk->title ?>" class="produk-img">
-                <p><?= $produk->description ?></p>
 
+    <form id="filterForm" method="get" class="filter-box">
 
-                <button class="btn btn-add-cart" data-id="<?= $produk->id ?>">
-                    Tambah ke Keranjang
-                </button>
-            </div>
-        <?php endforeach; ?>
+        <input type="text" name="search" id="searchProduk" placeholder="Cari produk..."
+            value="<?= Yii::$app->request->get('search') ?>">
+
+        <div class="jenis-filter">
+
+            <a href="<?= \yii\helpers\Url::to([
+                'produk/index',
+                'search' => Yii::$app->request->get('search'),
+                'sort' => Yii::$app->request->get('sort')
+            ]) ?>" class="jenis-btn <?= empty(Yii::$app->request->get('jenis')) ? 'active' : '' ?>">
+                Semua
+            </a>
+
+            <?php foreach ($jenisList as $jenis): ?>
+
+                <a href="<?= \yii\helpers\Url::to([
+                    'produk/index',
+                    'jenis' => $jenis->id,
+                    'search' => Yii::$app->request->get('search'),
+                    'sort' => Yii::$app->request->get('sort')
+                ]) ?>" class="jenis-btn <?= Yii::$app->request->get('jenis') == $jenis->id ? 'active' : '' ?>">
+                    <?= $jenis->nama_jenis ?>
+                </a>
+
+            <?php endforeach; ?>
+
+        </div>
+
+        <input type="hidden" name="jenis" value="<?= Yii::$app->request->get('jenis') ?>">
+
+        <select name="kategori" id="kategoriFilter">
+
+            <option value="">
+                <?= $jenisAktif ? 'Pilih Kategori ' . $jenisAktif->nama_jenis : 'Semua Kategori' ?>
+            </option>
+
+            <?php foreach ($kategoriList as $kategori): ?>
+
+                <option value="<?= $kategori->id ?>" <?= Yii::$app->request->get('kategori') == $kategori->id ? 'selected' : '' ?>>
+                    <?= $kategori->nama_kategori ?>
+                </option>
+
+            <?php endforeach; ?>
+
+        </select>
+
+        <select name="sort" id="sortFilter">
+
+            <option value="">
+                Urutkan
+            </option>
+
+            <option value="nama_asc">
+                Nama A-Z
+            </option>
+
+            <option value="nama_desc">
+                Nama Z-A
+            </option>
+
+            <option value="harga_asc">
+                Harga Termurah
+            </option>
+
+            <option value="harga_desc">
+                Harga Termahal
+            </option>
+
+        </select>
+
+    </form>
+
+    <div class="produk-grid" id="produkGrid">
+
+        <?= $this->render('_produk_grid', [
+            'produks' => $produks
+        ]) ?>
+
     </div>
 </section>
 
@@ -60,6 +125,46 @@ $(".btn-add-cart").click(function() {
             $("#cart-count").text(res.count);
         }
     });
+});
+
+$('#kategoriFilter').change(function() {
+    loadProduk();
+});
+
+$('#sortFilter').change(function() {
+    loadProduk();
+});
+
+function loadProduk() {
+
+    $.ajax({
+
+        url: window.location.href.split('?')[0],
+
+        type: 'GET',
+
+        data: $('#filterForm').serialize(),
+
+        success: function(response) {
+
+            $('#produkGrid').html(response);
+
+        }
+
+    });
+
+}
+
+$('#searchProduk').on('keyup', function() {
+
+    clearTimeout(window.searchTimer);
+
+    window.searchTimer = setTimeout(function() {
+
+        loadProduk();
+
+    }, 300);
+
 });
 JS;
 
