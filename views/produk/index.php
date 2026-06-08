@@ -7,17 +7,20 @@ $this->title = 'Daftar Produk';
 ?>
 
 <section class="produk mt-2" id="produk">
-    <h2>Daftar Produk</h2>
 
-    <form id="filterForm" method="get" class="filter-box">
+    <div class="produk-header-user">
 
-        <input type="text" name="search" id="searchProduk" placeholder="Cari produk..."
-            value="<?= Yii::$app->request->get('search') ?>">
+        <h1 class="produk-title">
+            Daftar Produk
+        </h1>
 
+    </div>
+
+    <form id="filterForm" method="get">
         <div class="jenis-filter">
 
             <a href="<?= \yii\helpers\Url::to([
-                'produk/index',
+                'homepage/admin-produk',
                 'search' => Yii::$app->request->get('search'),
                 'sort' => Yii::$app->request->get('sort')
             ]) ?>" class="jenis-btn <?= empty(Yii::$app->request->get('jenis')) ? 'active' : '' ?>">
@@ -27,7 +30,7 @@ $this->title = 'Daftar Produk';
             <?php foreach ($jenisList as $jenis): ?>
 
                 <a href="<?= \yii\helpers\Url::to([
-                    'produk/index',
+                    'homepage/admin-produk',
                     'jenis' => $jenis->id,
                     'search' => Yii::$app->request->get('search'),
                     'sort' => Yii::$app->request->get('sort')
@@ -39,41 +42,40 @@ $this->title = 'Daftar Produk';
 
         </div>
 
-        <input type="hidden" name="jenis" value="<?= Yii::$app->request->get('jenis') ?>">
+        <div class="filter-toolbar">
 
-        <select name="kategori" id="kategoriFilter">
+            <input type="text" name="search" id="searchProduk" class="filter-input" placeholder="Cari produk..."
+                value="<?= Yii::$app->request->get('search') ?>">
 
-            <option value="">
-                <?= $jenisAktif ? 'Pilih Kategori ' . $jenisAktif->nama_jenis : 'Semua Kategori' ?>
-            </option>
+            <select name="kategori" id="kategoriFilter" class="filter-select">
 
-            <?php foreach ($kategoriList as $kategori): ?>
-
-                <option value="<?= $kategori->id ?>" <?= Yii::$app->request->get('kategori') == $kategori->id ? 'selected' : '' ?>>
-                    <?= $kategori->nama_kategori ?>
+                <option value="">
+                    <?= $jenisAktif
+                        ? 'Pilih Kategori ' . $jenisAktif->nama_jenis
+                        : 'Semua Kategori' ?>
                 </option>
 
-            <?php endforeach; ?>
+                <?php foreach ($kategoriList as $kategori): ?>
+                    <option value="<?= $kategori->id ?>" <?= Yii::$app->request->get('kategori') == $kategori->id ? 'selected' : '' ?>>
+                        <?= $kategori->nama_kategori ?>
+                    </option>
+                <?php endforeach; ?>
 
-        </select>
+            </select>
 
-        <select name="sort" id="sortFilter">
+            <select name="sort" id="sortFilter" class="filter-select">
 
-            <option value="">
-                Urutkan
-            </option>
+                <option value="">Urutkan</option>
+                <option value="harga_asc">Harga Termurah</option>
+                <option value="harga_desc">Harga Termahal</option>
 
-            <option value="harga_asc">
-                Harga Termurah
-            </option>
+            </select>
 
-            <option value="harga_desc">
-                Harga Termahal
-            </option>
-
-        </select>
+        </div>
 
     </form>
+
+
 
     <div class="produk-grid" id="produkGrid">
 

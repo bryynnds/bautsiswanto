@@ -1685,3 +1685,105 @@ html {
   background: #0d6efd !important;
   color: white !important;
 }
+
+/* =========================
+   FILTER PRODUK ADMIN
+========================= */
+
+.filter-input {
+  width: 260px;
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  transition: 0.3s;
+}
+
+.filter-input:focus {
+  outline: none;
+  border-color: #008b8b;
+  box-shadow: 0 0 0 3px rgba(0, 139, 139, 0.12);
+}
+
+.filter-select {
+  width: 180px;
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.filter-select:focus {
+  outline: none;
+  border-color: #008b8b;
+}
+
+.jenis-filter {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.jenis-btn {
+  text-decoration: none;
+  padding: 6px 14px;
+  border-radius: 20px;
+  background: #f3f4f6;
+  color: #006666;
+  font-size: 14px;
+  font-weight: 500;
+  transition: 0.25s;
+}
+
+.jenis-btn:hover {
+  background: #d9f2f1;
+  color: #006666;
+}
+
+.jenis-btn.active {
+  background: #008b8b;
+  color: #fff;
+}
+
+.produk-action {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 25px;
+}
+
+.filter-toolbar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+}
+
+.produk-header {
+  max-width: 900px;
+  margin: 0 auto auto auto;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.produk-header-user {
+  margin: auto;
+  align-items: center;
+}
+
+.produk-title {
+  margin-bottom: 15px;
+  color: #006666;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.produk-action {
+  display: flex;
+  gap: 12px;
+}
