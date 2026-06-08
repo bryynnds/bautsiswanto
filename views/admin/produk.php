@@ -95,7 +95,8 @@ $this->title = 'Daftar Produk';
     <div class="produk-grid" id="produkGrid">
 
         <?= $this->render('_produk_grid', [
-            'produk' => $produk
+            'produk' => $produk,
+            'pages' => $pages,
         ]) ?>
 
     </div>
@@ -133,6 +134,28 @@ function loadProduk() {
     });
 
 }
+    
+$(document).on(
+    'click',
+    '.pagination a',
+    function(e) {
+
+        e.preventDefault();
+
+        $.ajax({
+
+            url: $(this).attr('href'),
+
+            success: function(response) {
+
+                $('#produkGrid').html(response);
+
+            }
+
+        });
+
+    }
+);
 
 $('#searchProduk').on('keyup', function() {
 

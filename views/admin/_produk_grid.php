@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\widgets\LinkPager;
 ?>
 
 <?php foreach ($produk as $item): ?>
@@ -59,3 +60,11 @@ use yii\helpers\Html;
     </div>
 
 <?php endforeach; ?>
+
+<div class="produk-pagination">
+
+    <?= LinkPager::widget([
+        'pagination' => $pages,
+    ]) ?>
+
+</div>

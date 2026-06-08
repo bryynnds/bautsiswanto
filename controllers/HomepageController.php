@@ -15,6 +15,7 @@ use app\models\HomepageTestimoni;
 use yii\filters\AccessControl;
 use app\models\HomepagePromo;
 use app\models\User;
+use yii\data\Pagination;
 
 class HomepageController extends Controller
 {
@@ -401,7 +402,19 @@ class HomepageController extends Controller
                 ]);
         }
 
-        $produk = $query->all();
+        $countQuery = clone $query;
+
+        $totalProduk = $countQuery->count();
+
+        $pages = new Pagination([
+            'totalCount' => $totalProduk,
+            'pageSize' => 3,
+        ]);
+
+        $produk = $query
+            ->offset($pages->offset)
+            ->limit($pages->limit)
+            ->all();
 
         $jenisAktif = null;
 
@@ -420,7 +433,8 @@ class HomepageController extends Controller
             return $this->renderPartial(
                 '/admin/_produk_grid',
                 [
-                    'produk' => $produk
+                    'produk' => $produk,
+                    'pages' => $pages,
                 ]
             );
         }
@@ -430,6 +444,8 @@ class HomepageController extends Controller
             'jenisList' => JenisProduk::find()->all(),
             'kategoriList' => $kategoriList,
             'jenisAktif' => $jenisAktif,
+            'pages' => $pages,
+            'totalProduk' => $totalProduk,
         ]);
     }
 

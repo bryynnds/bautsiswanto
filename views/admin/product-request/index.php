@@ -126,6 +126,28 @@ function loadRequests() {
 
 }
 
+$(document).on(
+    'click',
+    '.pagination a',
+    function(e) {
+
+        e.preventDefault();
+
+        $.ajax({
+
+            url: $(this).attr('href'),
+
+            success: function(response) {
+
+                $('#requestTable').html(response);
+
+            }
+
+        });
+
+    }
+);
+
 $('#searchRequest').on('keyup', function() {
 
     clearTimeout(window.requestTimer);

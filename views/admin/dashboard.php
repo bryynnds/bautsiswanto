@@ -82,7 +82,7 @@ $this->title = 'Dashboard Admin';
 
         <h3>Daftar Produk</h3>
         <div class="dashboard-card" id="produk-section">
-            <div class="table-responsive">
+            <div class="table-responsive" id="produkTable">
                 <?php Pjax::begin([
                     'id' => 'produk-grid',
                     'enablePushState' => false,
@@ -122,7 +122,7 @@ $this->title = 'Dashboard Admin';
 
         <h3>Daftar Pesanan</h3>
         <div class="dashboard-card" id="order-section">
-            <div class="table-responsive">
+            <div class="table-responsive" id="orderTable">
                 <?php Pjax::begin([
                     'id' => 'order-grid',
                     'enablePushState' => false,
@@ -254,6 +254,28 @@ $this->title = 'Dashboard Admin';
             }
         }
     });
+
+    $(document).on(
+        'click',
+        '.pagination a',
+        function (e) {
+
+            e.preventDefault();
+
+            $.ajax({
+
+                url: $(this).attr('href'),
+
+                success: function (response) {
+
+                    $('#orderTable', '#produkTable').html(response);
+
+                }
+
+            });
+
+        }
+    );
 
     $(document).on('pjax:end', function (event) {
         const container = event.target.id;
