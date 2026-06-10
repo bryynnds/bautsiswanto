@@ -4,6 +4,8 @@ namespace app\controllers;
 
 use Yii;
 use app\models\User;
+use app\models\ForgotPasswordForm;
+use app\models\ResetPasswordForm;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\Response;
@@ -141,6 +143,81 @@ class SiteController extends Controller
 
         $model->password = '';
         return $this->render('login', [
+            'model' => $model,
+        ]);
+    }
+
+    public function actionForgotPassword()
+    {
+        $model = new ForgotPasswordForm();
+
+        if (
+            $model->load(Yii::$app->request->post())
+            && $model->validate()
+        ) {
+
+            if ($model->sendResetEmail()) {
+
+                Yii::$app->session->setFlash(
+                    'success',
+                    'Link reset password telah dikirim ke email Anda.'
+                );
+
+            } else {
+
+                Yii::$app->session->setFlash(
+                    'error',
+                    'Email tidak ditemukan.'
+                );
+            }
+
+            return $this->redirect(['site/login']);
+
+        }
+
+        return $this->render('account/forgot-password', [
+            'model' => $model,
+        ]);
+    }
+
+    public function actionResetPassword($token)
+    {
+        $user = User::findOne([
+            'reset_token' => $token
+        ]);
+
+        if (!$user) {
+
+            Yii::$app->session->setFlash(
+                'error',
+                'Link reset password tidak valid.'
+            );
+
+            return $this->redirect(['site/login']);
+        }
+
+        $model = new ResetPasswordForm();
+
+        if (
+            $model->load(Yii::$app->request->post())
+            && $model->validate()
+        ) {
+
+            $user->setPassword($model->password);
+
+            $user->reset_token = null;
+
+            $user->save(false);
+
+            Yii::$app->session->setFlash(
+                'success',
+                'Password berhasil diubah.'
+            );
+
+            return $this->redirect(['site/login']);
+        }
+
+        return $this->render('account/reset-password', [
             'model' => $model,
         ]);
     }

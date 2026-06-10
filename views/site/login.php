@@ -35,6 +35,13 @@ $this->title = 'Masuk Akun';
             'placeholder' => 'Password...'
         ]) ?>
 
+        <div class="text-end mb-3">
+            <?= Html::a(
+                'Lupa Password?',
+                ['site/forgot-password']
+            ) ?>
+        </div>
+
         <div class="form-check mb-3">
             <?= $form->field($model, 'rememberMe')->checkbox([
                 'template' => "{input} {label}\n{error}",
