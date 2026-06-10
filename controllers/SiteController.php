@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use Yii;
+use app\models\User;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\Response;
@@ -147,14 +148,49 @@ class SiteController extends Controller
     public function actionSignup()
     {
         $model = new \app\models\SignupForm();
-        if ($model->load(Yii::$app->request->post()) && $user = $model->signup()) {
-            Yii::$app->user->login($user);
-            return $this->goHome();
+
+        if ($model->load(Yii::$app->request->post()) && $model->signup()) {
+
+            Yii::$app->session->setFlash(
+                'success',
+                'Pendaftaran berhasil. Silakan cek email untuk verifikasi akun.'
+            );
+
+            return $this->redirect(['site/login']);
         }
 
         return $this->render('signup', [
             'model' => $model,
         ]);
+    }
+
+    public function actionVerifyEmail($token)
+    {
+        $user = User::findOne([
+            'verification_token' => $token
+        ]);
+
+        if (!$user) {
+
+            Yii::$app->session->setFlash(
+                'warning',
+                'Link verifikasi sudah digunakan atau tidak valid.'
+            );
+
+            return $this->redirect(['site/login']);
+        }
+
+        $user->is_verified = 1;
+        $user->verification_token = null;
+
+        $user->save(false);
+
+        Yii::$app->session->setFlash(
+            'success',
+            'Email berhasil diverifikasi. Silakan login.'
+        );
+
+        return $this->redirect(['site/login']);
     }
 
 

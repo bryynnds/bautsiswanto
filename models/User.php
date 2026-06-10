@@ -117,4 +117,12 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return $this->hasMany(Notification::class, ['user_id' => 'id']);
     }
+
+    public static function findByUsernameOrEmail($login)
+    {
+        return static::find()
+            ->where(['username' => $login])
+            ->orWhere(['email' => $login])
+            ->one();
+    }
 }

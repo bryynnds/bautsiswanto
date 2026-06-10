@@ -45,9 +45,22 @@ class LoginForm extends Model
     public function validatePassword($attribute, $params)
     {
         if (!$this->hasErrors()) {
+
             $user = $this->getUser();
+
             if (!$user || !$user->validatePassword($this->password)) {
-                $this->addError($attribute, 'Incorrect username or password.');
+
+                $this->addError(
+                    $attribute,
+                    'Username/email atau password salah.'
+                );
+
+            } elseif (!$user->is_verified) {
+
+                $this->addError(
+                    $attribute,
+                    'Silakan verifikasi email terlebih dahulu.'
+                );
             }
         }
     }
@@ -73,7 +86,7 @@ class LoginForm extends Model
     public function getUser()
     {
         if ($this->_user === false) {
-            $this->_user = User::findByUsername($this->username);
+            $this->_user = User::findByUsernameOrEmail($this->username);
         }
 
         return $this->_user;

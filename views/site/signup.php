@@ -30,6 +30,11 @@ $this->title = 'Daftar Akun';
             'placeholder' => 'Username...'
         ]) ?>
 
+        <?= $form->field($model, 'email')->textInput([
+            'placeholder' => 'Email...',
+            'type' => 'email'
+        ]) ?>
+
         <?= $form->field($model, 'password')->passwordInput([
             'placeholder' => 'Password...'
         ]) ?>

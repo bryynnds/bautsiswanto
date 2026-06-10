@@ -28,7 +28,7 @@ $this->title = 'Masuk Akun';
 
         <?= $form->field($model, 'username')->textInput([
             'autofocus' => true,
-            'placeholder' => 'Username...'
+            'placeholder' => 'Username atau Email'
         ]) ?>
 
         <?= $form->field($model, 'password')->passwordInput([
