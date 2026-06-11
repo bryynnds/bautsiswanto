@@ -28,6 +28,9 @@ class ForgotPasswordForm extends Model
         $user->reset_token =
             Yii::$app->security->generateRandomString(64);
 
+        $user->reset_token_expired_at =
+            date('Y-m-d H:i:s', strtotime('+1 hour'));
+
         $user->save(false);
 
         $link = Yii::$app->urlManager->createAbsoluteUrl([

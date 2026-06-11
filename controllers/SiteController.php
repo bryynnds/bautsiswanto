@@ -196,6 +196,29 @@ class SiteController extends Controller
             return $this->redirect(['site/login']);
         }
 
+        if (
+            strtotime($user->reset_token_expired_at)
+            < time()
+        ) {
+
+            Yii::$app->session->setFlash(
+                'error',
+                'Link reset password telah kedaluwarsa.'
+            );
+
+            return $this->redirect(['site/forgot-password']);
+        }
+
+        if (!$user) {
+
+            Yii::$app->session->setFlash(
+                'error',
+                'Link reset password tidak valid.'
+            );
+
+            return $this->redirect(['site/login']);
+        }
+
         $model = new ResetPasswordForm();
 
         if (
@@ -206,6 +229,7 @@ class SiteController extends Controller
             $user->setPassword($model->password);
 
             $user->reset_token = null;
+            $user->reset_token_expired_at = null;
 
             $user->save(false);
 
