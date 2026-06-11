@@ -105,6 +105,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
             $menuItems = [
 
                 ['label' => 'Dashboard', 'url' => ['/owner/dashboard']],
+                ['label' => 'Laporan', 'url' => ['/owner/report']],
 
                 '<li class="nav-item">'
                 . Html::beginForm(['/site/logout'])

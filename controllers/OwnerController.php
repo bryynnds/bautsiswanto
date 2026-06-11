@@ -9,6 +9,7 @@ use app\models\HomepageProduk;
 use app\models\Order;
 use app\models\User;
 use app\models\ProductRequest;
+use Mpdf\Mpdf;
 
 class OwnerController extends Controller
 {
@@ -156,5 +157,102 @@ class OwnerController extends Controller
             'bulanLabels',
             'bulanData'
         ));
+    }
+
+    public function actionReport()
+    {
+        $startDate = Yii::$app->request->get('start_date');
+        $endDate = Yii::$app->request->get('end_date');
+
+        $query = Order::find();
+
+        if (!empty($startDate)) {
+            $query->andWhere(['>=', 'DATE(created_at)', $startDate]);
+        }
+
+        if (!empty($endDate)) {
+            $query->andWhere(['<=', 'DATE(created_at)', $endDate]);
+        }
+
+        $dataProvider = new \yii\data\ActiveDataProvider([
+            'query' => $query->orderBy(['created_at' => SORT_DESC]),
+            'pagination' => [
+                'pageSize' => 10
+            ]
+        ]);
+
+        $totalPendapatan = clone $query;
+        $totalPendapatan = $totalPendapatan->sum('total');
+
+        $totalPesanan = clone $query;
+        $totalPesanan = $totalPesanan->count();
+
+        $totalPelanggan = User::find()
+            ->where(['role' => 'user'])
+            ->count();
+
+        return $this->render('report', [
+            'dataProvider' => $dataProvider,
+            'totalPendapatan' => $totalPendapatan,
+            'totalPesanan' => $totalPesanan,
+            'totalPelanggan' => $totalPelanggan,
+            'startDate' => $startDate,
+            'endDate' => $endDate,
+        ]);
+    }
+
+    public function actionExportPdf()
+    {
+        $startDate = Yii::$app->request->get('start_date');
+        $endDate = Yii::$app->request->get('end_date');
+
+        $query = Order::find();
+
+        if (!empty($startDate)) {
+            $query->andWhere(['>=', 'DATE(created_at)', $startDate]);
+        }
+
+        if (!empty($endDate)) {
+            $query->andWhere(['<=', 'DATE(created_at)', $endDate]);
+        }
+
+        $orders = $query
+            ->orderBy(['created_at' => SORT_DESC])
+            ->all();
+
+        $totalPendapatan = (clone $query)->sum('total');
+        $totalPesanan = (clone $query)->count();
+
+        $totalPelanggan = User::find()
+            ->where(['role' => 'user'])
+            ->count();
+
+        $html = $this->renderPartial('report-pdf', [
+            'orders' => $orders,
+            'totalPendapatan' => $totalPendapatan,
+            'totalPesanan' => $totalPesanan,
+            'totalPelanggan' => $totalPelanggan,
+            'startDate' => $startDate,
+            'endDate' => $endDate,
+        ]);
+
+        $mpdf = new \Mpdf\Mpdf();
+
+        $mpdf->SetTitle('Laporan Penjualan');
+
+        $mpdf->SetFooter(
+            'Dicetak: ' . date('d-m-Y H:i') .
+            '| |Halaman {PAGENO}'
+        );
+
+        $mpdf->WriteHTML($html);
+
+        Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
+
+        $mpdf->Output(
+            'laporan-penjualan.pdf',
+            'D'
+        );
+        exit;
     }
 }

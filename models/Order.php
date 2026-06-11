@@ -40,6 +40,27 @@ class Order extends ActiveRecord
         ];
     }
 
+    public function getStatusLabel()
+    {
+        switch ($this->status) {
+
+            case 'pending':
+                return 'Tertunda';
+
+            case 'paid':
+                return 'Sudah Dibayar';
+
+            case 'shipped':
+                return 'Dikirim';
+
+            case 'completed':
+                return 'Selesai';
+
+            default:
+                return ucfirst($this->status);
+        }
+    }
+
     public function attributeLabels()
     {
         return [
