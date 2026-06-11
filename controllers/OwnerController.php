@@ -51,6 +51,16 @@ class OwnerController extends Controller
         $totalProduk = HomepageProduk::find()->count();
         $totalOrder = Order::find()->count();
 
+        $totalPendapatan = Order::find()
+            ->sum('total');
+
+        $pendapatanBulanIni = Order::find()
+            ->where([
+                'MONTH(created_at)' => date('m'),
+                'YEAR(created_at)' => date('Y')
+            ])
+            ->sum('total');
+
         $totalPesananAktif = Order::find()
             ->where([
                 'status' => [
@@ -90,7 +100,7 @@ class OwnerController extends Controller
             ->innerJoin(['p' => 'homepage_produk'], 'oi.produk_id = p.id')
             ->groupBy(['p.id', 'p.title', 'p.harga_kg', 'p.harga_bijian', 'p.image'])
             ->orderBy(['jumlah_terjual' => SORT_DESC])
-            ->limit(3)
+            ->limit(5)
             ->all();
 
         $produkTerlarisGrafik = (new \yii\db\Query())
@@ -146,6 +156,8 @@ class OwnerController extends Controller
             'jumlahCustomer',
             'totalProduk',
             'totalOrder',
+            'totalPendapatan',
+            'pendapatanBulanIni',
             'totalPesananAktif',
             'totalPesananSelesai',
             'totalRequestAktif',

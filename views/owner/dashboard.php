@@ -32,26 +32,32 @@ $this->title = 'Dashboard Pemilik';
             <div class="statistik-row top-row">
 
                 <div class="statistik-card">
-                    <div class="stat-icon">📦</div>
+                    <div class="stat-icon">💰</div>
 
                     <div class="stat-content">
-                        <span class="stat-label">Total Produk</span>
-                        <span class="stat-value"><?= $totalProduk ?></span>
-                    </div>
-                </div>
+                        <span class="stat-label">
+                            Total Pendapatan
+                        </span>
 
-                <div class="statistik-card">
-                    <div class="stat-icon">👤</div>
-
-                    <div class="stat-content">
-                        <span class="stat-label">Total Pelanggan</span>
                         <span class="stat-value">
-                            <?= $jumlahCustomer ?>
+                            Rp <?= number_format($totalPendapatan ?? 0, 0, ',', '.') ?>
                         </span>
                     </div>
                 </div>
 
+                <div class="statistik-card">
+                    <div class="stat-icon">📈</div>
 
+                    <div class="stat-content">
+                        <span class="stat-label">
+                            Pendapatan Bulan Ini
+                        </span>
+
+                        <span class="stat-value">
+                            Rp <?= number_format($pendapatanBulanIni ?? 0, 0, ',', '.') ?>
+                        </span>
+                    </div>
+                </div>
 
             </div>
 
@@ -59,45 +65,43 @@ $this->title = 'Dashboard Pemilik';
             <div class="statistik-row bottom-row">
 
                 <div class="statistik-card">
+                    <div class="stat-icon">📦</div>
+
+                    <div class="stat-content">
+                        <span class="stat-label">
+                            Total Produk
+                        </span>
+
+                        <span class="stat-value">
+                            <?= $totalProduk ?>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="statistik-card">
+                    <div class="stat-icon">👥</div>
+
+                    <div class="stat-content">
+                        <span class="stat-label">
+                            Total Pelanggan
+                        </span>
+
+                        <span class="stat-value">
+                            <?= $jumlahCustomer ?>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="statistik-card">
                     <div class="stat-icon">🛒</div>
 
                     <div class="stat-content">
-                        <span class="stat-label">Pesanan Aktif</span>
-                        <span class="stat-value">
-                            <?= $totalPesananAktif ?>
+                        <span class="stat-label">
+                            Total Pesanan
                         </span>
-                    </div>
-                </div>
 
-                <div class="statistik-card">
-                    <div class="stat-icon">✅</div>
-
-                    <div class="stat-content">
-                        <span class="stat-label">Pesanan Selesai</span>
                         <span class="stat-value">
-                            <?= $totalPesananSelesai ?>
-                        </span>
-                    </div>
-                </div>
-
-                <div class="statistik-card">
-                    <div class="stat-icon">📋</div>
-
-                    <div class="stat-content">
-                        <span class="stat-label">Permintaan Aktif</span>
-                        <span class="stat-value">
-                            <?= $totalRequestAktif ?>
-                        </span>
-                    </div>
-                </div>
-
-                <div class="statistik-card">
-                    <div class="stat-icon">📄</div>
-
-                    <div class="stat-content">
-                        <span class="stat-label">Permintaan Selesai</span>
-                        <span class="stat-value">
-                            <?= $totalRequestSelesai ?>
+                            <?= $totalOrder ?>
                         </span>
                     </div>
                 </div>
@@ -106,7 +110,10 @@ $this->title = 'Dashboard Pemilik';
 
         </div>
 
-        <h3>Produk Terlaris</h3>
+
+        <h3>
+            Top 5 Produk Terlaris
+        </h3>
         <div class="produkunggulan-card">
             <div class="produk-grid">
                 <?php if (!empty($produkTerlaris)): ?>
@@ -142,85 +149,19 @@ $this->title = 'Dashboard Pemilik';
             </div>
         </div>
 
-        <h3>Daftar Produk</h3>
-        <div class="dashboard-card" id="produk-section">
-            <div class="table-responsive" id="produkTable">
-                <?php Pjax::begin([
-                    'id' => 'produk-grid',
-                    'enablePushState' => false,
-                ]); ?>
-                <?= GridView::widget([
-                    'summary' => false,
-                    'dataProvider' => $produkDataProvider,
-                    'tableOptions' => ['class' => 'cart-table'],
-                    'columns' => [
-                        [
-                            'label' => 'Gambar',
-                            'format' => 'raw',
-                            'value' => function ($model) {
-                                return Html::img(
-                                    Yii::getAlias('@web') . '/' . $model->image,
-                                    ['class' => 'cart-img']
-                                );
-                            }
-                        ],
-                        'title',
-                        'description',
-                        [
-                            'label' => 'Harga',
-                            'format' => 'raw',
-                            'value' => function ($model) {
-                                return
-                                    '<p>Kiloan: Rp ' . number_format($model->harga_kg, 0, ',', '.') . '</p>' .
-                                    '<p>Bijian : Rp ' . number_format($model->harga_bijian, 0, ',', '.') . '</p>';
-                            }
-                        ],
-                    ],
-                ]); ?>
-                <?php Pjax::end(); ?>
-            </div>
-        </div>
-
-
-        <h3>Daftar Pesanan</h3>
-        <div class="dashboard-card" id="order-section">
-            <div class="table-responsive" id="orderTable">
-                <?php Pjax::begin([
-                    'id' => 'order-grid',
-                    'enablePushState' => false,
-                ]); ?>
-                <?= GridView::widget([
-                    'summary' => false,
-                    'dataProvider' => $orderDataProvider,
-                    'tableOptions' => ['class' => 'cart-table'],
-                    'columns' => [
-                        ['class' => 'yii\grid\SerialColumn'],
-                        'nama',
-                        'no_hp',
-                        'alamat:ntext',
-                        'metode_pembayaran',
-                        [
-                            'attribute' => 'total',
-                            'value' => function ($model) {
-                                return 'Rp ' . number_format($model->total, 0, ',', '.');
-                            }
-                        ],
-                        'created_at',
-                    ],
-                ]); ?>
-                <?php Pjax::end(); ?>
-            </div>
-        </div>
-
         <!-- Grafik -->
         <div class="graphic-wrapper">
             <div class="graphic-card">
-                <h3>Grafik Produk Terlaris</h3>
+                <h3>
+                    Grafik Produk Terlaris
+                </h3>
                 <canvas id="pieChart"></canvas>
             </div>
 
             <div class="graphic-card">
-                <h3>Grafik Penjualan Per Bulan</h3>
+                <h3>
+                    Grafik Penjualan Per Bulan
+                </h3>
                 <canvas id="lineChart"></canvas>
             </div>
         </div>
