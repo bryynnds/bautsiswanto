@@ -133,15 +133,24 @@ class SiteController extends Controller
         }
 
         $model = new LoginForm();
+
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            if (Yii::$app->user->identity->isAdmin()) {
+
+            $user = Yii::$app->user->identity;
+
+            if ($user->isOwner()) {
+                return $this->redirect(['owner/dashboard']);
+            }
+
+            if ($user->isAdmin()) {
                 return $this->redirect(['admin/dashboard']);
             }
-            return $this->goHome(); // user biasa ke site/index
+
+            return $this->goHome();
         }
 
-
         $model->password = '';
+
         return $this->render('login', [
             'model' => $model,
         ]);

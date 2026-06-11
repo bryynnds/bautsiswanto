@@ -108,6 +108,11 @@ class User extends ActiveRecord implements IdentityInterface
         return $this->getRole() === 'admin';
     }
 
+    public function isOwner()
+    {
+        return $this->getRole() === 'owner';
+    }
+
     public function getProductRequests()
     {
         return $this->hasMany(ProductRequest::class, ['user_id' => 'id']);

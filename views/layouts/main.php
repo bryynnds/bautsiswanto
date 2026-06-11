@@ -100,6 +100,21 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
                 . Html::endForm()
                 . '</li>'
             ];
+        } elseif (Yii::$app->user->identity->isOwner()) {
+
+            $menuItems = [
+
+                ['label' => 'Dashboard', 'url' => ['/owner/dashboard']],
+
+                '<li class="nav-item">'
+                . Html::beginForm(['/site/logout'])
+                . Html::submitButton(
+                    'Keluar (' . Yii::$app->user->identity->username . ')',
+                    ['class' => 'nav-link btn btn-link logout']
+                )
+                . Html::endForm()
+                . '</li>'
+            ];
         } else {
             // untuk user biasa
             $menuItems = [
