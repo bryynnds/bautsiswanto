@@ -175,6 +175,9 @@ class OwnerController extends Controller
     {
         $startDate = Yii::$app->request->get('start_date');
         $endDate = Yii::$app->request->get('end_date');
+        $status = Yii::$app->request->get('status');
+        $keyword = Yii::$app->request->get('keyword');
+        $sort = Yii::$app->request->get('sort');
 
         $query = Order::find();
 
@@ -186,8 +189,50 @@ class OwnerController extends Controller
             $query->andWhere(['<=', 'DATE(created_at)', $endDate]);
         }
 
+        if (!empty($status)) {
+            $query->andWhere(['status' => $status]);
+        }
+
+        if (!empty($keyword)) {
+
+            $query->andWhere([
+                'or',
+                ['like', 'nama', $keyword],
+                ['like', 'no_hp', $keyword]
+            ]);
+        }
+
+        switch ($sort) {
+
+            case 'oldest':
+                $query->orderBy(['created_at' => SORT_ASC]);
+                break;
+
+            case 'highest':
+                $query->orderBy(['total' => SORT_DESC]);
+                break;
+
+            case 'lowest':
+                $query->orderBy(['total' => SORT_ASC]);
+                break;
+
+            case 'name_asc':
+                $query->orderBy(['nama' => SORT_ASC]);
+                break;
+
+            case 'name_desc':
+                $query->orderBy(['nama' => SORT_DESC]);
+                break;
+
+            default:
+                $query->orderBy(['created_at' => SORT_DESC]);
+                break;
+        }
+
         $dataProvider = new \yii\data\ActiveDataProvider([
-            'query' => $query->orderBy(['created_at' => SORT_DESC]),
+            'query' => $query
+            ,
+
             'pagination' => [
                 'pageSize' => 10
             ]
@@ -205,9 +250,12 @@ class OwnerController extends Controller
 
         return $this->render('report', [
             'dataProvider' => $dataProvider,
+            'sort' => $sort,
             'totalPendapatan' => $totalPendapatan,
             'totalPesanan' => $totalPesanan,
             'totalPelanggan' => $totalPelanggan,
+            'status' => $status,
+            'keyword' => $keyword,
             'startDate' => $startDate,
             'endDate' => $endDate,
         ]);
@@ -217,6 +265,8 @@ class OwnerController extends Controller
     {
         $startDate = Yii::$app->request->get('start_date');
         $endDate = Yii::$app->request->get('end_date');
+        $status = Yii::$app->request->get('status');
+        $keyword = Yii::$app->request->get('keyword');
 
         $query = Order::find();
 
@@ -226,6 +276,19 @@ class OwnerController extends Controller
 
         if (!empty($endDate)) {
             $query->andWhere(['<=', 'DATE(created_at)', $endDate]);
+        }
+
+        if (!empty($status)) {
+            $query->andWhere(['status' => $status]);
+        }
+
+        if (!empty($keyword)) {
+
+            $query->andWhere([
+                'or',
+                ['like', 'nama', $keyword],
+                ['like', 'no_hp', $keyword]
+            ]);
         }
 
         $orders = $query

@@ -20,30 +20,123 @@ $this->title = 'Laporan Penjualan';
             'action' => ['owner/report']
         ]); ?>
 
-        <div class="row">
+        <div class="row g-3">
 
             <div class="col-md-4">
-                <label>Tanggal Awal</label>
+
+                <label>
+                    Cari Nama / No HP
+                </label>
+
+                <input type="text" name="keyword" class="form-control" value="<?= $keyword ?>"
+                    placeholder="Nama atau nomor HP...">
+
+            </div>
+
+            <div class="col-md-2">
+
+                <label>
+                    Status
+                </label>
+
+                <select name="status" class="form-control">
+
+                    <option value="">
+                        Semua Status
+                    </option>
+
+                    <option value="pending" <?= $status == 'pending' ? 'selected' : '' ?>>
+                        Tertunda
+                    </option>
+
+                    <option value="paid" <?= $status == 'paid' ? 'selected' : '' ?>>
+                        Sudah Dibayar
+                    </option>
+
+                    <option value="shipped" <?= $status == 'shipped' ? 'selected' : '' ?>>
+                        Dikirim
+                    </option>
+
+                    <option value="completed" <?= $status == 'completed' ? 'selected' : '' ?>>
+                        Selesai
+                    </option>
+
+                </select>
+
+            </div>
+
+            <div class="col-md-2">
+
+                <label>
+                    Tanggal Awal
+                </label>
+
                 <input type="date" name="start_date" class="form-control" value="<?= $startDate ?>">
+
             </div>
 
-            <div class="col-md-4">
-                <label>Tanggal Akhir</label>
+            <div class="col-md-2">
+
+                <label>
+                    Tanggal Akhir
+                </label>
+
                 <input type="date" name="end_date" class="form-control" value="<?= $endDate ?>">
+
             </div>
 
-            <div class="col-md-4 d-flex align-items-end">
-                <button type="submit" class="btn btn-primary">
+            <div class="col-md-2">
+
+                <label>
+                    Urutkan
+                </label>
+
+                <select name="sort" class="form-control">
+
+                    <option value="">
+                        Tanggal Terbaru
+                    </option>
+
+                    <option value="oldest" <?= $sort == 'oldest' ? 'selected' : '' ?>>
+                        Tanggal Terlama
+                    </option>
+
+                    <option value="highest" <?= $sort == 'highest' ? 'selected' : '' ?>>
+                        Total Tertinggi
+                    </option>
+
+                    <option value="lowest" <?= $sort == 'lowest' ? 'selected' : '' ?>>
+                        Total Terendah
+                    </option>
+
+                </select>
+
+            </div>
+
+            <div class="col-md-2 d-flex align-items-end">
+
+                <button type="submit" class="btn btn-primary me-2">
+
                     Filter
-                </button>
-            </div>
 
+                </button>
+
+                <?= Html::a(
+                    'Reset',
+                    ['owner/report'],
+                    ['class' => 'btn btn-secondary']
+                ) ?>
+
+            </div>
             <?= Html::a(
                 'Export PDF',
                 [
                     'owner/export-pdf',
                     'start_date' => $startDate,
-                    'end_date' => $endDate
+                    'end_date' => $endDate,
+                    'status' => $status,
+                    'keyword' => $keyword,
+                    'sort' => $sort,
                 ],
                 [
                     'class' => 'btn btn-danger ms-2',
