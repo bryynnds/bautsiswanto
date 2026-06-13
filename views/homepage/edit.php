@@ -8,7 +8,7 @@ $this->title = 'Admin - Ubah Halaman Beranda';
 ?>
 
 <section class="edit-section loading">
-    <div class="container mt-4">
+    <div class="container">
         <!-- <h2 class="section-title">Ubah Halaman Beranda</h2> -->
 
         <div class="edit-tabs">
