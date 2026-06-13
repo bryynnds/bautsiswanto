@@ -9,11 +9,11 @@ if (!is_object($model)) {
 }
 ?>
 
-<div class="form-card">
-    <h2 class="section-title mb-4">Ubah Slogan Utama</h2>
+<div>
+    <h2 class="section-title mb-4">Slogan Utama</h2>
 
     <?php $form = ActiveForm::begin([
-        'id' => 'form-hero', 
+        'id' => 'form-hero',
         'action' => ['homepage/edit-hero'],
         'options' => ['enctype' => 'multipart/form-data'],
         'enableClientValidation' => true,

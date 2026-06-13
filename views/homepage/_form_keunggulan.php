@@ -11,7 +11,7 @@ if (!is_object($model)) {
 }
 ?>
 
-<div class="form-card">
+<div>
     <h2 class="section-title mb-4">Tambah Keunggulan</h2>
 
     <?php $form = ActiveForm::begin([
@@ -31,7 +31,7 @@ if (!is_object($model)) {
 
     <?= $form->field($model, 'icon')
         ->textInput([
-            'placeholder' => 'fa-solid fa-truck-fast'
+            'placeholder' => 'Contoh : fa-solid fa-truck-fast'
         ]) ?>
 
     <?= Html::submitButton('Tambah Keunggulan', ['class' => 'btn btn-success']) ?>

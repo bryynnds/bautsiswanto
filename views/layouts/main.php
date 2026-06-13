@@ -40,10 +40,17 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
     <header id="header">
         <?php
         NavBar::begin([
-            'brandLabel' => Html::img(
-                '@web/images/logo.png', // path logo di folder web/images
-                ['alt' => 'CuanKonek.id', 'style' => 'height:40px;'] // bisa diatur ukuran
-            ),
+            'brandLabel' =>
+                '<div class="d-flex align-items-center">
+        <img src="' . Yii::getAlias('@web/images/logobautsiswanto.png') . '"
+             style="height:65px;width:auto;">
+        <div class="ms-2">
+            <div class="brand-title">BAUT SISWANTO</div>
+            <div class="brand-subtitle">
+                Baut & Mur Berkualitas
+            </div>
+        </div>
+    </div>',
             'brandUrl' => Yii::$app->homeUrl,
             'options' => [
                 'class' => 'navbar navbar-expand-md fixed-top custom-navbar'
@@ -315,13 +322,79 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
         </div>
     </main>
 
-    <footer id="kontak" class="mt-auto text-center py-3">
-        <p>© 2025 CuanKonek.id</p>
-        <p>Ikuti kami di
-            <a href="#">Instagram</a> |
-            <a href="#">Facebook</a> |
-            <a href="#">Twitter</a>
-        </p>
+    <footer class="footer-modern">
+
+        <div class="container">
+
+            <div class="row">
+
+                <div class="col-lg-5 col-md-12 mb-4 text-start">
+
+                    <h4 class="footer-title">
+                        Baut Siswanto
+                    </h4>
+
+                    <p>
+                        Menyediakan berbagai jenis baut, mur,
+                        ring, dan pengencang lainnya dengan
+                        kualitas terbaik untuk kebutuhan
+                        industri maupun rumah tangga.
+                    </p>
+
+                    <div class="social-links mt-3">
+                        ...
+                    </div>
+
+                </div>
+
+                <div class="col-lg-4 col-md-6 mb-4">
+
+                    <h5>Hubungi Kami</h5>
+
+                    <p>
+                        Jl. Garuda No.35, Pilangan<br>
+                        Baturan, Colomadu, Karanganyar
+                    </p>
+
+                    <p>
+                        0856-4720-8140
+                    </p>
+
+                    <p>
+                        bautsiswanto@gmail.com
+                    </p>
+
+                </div>
+
+                <div class="col-lg-3 col-md-6 mb-4">
+
+                    <h5>Jam Operasional</h5>
+
+                    <p>Senin - Sabtu</p>
+
+                    <strong>08:00 - 17:00</strong>
+
+                    <br><br>
+
+                    <p>Minggu</p>
+
+                    <strong>Tutup</strong>
+
+                </div>
+
+            </div>
+
+            <hr>
+
+            <hr class="footer-divider">
+
+            <div class="text-center footer-copy">
+                © <?= date('Y') ?> Baut Siswanto.
+                All Rights Reserved.
+            </div>
+
+        </div>
+
     </footer>
 
     <div class="toast-container position-fixed bottom-0 start-0 p-3">

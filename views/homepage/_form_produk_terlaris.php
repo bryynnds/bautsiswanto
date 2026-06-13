@@ -4,7 +4,9 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 ?>
 
-<div class="card p-4">
+<div>
+
+    <h2 class="section-title mb-4">Produk Terlaris</h2>
 
     <?php $form = ActiveForm::begin([
         'action' => ['homepage/update-produk-terlaris']
