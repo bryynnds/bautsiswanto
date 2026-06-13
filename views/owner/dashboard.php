@@ -25,6 +25,24 @@ $this->title = 'Dashboard Pemilik';
 <div class="container mt-5">
 
     <section class="dashboard">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+
+            <h2 class="section-title mb-0">
+                Dashboard Pemilik
+            </h2>
+
+            <form method="get" class="d-flex align-items-center">
+
+                <label class="me-2 fw-bold">
+                    Periode:
+                </label>
+
+                <input type="month" name="bulan" value="<?= $bulan ?>" class="form-control"
+                    onchange="this.form.submit()" style="width: 180px;">
+
+            </form>
+
+        </div>
         <!-- Statistik Singkat -->
         <div class="statistik-wrapper">
 
@@ -160,7 +178,7 @@ $this->title = 'Dashboard Pemilik';
 
             <div class="graphic-card">
                 <h3>
-                    Grafik Penjualan Per Bulan
+                    Grafik Penjualan Harian
                 </h3>
                 <canvas id="lineChart"></canvas>
             </div>
@@ -245,7 +263,7 @@ $this->title = 'Dashboard Pemilik';
                 x: {
                     title: {
                         display: true,
-                        text: 'Periode Bulan'
+                        text: 'Tanggal'
                     }
                 },
                 y: {

@@ -47,11 +47,36 @@ class OwnerController extends Controller
 
         ]);
 
+        $bulan = Yii::$app->request->get('bulan');
+
+        if (empty($bulan)) {
+            $bulan = date('Y-m');
+        }
+
+        $startDate = $bulan . '-01';
+        $endDate = date(
+            'Y-m-t',
+            strtotime($startDate)
+        );
+
         $jumlahCustomer = User::find()->where(['role' => 'user'])->count();
         $totalProduk = HomepageProduk::find()->count();
-        $totalOrder = Order::find()->count();
+        $totalOrder = Order::find()
+            ->where([
+                'between',
+                'DATE(created_at)',
+                $startDate,
+                $endDate
+            ])
+            ->count();
 
         $totalPendapatan = Order::find()
+            ->where([
+                'between',
+                'DATE(created_at)',
+                $startDate,
+                $endDate
+            ])
             ->sum('total');
 
         $pendapatanBulanIni = Order::find()
@@ -97,7 +122,17 @@ class OwnerController extends Controller
         $produkTerlaris = (new \yii\db\Query())
             ->select(['p.id', 'p.title', 'p.harga_kg', 'p.harga_bijian', 'p.image', 'SUM(oi.qty) AS jumlah_terjual'])
             ->from(['oi' => 'order_items'])
+            ->innerJoin(
+                ['o' => 'orders'],
+                'oi.order_id = o.id'
+            )
             ->innerJoin(['p' => 'homepage_produk'], 'oi.produk_id = p.id')
+            ->where([
+                'between',
+                'DATE(o.created_at)',
+                $startDate,
+                $endDate
+            ])
             ->groupBy(['p.id', 'p.title', 'p.harga_kg', 'p.harga_bijian', 'p.image'])
             ->orderBy(['jumlah_terjual' => SORT_DESC])
             ->limit(5)
@@ -117,38 +152,54 @@ class OwnerController extends Controller
         $pieData = array_column($produkTerlarisGrafik, 'jumlah_terjual');
 
         // Line chart penjualan per bulan
-        $bulanDataRaw = (new \yii\db\Query())
+        $jumlahHari = date(
+            't',
+            strtotime($startDate)
+        );
+
+        $grafikHarianRaw = (new \yii\db\Query())
             ->select([
-                "MONTH(created_at) as bulan",
-                "SUM(total) as total"
+                'DAY(created_at) as hari',
+                'SUM(total) as total'
             ])
             ->from('orders')
-            ->where(['YEAR(created_at)' => date('Y')])
-            ->groupBy(['bulan'])
+            ->where([
+                'between',
+                'DATE(created_at)',
+                $startDate,
+                $endDate
+            ])
+            ->groupBy(['hari'])
             ->all();
+
+        $dataHarian = [];
+
+        for ($i = 1; $i <= $jumlahHari; $i++) {
+            $dataHarian[$i] = 0;
+        }
 
         $dataBulanan = array_fill(1, 12, 0);
 
-        foreach ($bulanDataRaw as $row) {
-            $dataBulanan[(int) $row['bulan']] = (float) $row['total'];
+        foreach ($grafikHarianRaw as $row) {
+
+            $dataHarian[(int) $row['hari']] =
+                (float) $row['total'];
         }
 
-        $bulanLabels = [
-            'Jan',
-            'Feb',
-            'Mar',
-            'Apr',
-            'Mei',
-            'Jun',
-            'Jul',
-            'Agu',
-            'Sep',
-            'Okt',
-            'Nov',
-            'Des'
-        ];
+        $bulanLabels = [];
 
-        $bulanData = array_values($dataBulanan);
+        for ($i = 1; $i <= $jumlahHari; $i++) {
+
+            $bulanLabels[] =
+                $i . ' ' .
+                date(
+                    'M',
+                    strtotime($startDate)
+                );
+        }
+
+        $bulanData =
+            array_values($dataHarian);
 
         return $this->render('dashboard', compact(
             'produkDataProvider',
@@ -157,6 +208,7 @@ class OwnerController extends Controller
             'totalProduk',
             'totalOrder',
             'totalPendapatan',
+            'bulan',
             'pendapatanBulanIni',
             'totalPesananAktif',
             'totalPesananSelesai',
