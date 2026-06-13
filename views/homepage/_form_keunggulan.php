@@ -29,6 +29,11 @@ if (!is_object($model)) {
         'placeholder' => 'Ketik disini...',
     ]) ?>
 
+    <?= $form->field($model, 'icon')
+        ->textInput([
+            'placeholder' => 'fa-solid fa-truck-fast'
+        ]) ?>
+
     <?= Html::submitButton('Tambah Keunggulan', ['class' => 'btn btn-success']) ?>
 
     <?php ActiveForm::end(); ?>

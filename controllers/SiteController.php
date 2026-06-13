@@ -17,6 +17,9 @@ use app\models\HomepageProduk;
 use app\models\HomepageKeunggulan;
 use app\models\HomepageTestimoni;
 use app\models\HomepagePromo;
+use app\models\JenisProduk;
+
+use app\models\HomepageProdukTerlaris;
 
 class SiteController extends Controller
 {
@@ -85,6 +88,12 @@ class SiteController extends Controller
             Yii::$app->session->setFlash('danger', 'Pembayaran gagal.');
         }
 
+        $configTerlaris = HomepageProdukTerlaris::find()->one();
+
+        $jumlahTampil = $configTerlaris
+            ? $configTerlaris->jumlah_tampil
+            : 3;
+
 
         $produkTerlaris = (new \yii\db\Query())
             ->select([
@@ -107,17 +116,19 @@ class SiteController extends Controller
                 'p.description',
             ])
             ->orderBy(['jumlah_terjual' => SORT_DESC])
-            ->limit(3)
+            ->limit($jumlahTampil)
             ->all();
+
+        $jenisProduks = JenisProduk::find()->all();
 
 
         return $this->render('index', [
             'hero' => $hero,
             'produks' => $produks,
             'keunggulans' => $keunggulans,
-            'testimonis' => $testimonis,
-            'promos' => $promos,
             'produkTerlaris' => $produkTerlaris,
+            'jenisProduks' => $jenisProduks,
+            'configTerlaris' => $configTerlaris,
         ]);
     }
 

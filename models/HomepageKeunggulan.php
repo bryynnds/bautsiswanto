@@ -15,15 +15,18 @@ class HomepageKeunggulan extends ActiveRecord
     {
         return [
             [['title', 'subtitle'], 'required'],
+
             [['subtitle'], 'string', 'max' => 255],
             [['title'], 'string', 'max' => 255],
+            [['icon'], 'string', 'max' => 100],
         ];
     }
     public function attributeLabels()
     {
         return [
             'title' => 'Keunggulan',
-            'subtitle' => 'Deskripsi'
+            'subtitle' => 'Deskripsi',
+            'icon' => 'Icon Font Awesome',
         ];
     }
 }

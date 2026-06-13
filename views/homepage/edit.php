@@ -22,12 +22,12 @@ $this->title = 'Admin - Ubah Halaman Beranda';
                         'active' => true
                     ],
                     [
-                        'label' => 'Promo',
+                        'label' => 'Produk Terlaris',
                         'content' => "<div class='tab-card'>" .
-                            $this->render('_form_promo', [
-                                'model' => $newPromo,
-                                'promos' => $promos
-                            ]) . "</div>",
+                            $this->render('_form_produk_terlaris', [
+                                'model' => $configTerlaris
+                            ]) .
+                            "</div>",
                     ],
                     [
                         'label' => 'Keunggulan',
@@ -35,14 +35,6 @@ $this->title = 'Admin - Ubah Halaman Beranda';
                             $this->render('_form_keunggulan', [
                                 'model' => $newKeunggulan,
                                 'keunggulans' => $keunggulans
-                            ]) . "</div>",
-                    ],
-                    [
-                        'label' => 'Testimoni',
-                        'content' => "<div class='tab-card'>" .
-                            $this->render('_form_testimoni', [
-                                'model' => $newTestimoni,
-                                'testimonis' => $testimonis
                             ]) . "</div>",
                     ],
                 ]

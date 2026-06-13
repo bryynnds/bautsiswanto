@@ -1882,3 +1882,30 @@ html {
 .produk-pagination .pagination {
   margin: 0;
 }
+
+.jenis-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 20px;
+  margin-top: 30px;
+}
+
+.jenis-card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 24px;
+  text-align: center;
+  text-decoration: none;
+  color: #0b6b69;
+  transition: 0.25s;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.jenis-card:hover {
+  transform: translateY(-5px);
+}
+
+.jenis-icon {
+  font-size: 40px;
+  margin-bottom: 12px;
+}

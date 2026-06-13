@@ -6,12 +6,15 @@ use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\UploadedFile;
+
 use app\models\HomepageHero;
 use app\models\HomepageProduk;
 use app\models\KategoriProduk;
 use app\models\JenisProduk;
 use app\models\HomepageKeunggulan;
 use app\models\HomepageTestimoni;
+use app\models\HomepageProdukTerlaris;
+
 use yii\filters\AccessControl;
 use app\models\HomepagePromo;
 use app\models\User;
@@ -49,6 +52,14 @@ class HomepageController extends Controller
         $keunggulans = HomepageKeunggulan::find()->all();
         $testimonis = HomepageTestimoni::find()->all();
         $promos = HomepagePromo::find()->all();
+        $configTerlaris = HomepageProdukTerlaris::find()->one();
+
+        if (!$configTerlaris) {
+            $configTerlaris = new HomepageProdukTerlaris();
+            $configTerlaris->title = 'Produk Terlaris';
+            $configTerlaris->jumlah_tampil = 3;
+            $configTerlaris->save(false);
+        }
 
         return $this->render('edit', [
             'hero' => $hero,
@@ -60,7 +71,27 @@ class HomepageController extends Controller
             'testimonis' => $testimonis,
             'newPromo' => new HomepagePromo(),
             'promos' => $promos,
+            'configTerlaris' => $configTerlaris,
         ]);
+    }
+
+    public function actionUpdateProdukTerlaris()
+    {
+        $model = HomepageProdukTerlaris::find()->one();
+
+        if (!$model) {
+            $model = new HomepageProdukTerlaris();
+        }
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+
+            Yii::$app->session->setFlash(
+                'success',
+                'Pengaturan produk terlaris berhasil diperbarui.'
+            );
+        }
+
+        return $this->redirect(['edit']);
     }
 
     public function actionEditHero()

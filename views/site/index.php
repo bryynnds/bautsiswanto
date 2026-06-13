@@ -3,6 +3,8 @@
 use yii\grid\GridView;
 use yii\data\ArrayDataProvider;
 use app\models\HomepageProduk;
+use yii\helpers\Url;
+use yii\helpers\Html;
 
 /** @var yii\web\View $this */
 /** @var app\models\HomepageHero $hero */
@@ -35,44 +37,11 @@ $dataProvider = new ArrayDataProvider([
   </div>
 </section>
 
-<!-- Promo Section -->
-<section class="promo loading" id="promo">
-  <h2>Promo Spesial</h2>
-  <div id="promoCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="4000" data-bs-pause="hover">
-
-    <!-- Slides -->
-    <div class="carousel-inner">
-      <?php foreach ($promos as $index => $promo): ?>
-        <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>">
-          <div class="card mx-auto" style="max-width: 800px;">
-            <img src="<?= Yii::getAlias('@web') ?>/<?= $promo->image ?>" class="card-img-top" alt="<?= $promo->title ?>">
-            <div class="card-body text-center">
-              <h3 class="card-title"><?= $promo->title ?></h3>
-              <p class="card-text">
-                <?= Yii::$app->formatter->asDate($promo->start_date, 'php:d F Y') ?>
-                –
-                <?= Yii::$app->formatter->asDate($promo->end_date, 'php:d F Y') ?>
-              </p>
-            </div>
-          </div>
-        </div>
-      <?php endforeach; ?>
-    </div>
-
-    <!-- Indicators (Dots) di luar card -->
-    <div class="carousel-indicators mt-1">
-      <?php foreach ($promos as $index => $promo): ?>
-        <button type="button" data-bs-target="#promoCarousel" data-bs-slide-to="<?= $index ?>"
-          class="<?= $index === 0 ? 'active' : '' ?>" aria-current="<?= $index === 0 ? 'true' : 'false' ?>"
-          aria-label="Slide <?= $index + 1 ?>"></button>
-      <?php endforeach; ?>
-    </div>
-  </div>
-</section>
-
 <!-- Produk Unggulan -->
 <section class="produk loading" id="produk">
-  <h2>Produk Terlaris</h2>
+  <h2>
+    <?= $configTerlaris->title ?? 'Produk Terlaris' ?>
+  </h2>
   <div class="produk-grid">
     <?php if (!empty($produkTerlaris)): ?>
       <?php foreach ($produkTerlaris as $p): ?>
@@ -120,15 +89,14 @@ $dataProvider = new ArrayDataProvider([
   </div>
 </section>
 
-
 <!-- Keunggulan -->
-<section class="keunggulan loading" id="keunggulan">
+<section class="keunggulan loading mb-4" id="keunggulan">
   <h2>Mengapa Harus Memilih CuanKonek.id?</h2>
   <div class="keunggulan-grid">
     <?php foreach ($keunggulans as $k): ?>
       <div class="point">
         <div class="point-icon">
-          🔩
+          <i class="<?= Html::encode($k->icon) ?>"></i>
         </div>
         <h3><?= $k->title ?></h3>
         <p><?= $k->subtitle ?></p>
@@ -137,18 +105,6 @@ $dataProvider = new ArrayDataProvider([
   </div>
 </section>
 
-<!-- Testimoni -->
-<section class="testimoni loading" id="testimoni">
-  <h2>Apa Pendapat Mereka?</h2>
-  <div class="testimoni-grid">
-    <?php foreach ($testimonis as $t): ?>
-      <div class="testi">
-        <p>"<?= $t->content ?>"</p>
-        <span>- <?= $t->author ?></span>
-      </div>
-    <?php endforeach; ?>
-  </div>
-</section>
 
 <?php foreach (Yii::$app->session->getAllFlashes() as $type => $message): ?>
   <div class="alert alert-<?= $type ?>">

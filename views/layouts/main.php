@@ -41,7 +41,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
         <?php
         NavBar::begin([
             'brandLabel' => Html::img(
-                '@web/images/logo121.png', // path logo di folder web/images
+                '@web/images/logo.png', // path logo di folder web/images
                 ['alt' => 'CuanKonek.id', 'style' => 'height:40px;'] // bisa diatur ukuran
             ),
             'brandUrl' => Yii::$app->homeUrl,
