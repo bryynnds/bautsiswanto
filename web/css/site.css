@@ -965,6 +965,10 @@ html {
   grid-template-columns: repeat(3, 1fr);
 }
 
+.bottom-row-admin {
+  grid-template-columns: repeat(4, 1fr);
+}
+
 .statistik-card {
   background: #fff;
   border-radius: 14px;

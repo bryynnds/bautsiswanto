@@ -3,43 +3,33 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\ActiveForm;
+use yii\widgets\LinkPager;
 
 $this->title = 'Laporan Penjualan';
 ?>
 
 <div class="container mt-5">
 
-    <h2 class="section-title mb-4">
-        Laporan Penjualan
-    </h2>
+
 
     <div class="form-card mb-4">
 
-        <?php $form = ActiveForm::begin([
-            'method' => 'get',
-            'action' => ['owner/report']
-        ]); ?>
+        <h2 class="section-title mb-4">
+            Laporan Penjualan
+        </h2>
+        <div class="filter-form">
 
-        <div class="row g-3">
+            <?php $form = ActiveForm::begin([
+                'method' => 'get',
+                'action' => ['owner/report']
+            ]); ?>
 
-            <div class="col-md-4">
+            <div class="filter-toolbar">
 
-                <label>
-                    Cari Nama / No HP
-                </label>
+                <input type="text" name="keyword" class="filter-input" value="<?= $keyword ?>"
+                    placeholder="Cari nama atau nomor HP...">
 
-                <input type="text" name="keyword" class="form-control" value="<?= $keyword ?>"
-                    placeholder="Nama atau nomor HP...">
-
-            </div>
-
-            <div class="col-md-2">
-
-                <label>
-                    Status
-                </label>
-
-                <select name="status" class="form-control">
+                <select name="status" class="filter-select">
 
                     <option value="">
                         Semua Status
@@ -63,35 +53,11 @@ $this->title = 'Laporan Penjualan';
 
                 </select>
 
-            </div>
+                <input type="date" name="start_date" class="filter-select" value="<?= $startDate ?>">
 
-            <div class="col-md-2">
+                <input type="date" name="end_date" class="filter-select" value="<?= $endDate ?>">
 
-                <label>
-                    Tanggal Awal
-                </label>
-
-                <input type="date" name="start_date" class="form-control" value="<?= $startDate ?>">
-
-            </div>
-
-            <div class="col-md-2">
-
-                <label>
-                    Tanggal Akhir
-                </label>
-
-                <input type="date" name="end_date" class="form-control" value="<?= $endDate ?>">
-
-            </div>
-
-            <div class="col-md-2">
-
-                <label>
-                    Urutkan
-                </label>
-
-                <select name="sort" class="form-control">
+                <select name="sort" class="filter-select">
 
                     <option value="">
                         Tanggal Terbaru
@@ -113,9 +79,9 @@ $this->title = 'Laporan Penjualan';
 
             </div>
 
-            <div class="col-md-2 d-flex align-items-end">
+            <div class="report-action mb-4">
 
-                <button type="submit" class="btn btn-primary me-2">
+                <button type="submit" class="btn btn-primary">
 
                     Filter
 
@@ -127,110 +93,179 @@ $this->title = 'Laporan Penjualan';
                     ['class' => 'btn btn-secondary']
                 ) ?>
 
+                <?= Html::a(
+                    'Export PDF',
+                    [
+                        'owner/export-pdf',
+                        'start_date' => $startDate,
+                        'end_date' => $endDate,
+                        'status' => $status,
+                        'keyword' => $keyword,
+                        'sort' => $sort,
+                    ],
+                    [
+                        'class' => 'btn btn-danger',
+                        'target' => '_blank'
+                    ]
+                ) ?>
+
             </div>
-            <?= Html::a(
-                'Export PDF',
-                [
-                    'owner/export-pdf',
-                    'start_date' => $startDate,
-                    'end_date' => $endDate,
-                    'status' => $status,
-                    'keyword' => $keyword,
-                    'sort' => $sort,
-                ],
-                [
-                    'class' => 'btn btn-danger ms-2',
-                    'target' => '_blank'
-                ]
-            ) ?>
+
+            <?php ActiveForm::end(); ?>
 
         </div>
 
-        <?php ActiveForm::end(); ?>
+        <div class="request-info">
+
+            Menampilkan
+
+            <strong>
+                <?= $dataProvider->getTotalCount() ?>
+            </strong>
+
+            transaksi
+
+        </div>
+
+        <div class="dashboard-card mt-4">
+
+            <div class="table-responsive">
+
+                <table class="cart-table">
+
+                    <thead>
+
+                        <tr>
+                            <th>ID</th>
+                            <th>Pembeli</th>
+                            <th>No HP</th>
+                            <th>Total</th>
+                            <th>Metode</th>
+                            <th>Status</th>
+                            <th>Tanggal</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <?php foreach ($dataProvider->models as $order): ?>
+
+                            <?php
+
+                            $statusLabel = [
+                                'pending' => 'Tertunda',
+                                'paid' => 'Sudah Dibayar',
+                                'shipped' => 'Dikirim',
+                                'completed' => 'Selesai',
+                                'failed' => 'Gagal',
+                                'cancelled' => 'Dibatalkan',
+                            ];
+
+                            $statusClass = [
+                                'pending' => 'status-pending',
+                                'paid' => 'status-paid',
+                                'shipped' => 'status-shipped',
+                                'completed' => 'status-completed',
+                                'failed' => 'status-failed',
+                                'cancelled' => 'status-cancelled',
+                            ];
+
+                            ?>
+
+                            <tr>
+
+                                <td>
+                                    <?= $order->id ?>
+                                </td>
+
+                                <td>
+                                    <?= Html::encode($order->nama) ?>
+                                </td>
+
+                                <td>
+                                    <?= Html::encode($order->no_hp) ?>
+                                </td>
+
+                                <td>
+                                    Rp
+                                    <?= number_format(
+                                        $order->total,
+                                        0,
+                                        ',',
+                                        '.'
+                                    ) ?>
+                                </td>
+
+                                <td>
+                                    <?= $order->metode_pembayaran ?>
+                                </td>
+
+                                <td>
+
+                                    <span class="<?= $statusClass[$order->status] ?? 'status-default' ?>">
+
+                                        <?= $statusLabel[$order->status] ?? $order->status ?>
+
+                                    </span>
+
+                                </td>
+
+                                <td>
+
+                                    <?= Yii::$app->formatter->asDatetime(
+                                        $order->created_at,
+                                        'php:d-m-Y H:i'
+                                    ) ?>
+
+                                </td>
+
+                            </tr>
+
+                        <?php endforeach; ?>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+        <div class="pagination-wrapper">
+
+            <?= LinkPager::widget([
+                'pagination' => $dataProvider->pagination,
+            ]) ?>
+
+        </div>
 
     </div>
 
-    <div class="statistik-wrapper">
+    <style>
+        .request-info {
+            background: #e0f7f6;
+            color: #006666;
+            padding: 12px 16px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
 
-        <div class="statistik-card">
-            <div class="stat-content">
-                <span class="stat-label">
-                    Total Pendapatan
-                </span>
+        .report-action {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 15px;
+            margin-right: 50px
+        }
 
-                <span class="stat-value">
-                    Rp
-                    <?= number_format($totalPendapatan ?? 0, 0, ',', '.') ?>
-                </span>
-            </div>
-        </div>
-
-        <div class="statistik-card">
-            <div class="stat-content">
-                <span class="stat-label">
-                    Total Pesanan
-                </span>
-
-                <span class="stat-value">
-                    <?= $totalPesanan ?>
-                </span>
-            </div>
-        </div>
-
-        <div class="statistik-card">
-            <div class="stat-content">
-                <span class="stat-label">
-                    Total Pelanggan
-                </span>
-
-                <span class="stat-value">
-                    <?= $totalPelanggan ?>
-                </span>
-            </div>
-        </div>
-
-    </div>
-
-    <div class="dashboard-card mt-4">
-
-        <?= GridView::widget([
-            'dataProvider' => $dataProvider,
-            'summary' => false,
-
-            'columns' => [
-
-                ['class' => 'yii\grid\SerialColumn'],
-
-                'nama',
-
-                'metode_pembayaran',
-
-                [
-                    'attribute' => 'status',
-                    'value' => function ($model) {
-                    return $model->statusLabel;
-                }
-                ],
-
-                [
-                    'attribute' => 'total',
-
-                    'value' => function ($model) {
-
-                    return 'Rp ' .
-                        number_format(
-                            $model->total,
-                            0,
-                            ',',
-                            '.'
-                        );
-                }
-                ],
-
-                'created_at'
-            ]
-        ]) ?>
-
-    </div>
-
-</div>
+        .filter-toolbar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+    </style>

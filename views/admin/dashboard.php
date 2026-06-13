@@ -56,7 +56,7 @@ $this->title = 'Dashboard Admin';
             </div>
 
             <!-- Baris 2 -->
-            <div class="statistik-row bottom-row">
+            <div class="statistik-row bottom-row-admin">
 
                 <div class="statistik-card">
                     <div class="stat-icon">🛒</div>
