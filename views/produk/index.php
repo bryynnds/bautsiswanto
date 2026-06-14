@@ -20,7 +20,7 @@ $this->title = 'Daftar Produk';
         <div class="jenis-filter">
 
             <a href="<?= \yii\helpers\Url::to([
-                'homepage/admin-produk',
+                'produk/index',
                 'search' => Yii::$app->request->get('search'),
                 'sort' => Yii::$app->request->get('sort')
             ]) ?>" class="jenis-btn <?= empty(Yii::$app->request->get('jenis')) ? 'active' : '' ?>">
@@ -30,7 +30,7 @@ $this->title = 'Daftar Produk';
             <?php foreach ($jenisList as $jenis): ?>
 
                 <a href="<?= \yii\helpers\Url::to([
-                    'homepage/admin-produk',
+                    'produk/index',
                     'jenis' => $jenis->id,
                     'search' => Yii::$app->request->get('search'),
                     'sort' => Yii::$app->request->get('sort')
