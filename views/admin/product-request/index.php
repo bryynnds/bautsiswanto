@@ -202,29 +202,29 @@ $('#sortFilter').change(function() {
         font-weight: 500;
     }
 
-    .request-table {
+    .request-table-admin {
         width: 100%;
         border-collapse: collapse;
     }
 
-    .request-table th,
-    .request-table td {
+    .request-table-admin th,
+    .request-table-admin td {
         padding: 14px;
         border-bottom: 1px solid #e5e5e5;
     }
 
-    .request-table th {
+    .request-table-admin th {
         color: #006666;
         font-weight: 600;
         border-bottom: 2px solid #006666;
         background: #fff;
     }
 
-    .request-table tbody tr {
+    .request-table-admin tbody tr {
         transition: all .2s ease;
     }
 
-    .request-table tbody tr:hover {
+    .request-table-admin tbody tr:hover {
         background: #f7fdfd;
     }
 

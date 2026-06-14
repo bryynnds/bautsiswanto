@@ -11,7 +11,7 @@ use yii\helpers\Html;
 /** @var app\models\HomepageProduk[] $produks */
 /** @var app\models\HomepageKeunggulan[] $keunggulans */
 /** @var app\models\HomepageTestimoni[] $testimonis */
-$this->title = 'CuanKonek.id';
+$this->title = 'Baut Siswanto';
 
 $dataProvider = new ArrayDataProvider([
   'allModels' => $produks,

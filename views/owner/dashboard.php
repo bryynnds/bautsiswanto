@@ -37,7 +37,7 @@ $this->title = 'Dashboard Pemilik';
                     Periode:
                 </label>
 
-                <input type="month" name="bulan" value="<?= $bulan ?>" class="form-control"
+                <input type="month" name="bulan" value="<?= $bulan ?>" class="form-control period-input"
                     onchange="this.form.submit()" style="width: 180px;">
 
             </form>

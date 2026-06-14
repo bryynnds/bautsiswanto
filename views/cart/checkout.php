@@ -122,7 +122,7 @@ $this->title = 'Checkout';
                         <div class="cart-table-wrapper">
                             <table class="cart-table table">
                                 <thead>
-                                    <tr>
+                                    <tr class="checkout-item-row">
                                         <th>Produk</th>
                                         <th>Harga</th>
                                         <th>Satuan</th>
@@ -138,13 +138,13 @@ $this->title = 'Checkout';
                                             : (int) $item->produk->harga_bijian;
                                         $subtotal = $harga * $item->jumlah;
                                         ?>
-                                        <tr>
-                                            <td><?= Html::encode($item->produk->title) ?></td>
-                                            <td>Rp <?= number_format($harga, 0, ',', '.') ?></td>
-                                            <td><?= ucfirst($item->satuan) ?></td>
+                                        <tr class="checkout-item-row">
+                                            <td data-label="Produk"><?= Html::encode($item->produk->title) ?></td>
+                                            <td data-label="Harga">Rp <?= number_format($harga, 0, ',', '.') ?></td>
+                                            <td data-label="Satuan"><?= ucfirst($item->satuan) ?></td>
 
-                                            <td><?= $item->jumlah ?></td>
-                                            <td>Rp <?= number_format($subtotal, 0, ',', '.') ?></td>
+                                            <td data-label="Jumlah"><?= $item->jumlah ?></td>
+                                            <td data-label="Subtotal">Rp <?= number_format($subtotal, 0, ',', '.') ?></td>
                                         </tr>
                                     <?php endforeach; ?>
                                 </tbody>

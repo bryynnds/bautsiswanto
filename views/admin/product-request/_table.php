@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\LinkPager;
 ?>
 
-<table class="request-table">
+<table class="request-table-admin">
 
     <thead>
         <tr>

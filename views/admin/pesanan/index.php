@@ -261,6 +261,7 @@ $(document).on(
 
 </div>
 
+<div class="table-responsive">
 <table class="cart-table mt-3">
 
     <thead>
@@ -292,6 +293,7 @@ $(document).on(
     </tbody>
 
 </table>
+</div>
 
 <div class="order-summary-card mt-3">
 

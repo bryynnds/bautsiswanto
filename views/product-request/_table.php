@@ -6,7 +6,7 @@ use yii\widgets\LinkPager;
 <table class="request-table">
 
     <thead>
-        <tr>
+        <tr class="request-row">
             <th>Produk</th>
             <th>Jenis</th>
             <th>Keterangan</th>
@@ -35,27 +35,27 @@ use yii\widgets\LinkPager;
 
             ?>
 
-            <tr>
+            <tr class="request-row">
 
-                <td>
+                <td data-label="Produk">
                     <strong>
                         <?= Html::encode($request->nama_produk) ?>
                     </strong>
                 </td>
 
-                <td>
+                <td data-label="Jenis">
                     <?= $request->jenisProduk
                         ? Html::encode($request->jenisProduk->nama_jenis)
                         : '-' ?>
                 </td>
 
-                <td>
+                <td data-label="Keterangan">
                     <?= $request->keterangan
                         ? Html::encode($request->keterangan)
                         : '-' ?>
                 </td>
 
-                <td>
+                <td data-label="Status">
 
                     <span class="status-badge <?= $class ?>">
 
@@ -67,7 +67,7 @@ use yii\widgets\LinkPager;
 
                 </td>
 
-                <td>
+                <td data-label="Tanggal">
                     <?= date(
                         'd-m-Y H:i',
                         strtotime($request->created_at)
