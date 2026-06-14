@@ -31,7 +31,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
     <?php $this->head() ?>
     <!-- Bootstrap JS Bundle (sudah termasuk Popper) -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script> -->
 </head>
 
 <body class="d-flex flex-column h-100">
@@ -56,7 +56,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
                 'class' => 'navbar navbar-expand-md fixed-top custom-navbar'
             ],
             'containerOptions' => [
-                'class' => 'container-fluid'
+                'class' => 'container'
             ],
         ]);
 
@@ -410,7 +410,6 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
         </div>
     </div>
 
-    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
     <?php $this->endBody() ?>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
@@ -426,11 +425,12 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
                 toggle.addEventListener("click", function (e) {
 
                     e.preventDefault();
+                    e.stopPropagation();
 
                     menu.style.display =
-                        (menu.style.display === "none" || menu.style.display === "")
-                            ? "block"
-                            : "none";
+                        menu.style.display === "block"
+                            ? "none"
+                            : "block";
 
                 });
 
@@ -453,12 +453,12 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
                 notifToggle.addEventListener("click", function (e) {
 
                     e.preventDefault();
+                    e.stopPropagation();
 
                     notifMenu.style.display =
-                        (notifMenu.style.display === "none" ||
-                            notifMenu.style.display === "")
-                            ? "block"
-                            : "none";
+                        notifMenu.style.display === "block"
+                            ? "none"
+                            : "block";
 
                     const notifBadge =
                         document.getElementById("notifBadge");
@@ -466,13 +466,6 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
                     if (notifBadge) {
                         notifBadge.remove();
                     }
-
-                    fetch("/notification/read-all", {
-                        method: "POST",
-                        headers: {
-                            "X-CSRF-Token": yii.getCsrfToken()
-                        }
-                    });
 
                 });
 
@@ -488,6 +481,13 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
                 });
 
             }
+
+            document.querySelector('.navbar-toggler')
+                ?.addEventListener('click', function (e) {
+
+                    e.stopPropagation();
+
+                });
 
         });
     </script>
