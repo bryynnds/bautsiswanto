@@ -318,9 +318,8 @@ canvas {
     -webkit-overflow-scrolling: touch;
   }
 
-  .cart-table {
+  .table-responsive .cart-table {
     min-width: 850px;
-    font-size: 13px;
   }
 
   .cart-table th,
@@ -411,10 +410,6 @@ canvas {
   }
 
   /* Ringkasan pesanan */
-  .cart-table-wrapper {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-  }
 
   .checkout-section .cart-table {
     min-width: 650px;
@@ -494,10 +489,6 @@ canvas {
 
   #detailModal .modal-content {
     border-radius: 12px;
-  }
-
-  #itemsTable {
-    min-width: 600px;
   }
 
   #detailModal .table-responsive {
@@ -867,8 +858,13 @@ canvas {
     border-radius: 12px;
   }
 
-  #detailModal .cart-table {
-    min-width: 600px;
+  #detailModal .table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  #detailModal #itemsTable {
+    min-width: 500px;
   }
 
   #detailModal .summary-row {
@@ -976,6 +972,16 @@ canvas {
   .table-responsive {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
+  }
+
+  .table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .table-responsive .pagination {
+    min-width: 0 !important;
+    justify-content: center;
   }
 
   #historyTable {
@@ -1276,15 +1282,10 @@ canvas {
     font-size: 14px;
   }
 
-  /* Tabel */
-  .table-responsive {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .cart-table {
+  #orderTable .cart-table,
+  #produkTable .cart-table,
+  .checkout-section .cart-table {
     min-width: 850px;
-    font-size: 13px;
   }
 
   .cart-table th,
@@ -1318,6 +1319,40 @@ canvas {
    SMALL MOBILE
 ==================================== */
 @media (max-width: 576px) {
+  .toast {
+    width: 310px !important;
+    max-width: calc(100vw - 20px);
+    font-size: 13px;
+  }
+
+  .toast-body {
+    padding: 5px 8px;
+  }
+
+  .toast-container {
+    right: 10px !important;
+    left: auto !important;
+    bottom: 10px !important;
+  }
+
+  .jenis-filter {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-top: 10px;
+  }
+
+  .jenis-btn {
+    width: 100%;
+    text-align: center;
+    padding: 8px;
+    font-size: 14px;
+  }
+
+  .jenis-filter::-webkit-scrollbar {
+    display: none;
+  }
+
   h1 {
     font-size: 1.7rem;
   }
@@ -1340,6 +1375,47 @@ canvas {
 
   .statistik-card {
     padding: 15px;
+  }
+
+  .produk-title,
+  .section-title {
+    margin-bottom: 20px !important;
+  }
+
+  .jenis-filter {
+    margin-top: 15px;
+  }
+
+  .card h3 {
+    min-height: auto !important;
+    margin-bottom: 8px !important;
+    font-size: 16px;
+    line-height: 1.3;
+  }
+
+  .harga-box,
+  .harga-wrapper {
+    margin-top: 0 !important;
+  }
+
+  .card {
+    padding: 12px;
+  }
+
+  .produk-img {
+    max-height: 80px;
+    margin: 8px auto;
+  }
+
+  .produk-desc {
+    margin-top: 6px;
+    font-size: 13px;
+  }
+
+  .btn-add-cart {
+    margin-top: 8px;
+    padding: 8px;
+    font-size: 13px;
   }
 }
 

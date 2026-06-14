@@ -212,23 +212,23 @@ $this->title = 'Profil Saya';
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-
-                <table class="cart-table" id="itemsTable">
-                    <thead>
-                        <tr>
-                            <th>Nama Produk</th>
-                            <th>Jumlah</th>
-                            <th>Harga</th>
-                            <th>Subtotal</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
+                <div class="table-responsive">
+                    <table class="cart-table" id="itemsTable">
+                        <thead>
+                            <tr>
+                                <th>Nama Produk</th>
+                                <th>Jumlah</th>
+                                <th>Harga</th>
+                                <th>Subtotal</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
                 <div id="order-summary">
                 </div>
                 <div class="text-end mt-3" id="repay-container">
                 </div>
-
             </div>
         </div>
     </div>

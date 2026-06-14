@@ -70,7 +70,7 @@ $this->title = "Ajukan Permintaan Produk";
         <div class="btn-group-custom">
 
             <?= Html::submitButton(
-                'Kirim Request',
+                'Kirim',
                 ['class' => 'btn btn-primary']
             ) ?>
 

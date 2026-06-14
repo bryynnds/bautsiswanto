@@ -144,25 +144,31 @@ $this->title = 'Dashboard Admin';
 
         <h3>Daftar Produk</h3>
         <div class="dashboard-card" id="produk-section">
+            <?php Pjax::begin([
+                'id' => 'produk-grid',
+                'enablePushState' => false,
+                'timeout' => 0,
+            ]); ?>
             <div class="table-responsive" id="produkTable">
-                <?php Pjax::begin([
-                    'id' => 'produk-grid',
-                    'enablePushState' => false,
-                ]); ?>
+
                 <?= GridView::widget([
+                    'layout' => '{items}',
                     'summary' => false,
                     'dataProvider' => $produkDataProvider,
+                    'options' => [
+                        'class' => 'gridview-wrapper'
+                    ],
                     'tableOptions' => ['class' => 'cart-table'],
                     'columns' => [
                         [
                             'label' => 'Gambar',
                             'format' => 'raw',
                             'value' => function ($model) {
-                                return Html::img(
-                                    Yii::getAlias('@web') . '/' . $model->image,
-                                    ['class' => 'cart-img']
-                                );
-                            }
+                                    return Html::img(
+                                        Yii::getAlias('@web') . '/' . $model->image,
+                                        ['class' => 'cart-img']
+                                    );
+                                }
                         ],
                         'title',
                         'description',
@@ -170,27 +176,42 @@ $this->title = 'Dashboard Admin';
                             'label' => 'Harga',
                             'format' => 'raw',
                             'value' => function ($model) {
-                                return
-                                    '<p>Kiloan: Rp ' . number_format($model->harga_kg, 0, ',', '.') . '</p>' .
-                                    '<p>Bijian : Rp ' . number_format($model->harga_bijian, 0, ',', '.') . '</p>';
-                            }
+                                    return
+                                        '<p>Kiloan: Rp ' . number_format($model->harga_kg, 0, ',', '.') . '</p>' .
+                                        '<p>Bijian : Rp ' . number_format($model->harga_bijian, 0, ',', '.') . '</p>';
+                                }
                         ],
                     ],
                 ]); ?>
-                <?php Pjax::end(); ?>
+
             </div>
+            <div class="pagination-wrapper produk-pagination">
+                <?= \yii\widgets\LinkPager::widget([
+                    'pagination' => $produkDataProvider->pagination,
+                    'linkOptions' => [
+                        'data-pjax' => 1,
+                    ],
+                ]) ?>
+            </div>
+            <?php Pjax::end(); ?>
         </div>
 
 
         <h3>Daftar Pesanan</h3>
         <div class="dashboard-card" id="order-section">
+            <?php Pjax::begin([
+                'id' => 'order-grid',
+                'enablePushState' => false,
+                'timeout' => 0,
+            ]); ?>
             <div class="table-responsive" id="orderTable">
-                <?php Pjax::begin([
-                    'id' => 'order-grid',
-                    'enablePushState' => false,
-                ]); ?>
+
                 <?= GridView::widget([
                     'summary' => false,
+                    'layout' => '{items}',
+                    'options' => [
+                        'class' => 'gridview-wrapper'
+                    ],
                     'dataProvider' => $orderDataProvider,
                     'tableOptions' => ['class' => 'cart-table'],
                     'columns' => [
@@ -202,14 +223,25 @@ $this->title = 'Dashboard Admin';
                         [
                             'attribute' => 'total',
                             'value' => function ($model) {
-                                return 'Rp ' . number_format($model->total, 0, ',', '.');
-                            }
+                                    return 'Rp ' . number_format($model->total, 0, ',', '.');
+                                }
                         ],
                         'created_at',
                     ],
                 ]); ?>
-                <?php Pjax::end(); ?>
+
             </div>
+
+            <div class="pagination-wrapper order-pagination">
+                <?= \yii\widgets\LinkPager::widget([
+                    'pagination' => $orderDataProvider->pagination,
+                    'linkOptions' => [
+                        'data-pjax' => 1,
+                    ],
+                ]) ?>
+            </div>
+
+            <?php Pjax::end(); ?>
         </div>
 
         <!-- Grafik -->
@@ -315,6 +347,14 @@ $this->title = 'Dashboard Admin';
                 }
             }
         }
+    });
+
+    $(document).on('pjax:send', function () {
+        console.log('PJAX SEND');
+    });
+
+    $(document).on('pjax:success', function () {
+        console.log('PJAX SUCCESS');
     });
 
     $(document).on(
