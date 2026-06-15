@@ -27,6 +27,30 @@ $this->title = 'Admin - Ubah Keunggulan';
             'class' => 'form-control'
         ]) ?>
 
+        <?= $form->field($model, 'icon')->textInput([
+            'placeholder' => 'Contoh: fa-solid fa-award',
+            'class' => 'form-control'
+        ]) ?>
+
+        <div class="alert alert-info mt-3">
+            <h6 class="mb-2">
+                <i class="fa-solid fa-circle-info"></i>
+                Cara Menentukan Icon
+            </h6>
+
+            <ol class="mb-0">
+                <li>
+                    Kunjungi
+                    <a href="https://fontawesome.com/icons" target="_blank">
+                        Font Awesome Icons
+                    </a>
+                </li>
+                <li>Cari icon yang diinginkan.</li>
+                <li>Salin class icon, misalnya <code>fa-solid fa-award</code>.</li>
+                <li>Masukkan class tersebut ke kolom Icon dan simpan.</li>
+            </ol>
+        </div>
+
         <div class="mt-4">
             <?= Html::submitButton('Simpan Perubahan', [
                 'class' => 'btn btn-primary me-2'

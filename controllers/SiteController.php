@@ -75,8 +75,6 @@ class SiteController extends Controller
         $hero = HomepageHero::find()->one(); // karena hanya 1 baris
         $produks = HomepageProduk::find()->all();
         $keunggulans = HomepageKeunggulan::find()->all();
-        $testimonis = HomepageTestimoni::find()->all();
-        $promos = HomepagePromo::find()->all();
 
         if (Yii::$app->request->get('success')) {
             Yii::$app->session->setFlash('success', 'Pembayaran berhasil!');

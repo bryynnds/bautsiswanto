@@ -843,6 +843,18 @@ html {
   margin-top: 20px;
 }
 
+.qty {
+  width: 70px;
+  text-align: center;
+}
+
+.qty-control .qty {
+  width: 70px;
+  text-align: center;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+}
+
 .wa-alert-content strong {
   display: block;
   margin-bottom: 3px;

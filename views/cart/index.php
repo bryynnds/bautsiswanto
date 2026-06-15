@@ -91,7 +91,7 @@ $csrf = Yii::$app->request->csrfToken;
                                 <td>
                                     <div class="qty-control">
                                         <button class="btn-qty minus">-</button>
-                                        <input type="text" class="qty" value="<?= (int) $item->jumlah ?>" readonly>
+                                        <input type="number" class="qty" min="1" value="<?= (int) $item->jumlah ?>">
                                         <button class="btn-qty plus">+</button>
                                     </div>
                                 </td>
@@ -198,6 +198,55 @@ $(document).on('click', '.plus, .minus', function(e){
             location.reload();
         }
     });
+});
+
+$(document).on('input', '.qty', function(){
+
+    var row = $(this).closest('tr');
+    var qtyInput = $(this);
+
+    var qty = parseInt(qtyInput.val());
+
+    if (isNaN(qty) || qty < 1) {
+        qty = 1;
+        qtyInput.val(1);
+    }
+
+    $.ajax({
+        url: '{$updateUrl}',
+        method: 'POST',
+        dataType: 'json',
+        data: {
+            id: row.data('id'),
+            qty: qty,
+            _csrf: '{$csrf}'
+        },
+        success: function(res) {
+
+            if(res.success){
+
+                row.find('.subtotal')
+                    .text(formatRupiah(res.subtotal));
+
+                $('#grand-total')
+                    .text(formatRupiah(res.grandTotal));
+
+                $('#grand-weight')
+                    .text(res.grandWeight + ' gram');
+
+            } else {
+
+                alert('Gagal update jumlah');
+                location.reload();
+            }
+        },
+
+        error: function(){
+            alert('Terjadi error server');
+            location.reload();
+        }
+    });
+
 });
 
 $(document).on('change', '.satuan-select', function(){

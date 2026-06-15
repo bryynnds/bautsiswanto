@@ -26,7 +26,7 @@ class HomepageKeunggulan extends ActiveRecord
         return [
             'title' => 'Keunggulan',
             'subtitle' => 'Deskripsi',
-            'icon' => 'Icon Font Awesome',
+            'icon' => 'Icon',
         ];
     }
 }
