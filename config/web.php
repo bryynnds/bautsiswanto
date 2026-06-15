@@ -16,6 +16,10 @@ $config = [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'X6zwAQUTiHbdzTUxHNXI_xVvwx0QAf4S',
         ],
+        'whatsapp' => [
+            'class' => 'app\components\Whatsapp',
+            'token' => 'pAeFi7468aNRqhMLf33Z',
+        ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],

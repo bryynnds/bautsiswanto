@@ -6,6 +6,7 @@ use Yii;
 use yii\web\Controller;
 use yii\data\ActiveDataProvider;
 use app\models\HomepageProduk;
+use app\models\Notification;
 use app\models\Order;
 use app\models\OrderItems;
 use app\models\User;
@@ -434,6 +435,53 @@ class AdminController extends Controller
         $order->tracking_number = $resi;
 
         if ($order->save(false)) {
+
+            $notif = new Notification();
+            $notif->user_id = $order->user_id;
+            $notif->title = 'Pesanan Dikirim';
+            $notif->message =
+                'Pesanan #' . $order->id .
+                ' telah dikirim. Nomor resi: ' .
+                $order->tracking_number;
+            $notif->is_read = 0;
+            $notif->save(false);
+
+            $pesan =
+                "📦 PESANAN DIKIRIM\n\n" .
+
+                "Halo {$order->nama},\n\n" .
+
+                "Pesanan Anda telah dikirim.\n\n" .
+
+                "Nomor Pesanan : #{$order->id}\n" .
+                "No. Resi : {$order->tracking_number}\n" .
+                "Kurir : " . strtoupper($order->courier) . "\n\n" .
+
+                "Silakan simpan nomor resi untuk melacak pengiriman.\n\n" .
+
+                "Terima kasih telah berbelanja di Baut Siswanto 🔩";
+
+            $nomor = preg_replace('/[^0-9]/', '', $order->no_hp);
+
+            if (substr($nomor, 0, 1) == '0') {
+                $nomor = '62' . substr($nomor, 1);
+            }
+
+            try {
+
+                Yii::$app->whatsapp->send(
+                    $nomor,
+                    $pesan
+                );
+
+            } catch (\Exception $e) {
+
+                Yii::error(
+                    'Gagal kirim WA: ' . $e->getMessage(),
+                    'whatsapp'
+                );
+
+            }
 
             return [
                 'success' => true

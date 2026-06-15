@@ -174,14 +174,45 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
         <div style="
     padding:15px;
     border-bottom:1px solid #eee;
-    font-weight:600;
-    font-size:16px;
     background:#f8f9fa;
     border:1px solid #e5e7eb;
     border-radius:14px 14px 0 0;
-    overflow:hidden;
 ">
-    Notifikasi
+
+    <div style="
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+    ">
+
+        <span style="
+            font-weight:600;
+            font-size:16px;
+        ">
+            Notifikasi
+        </span>
+
+        ' . ($unreadCount > 0 ? '
+
+        <button
+            id="markAllReadBtn"
+            type="button"
+            style="
+                border:none;
+                background:none;
+                color:#2563eb;
+                font-size:12px;
+                cursor:pointer;
+                font-weight:600;
+            "
+        >
+            Tandai Semua Dibaca
+        </button>
+
+        ' : '') . '
+
+    </div>
+
 </div>
 
         ' .
@@ -206,8 +237,10 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
                         return \yii\helpers\Html::a(
 
                             '
-        <div style="
-            padding:14px 16px;
+        <div
+    data-unread="' . ($notif->is_read ? '0' : '1') . '"
+    style="
+        padding:14px 16px;
             border-bottom:1px solid #f1f1f1;
             background:' . $bgColor . ';
             transition:0.2s;
@@ -241,7 +274,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
         </div>
         ',
 
-                            ['/produk/index'],
+                            ['/notification/index'],
 
                             [
                                 'style' => '
@@ -259,7 +292,28 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
                         );
 
                     }, $notifications))
-                )
+                ) . '
+
+<div style="
+    padding:12px;
+    text-align:center;
+    border-top:1px solid #eee;
+    background:#fafafa;
+">
+
+    <a href="' . \yii\helpers\Url::to(['/notification/index']) . '"
+       style="
+           text-decoration:none;
+           color:#2563eb;
+           font-size:13px;
+           font-weight:600;
+       ">
+        Lihat Semua Notifikasi →
+    </a>
+
+</div>
+
+'
 
                 . '
 
@@ -460,12 +514,6 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
                             ? "none"
                             : "block";
 
-                    const notifBadge =
-                        document.getElementById("notifBadge");
-
-                    if (notifBadge) {
-                        notifBadge.remove();
-                    }
 
                 });
 
@@ -477,6 +525,61 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
                     ) {
                         notifMenu.style.display = "none";
                     }
+
+                });
+
+            }
+
+            const markAllReadBtn =
+                document.getElementById("markAllReadBtn");
+
+            if (markAllReadBtn) {
+
+                markAllReadBtn.addEventListener("click", function () {
+
+                    fetch("<?= \yii\helpers\Url::to(['/notification/read-all']) ?>", {
+
+                        method: "POST",
+
+                        headers: {
+                            "X-CSRF-Token":
+                                yii.getCsrfToken()
+                        }
+
+                    })
+
+                        .then(response => response.json())
+
+                        .then(data => {
+
+                            if (data.success) {
+
+                                const badge =
+                                    document.getElementById("notifBadge");
+
+                                if (badge) {
+                                    badge.remove();
+                                }
+
+                                markAllReadBtn.remove();
+
+                                document
+                                    .querySelectorAll("#notifMenu [data-unread='1']")
+                                    .forEach(item => {
+
+                                        item.style.background =
+                                            "#ffffff";
+
+                                        item.setAttribute(
+                                            "data-unread",
+                                            "0"
+                                        );
+
+                                    });
+
+                            }
+
+                        });
 
                 });
 

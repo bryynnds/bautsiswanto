@@ -6,6 +6,7 @@ use Yii;
 use yii\web\Controller;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
+use yii\data\Pagination;
 
 use app\models\Notification;
 
@@ -36,23 +37,28 @@ class NotificationController extends Controller
 
     public function actionIndex()
     {
-        $notifications = Notification::find()
+        $query = Notification::find()
             ->where([
                 'user_id' => Yii::$app->user->id
             ])
-            ->orderBy(['id' => SORT_DESC])
-            ->all();
+            ->orderBy(['id' => SORT_DESC]);
 
-        Notification::updateAll(
-            ['is_read' => 1],
-            [
-                'user_id' => Yii::$app->user->id,
-                'is_read' => 0
-            ]
-        );
+        $totalNotifications = $query->count();
+
+        $pages = new Pagination([
+            'totalCount' => $query->count(),
+            'pageSize' => 5,
+        ]);
+
+        $notifications = $query
+            ->offset($pages->offset)
+            ->limit($pages->limit)
+            ->all();
 
         return $this->render('/notification/index', [
             'notifications' => $notifications,
+            'pages' => $pages,
+            'totalNotifications' => $totalNotifications,
         ]);
     }
 

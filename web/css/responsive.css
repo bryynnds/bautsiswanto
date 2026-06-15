@@ -299,11 +299,6 @@ canvas {
     width: 100%;
   }
 
-  .request-info {
-    text-align: center;
-    font-size: 14px;
-  }
-
   .keranjang {
     padding: 15px;
   }
@@ -751,6 +746,7 @@ canvas {
   .request-info {
     text-align: center;
     font-size: 14px;
+    margin-top: 15px;
   }
 
   /* Tabel */
@@ -1276,11 +1272,7 @@ canvas {
     width: 100%;
   }
 
-  /* Info */
-  .request-info {
-    text-align: center;
-    font-size: 14px;
-  }
+  /* Info *
 
   #orderTable .cart-table,
   #produkTable .cart-table,
