@@ -120,7 +120,7 @@ $this->title = 'Profil Saya';
     <!--  CARD RIWAYAT PEMESANAN -->
     <div class="dashboard-card">
         <h3>Riwayat Pemesanan</h3>
-        <div class=" table-responsive mt-4">
+        <div class="table-responsive mt-4">
             <table class="cart-table">
                 <thead>
                     <tr>
@@ -218,17 +218,16 @@ $this->title = 'Profil Saya';
 
 <!-- Modal Detail Pesanan -->
 <div class="modal fade" id="detailModal" tabindex="-1">
-    <div class="  modal-dialog modal-lg">
-        <div cla ss="modal-content">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Detail Pesanan</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <div class="    table-responsive">
+                <div class="table-responsive">
                     <table class="cart-table" id="itemsTable">
                         <thead>
-
                             <tr>
                                 <th>Nama Produk</th>
                                 <th>Jumlah</th>

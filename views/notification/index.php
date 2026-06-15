@@ -24,7 +24,7 @@ $this->title = 'Notifikasi';
 
             <?php if (!empty($notifications)): ?>
 
-                <button id="markAllReadBtn" class="btn btn-success mb-3">
+                <button id="markAllReadPageBtn" class="btn btn-success mb-3">
 
                     <i class="bi bi-check2-all"></i>
                     Tandai Semua Dibaca
@@ -124,7 +124,7 @@ $this->title = 'Notifikasi';
 <?php
 
 $this->registerJs("
-$('#markAllReadBtn').click(function() {
+$('#markAllReadPageBtn').click(function() {
 
     $.ajax({
 

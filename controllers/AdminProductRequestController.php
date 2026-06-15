@@ -96,14 +96,14 @@ class AdminProductRequestController extends Controller
         $oldStatus = $model->status;
 
         if (!$model) {
-            throw new NotFoundHttpException('Request tidak ditemukan.');
+            throw new NotFoundHttpException('Permintaan tidak ditemukan.');
         }
 
         if ($model->load(Yii::$app->request->post())) {
 
             if ($model->save()) {
 
-                $title = 'Update Request Produk';
+                $title = 'Update Permintaan Produk';
 
                 $message = '';
 
@@ -112,7 +112,7 @@ class AdminProductRequestController extends Controller
                     $oldStatus != 'diproses'
                 ) {
 
-                    $message = 'Request produk "' . $model->nama_produk . '" sedang diproses oleh admin.';
+                    $message = 'Permintaan produk "' . $model->nama_produk . '" sedang diproses oleh admin.';
 
                     if (
                         $model->user &&
@@ -120,15 +120,13 @@ class AdminProductRequestController extends Controller
                     ) {
 
                         $waMessage =
-                            "🔩 REQUEST PRODUK DIPROSES\n\n" .
+                            "🔩 PERMINTAAN PRODUK DIPROSES\n\n" .
 
                             "Halo {$model->user->username},\n\n" .
 
                             "Permintaan produk berikut sedang diproses oleh tim Baut Siswanto.\n\n" .
 
-                            "Produk : {$model->nama_produk}\n" .
-
-                            "Jenis : " . ($model->jenisProduk->nama ?? '-') . "\n\n" .
+                            "Produk : {$model->nama_produk}\n\n" .
 
                             "Kami akan memberi kabar kembali setelah ada hasil pencarian produk.\n\n" .
 
@@ -169,9 +167,7 @@ class AdminProductRequestController extends Controller
 
                             "Produk yang Anda minta sekarang sudah tersedia.\n\n" .
 
-                            "Produk : {$model->nama_produk}\n" .
-
-                            "Jenis : " . ($model->jenisProduk->nama ?? '-') . "\n\n" .
+                            "Produk : {$model->nama_produk}\n\n" .
 
                             "Silakan kunjungi website Baut Siswanto untuk melakukan pemesanan.\n\n" .
 
@@ -198,7 +194,7 @@ class AdminProductRequestController extends Controller
                     $message = 'Produk "' . $model->nama_produk . '" tidak ditemukan di grosir.';
                 } else {
 
-                    $message = 'Status request produk diperbarui.';
+                    $message = 'Status permintaan produk diperbarui.';
                 }
 
                 $notification = new Notification();
@@ -211,7 +207,7 @@ class AdminProductRequestController extends Controller
 
                 Yii::$app->session->setFlash(
                     'success',
-                    'Request berhasil diperbarui.'
+                    'Permintaan berhasil diperbarui.'
                 );
 
                 return $this->redirect(['index']);

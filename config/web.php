@@ -18,7 +18,7 @@ $config = [
         ],
         'whatsapp' => [
             'class' => 'app\components\Whatsapp',
-            'token' => 'pAeFi7468aNRqhMLf33Z',
+            'token' => '2a291Xj6M1ZnRmtRPFTB',
         ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
