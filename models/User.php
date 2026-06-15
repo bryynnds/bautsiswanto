@@ -22,6 +22,14 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return [
             [['username'], 'required'],
+            ['no_hp', 'string', 'max' => 20],
+
+            [
+                'no_hp',
+                'match',
+                'pattern' => '/^[0-9]+$/',
+                'message' => 'Nomor HP hanya boleh berisi angka.'
+            ],
 
             // password lama wajib jika password baru diisi
             [

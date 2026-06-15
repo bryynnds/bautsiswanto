@@ -58,13 +58,6 @@ $this->title = 'Permintaan Produk';
             </form>
         </div>
 
-
-        <?php if (Yii::$app->session->hasFlash('success')): ?>
-            <div class="alert alert-success">
-                <?= Yii::$app->session->getFlash('success') ?>
-            </div>
-        <?php endif; ?>
-
         <div class="request-info">
             Total Permintaan:
             <strong><?= $totalRequests ?></strong>

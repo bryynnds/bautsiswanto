@@ -3,7 +3,7 @@ main > .container {
 }
 
 main {
-  margin-top: 20px;
+  margin-top: 10px;
 }
 
 .custom-navbar {
@@ -819,6 +819,40 @@ html {
 }
 .btn-clear:hover {
   background: #e0a800;
+}
+
+.wa-alert-bar {
+  background: linear-gradient(90deg, #fff3cd, #ffe69c);
+
+  border-top: 1px solid #f5d878;
+  border-bottom: 1px solid #f5d878;
+  margin-top: 20px;
+}
+
+.wa-alert-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 14px 0;
+
+  gap: 20px;
+}
+
+.alert-success {
+  margin-top: 20px;
+}
+
+.wa-alert-content strong {
+  display: block;
+  margin-bottom: 3px;
+
+  color: #7c5a00;
+  font-size: 16px;
+}
+
+.wa-alert-content div {
+  color: #7c5a00;
 }
 
 /* Toast notif */

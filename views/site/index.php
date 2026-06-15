@@ -32,7 +32,7 @@ $dataProvider = new ArrayDataProvider([
       <p>
         <?= $hero->subtitle ?? 'Menyediakan berbagai jenis baut, mur, ring, dan perlengkapan teknik dengan harga kompetitif dan kualitas terpercaya.' ?>
       </p>
-      <a href="#produk" class="btn">Lihat Produk</a>
+      <a href="/produk/index" class="btn">Lihat Produk</a>
     </div>
   </div>
 </section>

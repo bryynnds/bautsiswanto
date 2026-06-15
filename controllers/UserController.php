@@ -122,7 +122,57 @@ class UserController extends Controller
 
             $order->status = 'completed';
 
-            $order->save(false);
+            if ($order->save(false)) {
+
+                $notification = new \app\models\Notification();
+
+                $notification->user_id = $order->user_id;
+
+                $notification->title =
+                    'Pesanan Selesai';
+
+                $notification->message =
+                    'Pesanan #' . $order->id .
+                    ' telah selesai dan diterima.';
+
+                $notification->save();
+
+                if (!empty($order->no_hp)) {
+
+                    $nomor = preg_replace(
+                        '/[^0-9]/',
+                        '',
+                        $order->no_hp
+                    );
+
+                    if (
+                        substr($nomor, 0, 1) == '0'
+                    ) {
+
+                        $nomor =
+                            '62' .
+                            substr($nomor, 1);
+                    }
+
+                    $pesan =
+                        "✅ PESANAN SELESAI\n\n" .
+
+                        "Halo {$order->nama},\n\n" .
+
+                        "Pesanan Anda telah berhasil diterima.\n\n" .
+
+                        "Nomor Pesanan : #{$order->id}\n\n" .
+
+                        "Terima kasih telah berbelanja di Baut Siswanto.\n\n" .
+
+                        "Kami berharap dapat melayani kebutuhan baut dan mur Anda kembali 🔩";
+
+                    Yii::$app->whatsapp->send(
+                        $nomor,
+                        $pesan
+                    );
+                }
+            }
         }
 
         Yii::$app->session->setFlash(

@@ -93,20 +93,34 @@ $this->title = 'Profil Saya';
                 <label><strong>Password</strong></label>
                 <div class="form-control bg-light">******</div>
             </div>
+
+            <div class="col-md-6 mb-3">
+                <label><strong>Email</strong></label>
+                <div class="form-control bg-light">
+                    <?= Html::encode($user->email) ?>
+                </div>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label><strong>Nomor WhatsApp</strong></label>
+                <div class="form-control bg-light">
+                    <?= $user->no_hp ?: 'Belum diisi' ?>
+                </div>
+            </div>
         </div>
 
         <div class="text-center mt-3">
-            <?= Html::a('Ubah Password', ['user/update'], [
+            <?= Html::a('Pengaturan Akun', ['user/update'], [
                 'class' => 'btn btn-primary px-4'
             ]) ?>
         </div>
     </div>
 
 
-    <!-- CARD RIWAYAT PEMESANAN -->
+    <!--  CARD RIWAYAT PEMESANAN -->
     <div class="dashboard-card">
         <h3>Riwayat Pemesanan</h3>
-        <div class="table-responsive mt-4">
+        <div class=" table-responsive mt-4">
             <table class="cart-table">
                 <thead>
                     <tr>
@@ -164,7 +178,6 @@ $this->title = 'Profil Saya';
                                 <button class="btn-detail-order" data-id="<?= $order->id ?>">
                                     Lihat
                                 </button>
-
                                 <?php if ($order->status === 'shipped'): ?>
 
                                     <a href="<?= Url::to([
@@ -205,16 +218,17 @@ $this->title = 'Profil Saya';
 
 <!-- Modal Detail Pesanan -->
 <div class="modal fade" id="detailModal" tabindex="-1">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
+    <div class="  modal-dialog modal-lg">
+        <div cla ss="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Detail Pesanan</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <div class="table-responsive">
+                <div class="    table-responsive">
                     <table class="cart-table" id="itemsTable">
                         <thead>
+
                             <tr>
                                 <th>Nama Produk</th>
                                 <th>Jumlah</th>

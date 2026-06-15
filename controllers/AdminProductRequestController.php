@@ -93,6 +93,7 @@ class AdminProductRequestController extends Controller
     public function actionUpdate($id)
     {
         $model = ProductRequest::findOne($id);
+        $oldStatus = $model->status;
 
         if (!$model) {
             throw new NotFoundHttpException('Request tidak ditemukan.');
@@ -106,12 +107,92 @@ class AdminProductRequestController extends Controller
 
                 $message = '';
 
-                if ($model->status == 'diproses') {
+                if (
+                    $model->status == 'diproses' &&
+                    $oldStatus != 'diproses'
+                ) {
 
                     $message = 'Request produk "' . $model->nama_produk . '" sedang diproses oleh admin.';
-                } elseif ($model->status == 'tersedia') {
+
+                    if (
+                        $model->user &&
+                        !empty($model->user->no_hp)
+                    ) {
+
+                        $waMessage =
+                            "🔩 REQUEST PRODUK DIPROSES\n\n" .
+
+                            "Halo {$model->user->username},\n\n" .
+
+                            "Permintaan produk berikut sedang diproses oleh tim Baut Siswanto.\n\n" .
+
+                            "Produk : {$model->nama_produk}\n" .
+
+                            "Jenis : " . ($model->jenisProduk->nama ?? '-') . "\n\n" .
+
+                            "Kami akan memberi kabar kembali setelah ada hasil pencarian produk.\n\n" .
+
+                            "Terima kasih telah menggunakan layanan Baut Siswanto 🔩";
+
+                        $nomor = preg_replace(
+                            '/[^0-9]/',
+                            '',
+                            $model->user->no_hp
+                        );
+
+                        if (substr($nomor, 0, 1) == '0') {
+
+                            $nomor = '62' . substr($nomor, 1);
+                        }
+
+                        Yii::$app->whatsapp->send(
+                            $nomor,
+                            $waMessage
+                        );
+                    }
+                } elseif (
+                    $model->status == 'tersedia' &&
+                    $oldStatus != 'tersedia'
+                ) {
 
                     $message = 'Produk "' . $model->nama_produk . '" sekarang sudah tersedia.';
+
+                    if (
+                        $model->user &&
+                        !empty($model->user->no_hp)
+                    ) {
+
+                        $waMessage =
+                            "🎉 PRODUK TERSEDIA\n\n" .
+
+                            "Halo {$model->user->username},\n\n" .
+
+                            "Produk yang Anda minta sekarang sudah tersedia.\n\n" .
+
+                            "Produk : {$model->nama_produk}\n" .
+
+                            "Jenis : " . ($model->jenisProduk->nama ?? '-') . "\n\n" .
+
+                            "Silakan kunjungi website Baut Siswanto untuk melakukan pemesanan.\n\n" .
+
+                            "Terima kasih telah menggunakan layanan Baut Siswanto 🔩";
+
+                        $nomor = preg_replace(
+                            '/[^0-9]/',
+                            '',
+                            $model->user->no_hp
+                        );
+
+                        if (substr($nomor, 0, 1) == '0') {
+
+                            $nomor = '62' . substr($nomor, 1);
+                        }
+
+                        Yii::$app->whatsapp->send(
+                            $nomor,
+                            $waMessage
+                        );
+                    }
                 } elseif ($model->status == 'tidak_ditemukan') {
 
                     $message = 'Produk "' . $model->nama_produk . '" tidak ditemukan di grosir.';

@@ -372,6 +372,49 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
                 <?= Breadcrumbs::widget(['links' => $this->params['breadcrumbs']]) ?>
             <?php endif ?>
             <?= Alert::widget() ?>
+            <?php
+
+            if (
+                !Yii::$app->user->isGuest &&
+                Yii::$app->user->identity->role === 'user' &&
+                empty(Yii::$app->user->identity->no_hp)
+            ):
+
+                ?>
+
+                <div class="wa-alert-bar">
+
+                    <div class="container">
+
+                        <div class="wa-alert-content">
+
+                            <div>
+
+                                <strong>
+                                    <i class="bi bi-whatsapp"></i>
+                                    Lengkapi Nomor WhatsApp
+                                </strong>
+
+                                <div>
+                                    Nomor WhatsApp diperlukan untuk menerima
+                                    notifikasi pengiriman pesanan dan informasi produk.
+                                </div>
+
+                            </div>
+
+                            <a href="<?= \yii\helpers\Url::to(['/user/update']) ?>" class="btn btn-warning">
+
+                                Lengkapi Sekarang
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            <?php endif; ?>
             <?= $content ?>
         </div>
     </main>
