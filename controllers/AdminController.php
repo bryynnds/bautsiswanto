@@ -21,7 +21,7 @@ class AdminController extends Controller
         $produkDataProvider = new ActiveDataProvider([
             'query' => HomepageProduk::find()->orderBy(['id' => SORT_DESC]),
             'pagination' => [
-                'pageSize' => 3,
+                'pageSize' => 5,
                 'pageParam' => 'produk-page'
             ],
         ]);
@@ -29,7 +29,7 @@ class AdminController extends Controller
         $orderDataProvider = new ActiveDataProvider([
             'query' => Order::find()->orderBy(['created_at' => SORT_DESC]),
             'pagination' => [
-                'pageSize' => 3,
+                'pageSize' => 5,
                 'pageParam' => 'order-page'
             ],
 

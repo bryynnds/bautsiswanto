@@ -111,6 +111,7 @@ $this->title = 'Notifikasi';
 
                 <?= LinkPager::widget([
                     'pagination' => $pages,
+                    'maxButtonCount' => 3,
                 ]) ?>
 
             </div>

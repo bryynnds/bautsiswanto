@@ -236,6 +236,7 @@ $this->title = 'Laporan Penjualan';
 
             <?= LinkPager::widget([
                 'pagination' => $dataProvider->pagination,
+                'maxButtonCount' => 3,
             ]) ?>
 
         </div>

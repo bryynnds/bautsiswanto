@@ -188,6 +188,7 @@ $this->title = 'Dashboard Admin';
             <div class="pagination-wrapper produk-pagination">
                 <?= \yii\widgets\LinkPager::widget([
                     'pagination' => $produkDataProvider->pagination,
+                    'maxButtonCount' => 3,
                     'linkOptions' => [
                         'data-pjax' => 1,
                     ],
@@ -235,6 +236,7 @@ $this->title = 'Dashboard Admin';
             <div class="pagination-wrapper order-pagination">
                 <?= \yii\widgets\LinkPager::widget([
                     'pagination' => $orderDataProvider->pagination,
+                    'maxButtonCount' => 3,
                     'linkOptions' => [
                         'data-pjax' => 1,
                     ],

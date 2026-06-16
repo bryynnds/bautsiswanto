@@ -71,7 +71,7 @@ class ProdukController extends Controller
 
         $pages = new Pagination([
             'totalCount' => $totalProduks,
-            'pageSize' => 3,
+            'pageSize' => 8,
         ]);
 
         $produks = $query

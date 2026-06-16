@@ -98,6 +98,7 @@ use yii\widgets\LinkPager;
 
     <?= LinkPager::widget([
         'pagination' => $pages,
+        'maxButtonCount' => 3,
     ]) ?>
 
 </div>

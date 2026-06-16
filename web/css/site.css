@@ -287,7 +287,7 @@ section.promo h2 {
 }
 .card {
   background: #fff;
-  flex: 0 1 calc(33.333% - 20px); /* max 3 kolom */
+  flex: 0 1 calc(25% - 20px); /* max 4 kolom */
   max-width: 300px; /* biar gak terlalu gede */
   border-radius: 15px;
   padding: 20px;

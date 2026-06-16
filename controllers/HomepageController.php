@@ -439,7 +439,7 @@ class HomepageController extends Controller
 
         $pages = new Pagination([
             'totalCount' => $totalProduk,
-            'pageSize' => 3,
+            'pageSize' => 8,
         ]);
 
         $produk = $query
