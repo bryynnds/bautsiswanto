@@ -93,6 +93,7 @@ class AdminProductRequestController extends Controller
     public function actionUpdate($id)
     {
         $model = ProductRequest::findOne($id);
+        $urlProduk = Yii::$app->urlManager->createAbsoluteUrl(['/produk/index']);
         $oldStatus = $model->status;
 
         if (!$model) {
@@ -169,7 +170,9 @@ class AdminProductRequestController extends Controller
 
                             "Produk : {$model->nama_produk}\n\n" .
 
-                            "Silakan kunjungi website Baut Siswanto untuk melakukan pemesanan.\n\n" .
+                            "Silakan lihat dan pesan produk melalui link berikut:\n" .
+
+                            "{$urlProduk}\n\n" .
 
                             "Terima kasih telah menggunakan layanan Baut Siswanto 🔩";
 
@@ -189,9 +192,28 @@ class AdminProductRequestController extends Controller
                             $waMessage
                         );
                     }
-                } elseif ($model->status == 'tidak_ditemukan') {
+                } elseif ($model->status == 'tidak_ditemukan' && $oldStatus != 'tidak_ditemukan') {
 
                     $message = 'Produk "' . $model->nama_produk . '" tidak ditemukan di grosir.';
+
+                    if ($model->user && !empty($model->user->no_hp)) {
+
+                        $waMessage =
+                            "📢 INFORMASI PERMINTAAN PRODUK\n\n" .
+                            "Halo {$model->user->username},\n\n" .
+                            "Mohon maaf, setelah kami lakukan pengecekan, produk yang Anda minta saat ini belum tersedia di grosir.\n\n" .
+                            "Produk: {$model->nama_produk}\n\n" .
+                            "Anda dapat mencoba mengajukan permintaan produk lain atau menghubungi admin untuk informasi lebih lanjut.\n\n" .
+                            "Terima kasih telah menggunakan layanan Baut Siswanto 🔩";
+
+                        $nomor = preg_replace('/[^0-9]/', '', $model->user->no_hp);
+
+                        if (substr($nomor, 0, 1) == '0') {
+                            $nomor = '62' . substr($nomor, 1);
+                        }
+
+                        Yii::$app->whatsapp->send($nomor, $waMessage);
+                    }
                 } else {
 
                     $message = 'Status permintaan produk diperbarui.';

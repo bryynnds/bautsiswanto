@@ -65,6 +65,7 @@ $config = [
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
+            // 'hostInfo' => 'https://bautsiswanto.free.nf',
             'rules' => [
                 'admin/produk' => 'homepage/admin-produk',
 
