@@ -94,23 +94,35 @@ $addUrl = \yii\helpers\Url::to(['cart/add']);
 $cartUrl = \yii\helpers\Url::to(['cart/index']);
 $js = <<<JS
 $(document).on('click', '.btn-add-cart', function() {
+
     let produkId = $(this).data('id');
 
-    $.ajax({
-        url: '/cart/add',
-        type: 'POST',
-        data: { id: produkId, _csrf: '{$csrf}' },
-        success: function(response) {
+    $.post('$addUrl', {
+        produk_id: produkId,
+        _csrf: '$csrf'
+    }, function(res) {
+
+        if(res.success) {
+
+            $('#cart-count').text(res.count);
+
             let toastEl = document.getElementById('cartToast');
+
             if (toastEl) {
-                let toast = new bootstrap.Toast(toastEl, { delay: 2000 });
+                let toast = new bootstrap.Toast(toastEl, {
+                    delay: 2000
+                });
                 toast.show();
             }
-        },
-        error: function() {
-            alert("Silahkan login terlebih dahulu untuk menambahkan ke keranjang.");
+
+        } else {
+
+            alert('Gagal menambahkan produk ke keranjang');
+
         }
+
     });
+
 });
 
 $(document).on(
@@ -134,15 +146,6 @@ $(document).on(
 
     }
 );
-
-$(".btn-add-cart").click(function() {
-    var produkId = $(this).data("id");
-    $.post("$addUrl", {produk_id: produkId, _csrf: "$csrf"}, function(res) {
-        if(res.success) {
-            $("#cart-count").text(res.count);
-        }
-    });
-});
 
 $('#kategoriFilter').change(function() {
     loadProduk();
