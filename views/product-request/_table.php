@@ -38,9 +38,27 @@ use yii\widgets\LinkPager;
             <tr class="request-row">
 
                 <td data-label="Produk">
+
                     <strong>
                         <?= Html::encode($request->nama_produk) ?>
                     </strong>
+
+                    <?php if (
+                        $request->status == 'tersedia' &&
+                        !empty($request->nama_produk_sistem)
+                    ): ?>
+
+                        <div class="mt-1 text-success">
+
+                            Nama di Daftar Produk :
+                            <strong>
+                                <?= Html::encode($request->nama_produk_sistem) ?>
+                            </strong>
+
+                        </div>
+
+                    <?php endif; ?>
+
                 </td>
 
                 <td data-label="Jenis">

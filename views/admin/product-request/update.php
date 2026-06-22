@@ -83,6 +83,14 @@ $this->title = 'Proses Permintaan Produk';
             'tidak_ditemukan' => 'Tidak Ditemukan',
         ]) ?>
 
+        <div id="produk-sistem-wrapper" style="display:none;">
+
+            <?= $form->field($model, 'nama_produk_sistem')->textInput([
+                'placeholder' => 'Contoh: Baut Hex M5 x 90'
+            ]) ?>
+
+        </div>
+
         <div class="btn-group-custom">
 
             <?= Html::submitButton(
@@ -190,3 +198,23 @@ $this->title = 'Proses Permintaan Produk';
 
     }
 </style>
+
+<?php
+$this->registerJs("
+function toggleProdukSistem() {
+
+    if ($('#productrequest-status').val() === 'tersedia') {
+        $('#produk-sistem-wrapper').show();
+    } else {
+        $('#produk-sistem-wrapper').hide();
+    }
+
+}
+
+toggleProdukSistem();
+
+$('#productrequest-status').on('change', function() {
+    toggleProdukSistem();
+});
+");
+?>

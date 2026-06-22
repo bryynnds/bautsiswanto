@@ -161,6 +161,8 @@ class AdminProductRequestController extends Controller
                         !empty($model->user->no_hp)
                     ) {
 
+                        $namaProdukSistem = $model->nama_produk_sistem;
+
                         $waMessage =
                             "🎉 PRODUK TERSEDIA\n\n" .
 
@@ -168,7 +170,9 @@ class AdminProductRequestController extends Controller
 
                             "Produk yang Anda minta sekarang sudah tersedia.\n\n" .
 
-                            "Produk : {$model->nama_produk}\n\n" .
+                            "Produk : {$model->nama_produk}\n" .
+
+                            "Nama produk di sistem :{$namaProdukSistem}\n\n" .
 
                             "Silakan lihat dan pesan produk melalui link berikut:\n" .
 

@@ -91,7 +91,7 @@ $dataProvider = new ArrayDataProvider([
 
 <!-- Keunggulan -->
 <section class="keunggulan loading mb-4" id="keunggulan">
-  <h2>Mengapa Harus Memilih CuanKonek.id?</h2>
+  <h2>Mengapa Harus Memilih Baut Siswanto?</h2>
   <div class="keunggulan-grid">
     <?php foreach ($keunggulans as $k): ?>
       <div class="point">

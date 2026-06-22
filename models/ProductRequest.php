@@ -32,6 +32,19 @@ class ProductRequest extends ActiveRecord
             [['material'], 'string', 'max' => 100],
 
             [['status'], 'string'],
+
+            [['nama_produk_sistem'], 'string', 'max' => 255],
+
+            [
+                'nama_produk_sistem',
+                'required',
+                'when' => function ($model) {
+                    return $model->status == 'tersedia';
+                },
+                'whenClient' => "function () {
+        return $('#productrequest-status').val() == 'tersedia';
+    }"
+            ],
         ];
     }
 
@@ -45,6 +58,7 @@ class ProductRequest extends ActiveRecord
             'foto' => 'Foto',
             'status' => 'Status',
             'admin_note' => 'Catatan Admin',
+            'nama_produk_sistem' => 'Nama Produk di Sistem',
         ];
     }
 
