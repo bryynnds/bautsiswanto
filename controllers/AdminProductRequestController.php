@@ -63,7 +63,7 @@ class AdminProductRequestController extends Controller
 
         $pages = new Pagination([
             'totalCount' => $countQuery->count(),
-            'pageSize' => 2,
+            'pageSize' => 5,
         ]);
 
         $requests = $query

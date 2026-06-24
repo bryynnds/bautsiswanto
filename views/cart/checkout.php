@@ -61,6 +61,7 @@ $this->title = 'Checkout';
                 <div class="col-md-6">
                     <div class="checkout-card">
                         <?php $form = ActiveForm::begin([
+                            'id' => 'checkout-form',
                             'action' => ['/checkout/process'], // sesuaikan route jika beda
                             'method' => 'post',
                         ]); ?>
@@ -86,11 +87,11 @@ $this->title = 'Checkout';
 
                         <div class="mb-3">
                             <label class="form-label">
-                                Cari Tujuan Pengiriman
+                                Cari Tujuan Pengiriman (Kelurahan / Desa / Kecamatan)
                             </label>
 
                             <input type="text" id="search-destination" class="form-control"
-                                placeholder="Contoh: Solo, Surabaya, Jakarta">
+                                placeholder="Contoh: Baturan, Colomadu, Karanganyar, Jawa Tengah">
 
                             <div id="destination-results" class="list-group mt-2">
                             </div>
@@ -107,6 +108,8 @@ $this->title = 'Checkout';
                                 <option value="Transfer Bank">Transfer Bank</option>
                             </select>
                         </div>
+
+                        <div id="checkout-error" class="alert alert-danger d-none"></div>
 
                         <button type="submit" class="btn-checkout btn btn-primary">Bayar</button>
 
@@ -305,6 +308,39 @@ $('#search-destination').css({
             }
         }
     });
+});
+
+$('#checkout-form').on('submit', function(e){
+
+    let error = '';
+
+    if($('input[name="nama"]').val().trim() === ''){
+        error = 'Nama lengkap wajib diisi';
+    }
+    else if($('textarea[name="alamat"]').val().trim() === ''){
+        error = 'Alamat wajib diisi';
+    }
+    else if($('#no_hp').val().trim() === ''){
+        error = 'Nomor HP wajib diisi';
+    }
+    else if($('#destination-id').val() === ''){
+        error = 'Tujuan pengiriman wajib dipilih';
+    }
+
+    if(error !== ''){
+
+        e.preventDefault();
+
+        $('#checkout-error')
+            .removeClass('d-none')
+            .text(error);
+
+        $('html, body').animate({
+            scrollTop: $('#checkout-error').offset().top - 100
+        }, 300);
+
+        return false;
+    }
 });
 
 JS;

@@ -49,7 +49,7 @@ use yii\widgets\LinkPager;
                 [
                     'class' => 'btn-hapus',
                     'data' => [
-                        'confirm' => 'Yakin ingin menghapus produk ini?',
+                        'confirm' => 'Yakin ingin hapus produk ini?',
                         'method' => 'post',
                     ],
                 ]

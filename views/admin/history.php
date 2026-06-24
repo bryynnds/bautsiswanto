@@ -27,29 +27,7 @@ $this->title = 'Riwayat Belanja';
 
                 <input type="text" id="searchHistory" class="filter-input" placeholder="Cari produk atau nama...">
 
-                <select id="bulanFilter" class="filter-select">
 
-                    <option value="">
-                        Semua Bulan
-                    </option>
-
-                    <?php for ($i = 1; $i <= 12; $i++): ?>
-
-                        <option value="<?= sprintf('%02d', $i) ?>">
-                            <?= date('F', mktime(0, 0, 0, $i, 1)) ?>
-                        </option>
-
-                    <?php endfor; ?>
-
-                </select>
-
-                <select id="tahunFilter" class="filter-select">
-
-                    <option value="">
-                        Semua Tahun
-                    </option>
-
-                </select>
 
                 <select id="sortFilter" class="filter-select">
 
@@ -62,6 +40,12 @@ $this->title = 'Riwayat Belanja';
                     </option>
 
                 </select>
+
+                <?= Html::a(
+                    'Reset',
+                    ['admin/history'],
+                    ['class' => 'btn btn-secondary']
+                ) ?>
 
             </div>
 

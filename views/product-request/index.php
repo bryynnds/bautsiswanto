@@ -69,6 +69,12 @@ $this->title = "Permintaan Produk";
                     </option>
 
                 </select>
+
+                <?= Html::a(
+                    'Reset',
+                    ['product-request/index'],
+                    ['class' => 'btn btn-secondary']
+                ) ?>
             </div>
 
         </form>

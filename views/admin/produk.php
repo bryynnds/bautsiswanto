@@ -87,6 +87,12 @@ $this->title = 'Daftar Produk';
 
             </select>
 
+            <?= Html::a(
+                'Reset',
+                ['admin/produk'],
+                ['class' => 'btn btn-secondary']
+            ) ?>
+
         </div>
 
     </form>

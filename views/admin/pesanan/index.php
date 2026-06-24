@@ -42,45 +42,9 @@ $this->title = 'Daftar Pesanan';
 
                 </select>
 
-                <select name="bulan" id="bulanFilter" class="filter-select">
 
-                    <option value="">
-                        Semua Bulan
-                    </option>
 
-                    <?php for ($i = 1; $i <= 12; $i++): ?>
 
-                        <option value="<?= $i ?>">
-                            <?= date('F', mktime(0, 0, 0, $i, 1)) ?>
-                        </option>
-
-                    <?php endfor; ?>
-
-                </select>
-
-                <select name="tahun" id="tahunFilter" class="filter-select">
-
-                    <option value="">
-                        Semua Tahun
-                    </option>
-
-                    <?php
-                    $currentYear = date('Y');
-
-                    for (
-                        $year = $currentYear;
-                        $year >= 2024;
-                        $year--
-                    ):
-                        ?>
-
-                        <option value="<?= $year ?>">
-                            <?= $year ?>
-                        </option>
-
-                    <?php endfor; ?>
-
-                </select>
 
                 <select name="sort" id="sortFilter" class="filter-select">
 
@@ -93,6 +57,12 @@ $this->title = 'Daftar Pesanan';
                     </option>
 
                 </select>
+
+                <?= Html::a(
+                    'Reset',
+                    ['admin/pesanan'],
+                    ['class' => 'btn btn-secondary']
+                ) ?>
             </div>
         </form>
 

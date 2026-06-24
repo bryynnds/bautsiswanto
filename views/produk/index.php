@@ -1,5 +1,7 @@
 <?php
 
+use yii\helpers\Html;
+
 /** @var yii\web\View $this */
 /** @var app\models\HomepageProduk[] $produks */
 
@@ -70,6 +72,12 @@ $this->title = 'Daftar Produk';
                 <option value="harga_desc">Harga Termahal</option>
 
             </select>
+
+            <?= Html::a(
+                'Reset',
+                ['produk/index'],
+                ['class' => 'btn btn-secondary']
+            ) ?>
 
         </div>
 

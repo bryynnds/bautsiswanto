@@ -42,6 +42,7 @@ class HomepageProduk extends ActiveRecord
             ],
 
             [['title'], 'string', 'max' => 255],
+            ['status', 'string'],
 
             [['image'], 'file', 'extensions' => 'png, jpg, jpeg'],
 

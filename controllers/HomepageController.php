@@ -341,22 +341,15 @@ class HomepageController extends Controller
 
         if ($model) {
 
-            // Hapus gambar
-            if (!empty($model->image)) {
+            $model->status = 'nonaktif';
 
-                $imagePath = Yii::getAlias('@webroot') . '/' . $model->image;
+            if ($model->save(false)) {
 
-                if (file_exists($imagePath)) {
-                    @unlink($imagePath);
-                }
+                Yii::$app->session->setFlash(
+                    'success',
+                    'Produk berhasil dinonaktifkan!'
+                );
             }
-
-            $model->delete();
-
-            Yii::$app->session->setFlash(
-                'success',
-                'Produk berhasil dihapus!'
-            );
         }
 
         return $this->redirect(['admin/produk']);
@@ -365,6 +358,7 @@ class HomepageController extends Controller
     public function actionAdminProduk()
     {
         $query = HomepageProduk::find()
+            ->where(['status' => 'aktif'])
             ->joinWith(['kategori.jenis']);
 
         $search = Yii::$app->request->get('search');

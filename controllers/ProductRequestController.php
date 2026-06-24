@@ -125,7 +125,7 @@ class ProductRequestController extends Controller
 
         $pages = new Pagination([
             'totalCount' => $totalRequests,
-            'pageSize' => 2,
+            'pageSize' => 5,
         ]);
 
         $requests = $query

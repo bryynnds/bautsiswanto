@@ -14,6 +14,7 @@ class ProdukController extends Controller
     public function actionIndex()
     {
         $query = HomepageProduk::find()
+            ->where(['status' => 'aktif'])
             ->joinWith(['kategori.jenis']);
 
         $search = Yii::$app->request->get('search');
