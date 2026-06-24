@@ -92,7 +92,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
             ];
         } elseif (Yii::$app->user->identity->isAdmin()) {
             $menuItems = [
-                ['label' => 'Beranda', 'url' => ['/admin/dashboard']],
+                ['label' => 'Dashboard', 'url' => ['/admin/dashboard']],
                 ['label' => 'Produk', 'url' => ['/homepage/admin-produk']],
                 ['label' => 'Permintaan', 'url' => ['/admin-product-request/index']],
                 ['label' => 'Pesanan', 'url' => ['/admin/pesanan']],

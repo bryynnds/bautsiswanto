@@ -34,6 +34,25 @@ if (!is_object($model)) {
             'placeholder' => 'Contoh : fa-solid fa-truck-fast'
         ]) ?>
 
+    <div class="alert alert-info mt-3">
+        <h6 class="mb-2">
+            <i class="fa-solid fa-circle-info"></i>
+            Cara Menentukan Icon
+        </h6>
+
+        <ol class="mb-0">
+            <li>
+                Kunjungi
+                <a href="https://fontawesome.com/icons" target="_blank">
+                    Font Awesome Icons
+                </a>
+            </li>
+            <li>Cari icon yang diinginkan.</li>
+            <li>Salin class icon, misalnya <code>fa-solid fa-award</code>.</li>
+            <li>Masukkan class tersebut ke kolom Icon dan simpan.</li>
+        </ol>
+    </div>
+
     <?= Html::submitButton('Tambah Keunggulan', ['class' => 'btn btn-success']) ?>
 
     <?php ActiveForm::end(); ?>

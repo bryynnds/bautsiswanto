@@ -255,6 +255,11 @@ $(document).on(
     </div>
 
     <div class="summary-row">
+        <span>Tanggal Pesanan</span>
+        <strong>\${res.order.created_at}</strong>
+    </div>
+
+    <div class="summary-row">
         <span>Alamat</span>
         <strong>\${res.order.alamat}</strong>
     </div>

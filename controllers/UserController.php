@@ -101,6 +101,10 @@ class UserController extends Controller
                 'courier' => $order->courier,
                 'tracking_number' => $order->tracking_number,
                 'subtotal_produk' => $order->total - $order->shipping_cost,
+                'created_at' => date(
+                    'd-m-Y H:i',
+                    strtotime($order->created_at)
+                ),
             ],
             'items' => $data,
         ];

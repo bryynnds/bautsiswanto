@@ -104,7 +104,6 @@ $this->title = 'Checkout';
                         <div class="mb-3">
                             <label class="form-label">Metode Pembayaran</label>
                             <select name="metode_pembayaran" class="form-select" required>
-                                <option value="COD">COD</option>
                                 <option value="Transfer Bank">Transfer Bank</option>
                             </select>
                         </div>

@@ -68,7 +68,7 @@ $this->title = 'Dashboard Pemilik';
 
                     <div class="stat-content">
                         <span class="stat-label">
-                            Pendapatan Bulan Ini
+                            Pendapatan Bulan <?= Yii::$app->formatter->asDate($bulan . '-01', 'MMMM yyyy') ?>
                         </span>
 
                         <span class="stat-value">
@@ -130,7 +130,8 @@ $this->title = 'Dashboard Pemilik';
 
 
         <h3>
-            Top 5 Produk Terlaris
+            5 Produk Terlaris Bulan
+            <?= Yii::$app->formatter->asDate($bulan . '-01', 'MMMM yyyy') ?>
         </h3>
         <div class="produkunggulan-card">
             <div class="produk-grid">

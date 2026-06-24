@@ -71,18 +71,14 @@ class OwnerController extends Controller
             ->count();
 
         $totalPendapatan = Order::find()
+            ->sum('total');
+
+        $pendapatanBulanIni = Order::find()
             ->where([
                 'between',
                 'DATE(created_at)',
                 $startDate,
                 $endDate
-            ])
-            ->sum('total');
-
-        $pendapatanBulanIni = Order::find()
-            ->where([
-                'MONTH(created_at)' => date('m'),
-                'YEAR(created_at)' => date('Y')
             ])
             ->sum('total');
 
@@ -286,7 +282,7 @@ class OwnerController extends Controller
             ,
 
             'pagination' => [
-                'pageSize' => 10
+                'pageSize' => 5
             ]
         ]);
 
