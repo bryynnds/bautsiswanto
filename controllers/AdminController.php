@@ -421,6 +421,8 @@ class AdminController extends Controller
 
         $id = Yii::$app->request->post('id');
 
+        $urlProfile = Yii::$app->urlManager->createAbsoluteUrl(['/user/profile']);
+
         $resi = Yii::$app->request->post('resi');
 
         $order = Order::findOne($id);
@@ -458,6 +460,9 @@ class AdminController extends Controller
                 "Kurir : " . strtoupper($order->courier) . "\n\n" .
 
                 "Silakan simpan nomor resi untuk melacak pengiriman.\n\n" .
+
+                "Jika pesanan sudah sampai, silakan selesaikan pesanan melalui halaman profil berikut:\n" .
+                "{$urlProfile}\n\n" .
 
                 "Terima kasih telah berbelanja di Baut Siswanto 🔩";
 
