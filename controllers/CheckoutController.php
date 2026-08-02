@@ -94,6 +94,42 @@ class CheckoutController extends Controller
             return "Gagal menyimpan order";
         }
 
+        // Kirim WhatsApp ke admin
+        $admin = \app\models\User::find()
+            ->where(['role' => 'admin'])
+            ->one();
+
+        if ($admin && !empty($admin->no_hp)) {
+
+            $nomor = preg_replace('/[^0-9]/', '', $admin->no_hp);
+
+            if (substr($nomor, 0, 1) == '0') {
+                $nomor = '62' . substr($nomor, 1);
+            }
+
+            $pesan =
+                "🔔 PESANAN BARU\n\n" .
+
+                "Ada pesanan baru yang masuk.\n\n" .
+
+                "Nomor Pesanan : #{$order->id}\n" .
+                "Nama : {$order->nama}\n" .
+                "No. HP : {$order->no_hp}\n" .
+                "Total : Rp" . number_format($order->total, 0, ',', '.') . "\n" .
+                "Metode Pembayaran : {$order->metode_pembayaran}\n\n" .
+
+                "Silakan login ke dashboard admin untuk memproses pesanan.";
+
+            try {
+                Yii::$app->whatsapp->send($nomor, $pesan);
+            } catch (\Exception $e) {
+                Yii::error(
+                    'Gagal kirim WA admin: ' . $e->getMessage(),
+                    'whatsapp'
+                );
+            }
+        }
+
         // 2. Ambil keranjang user
         $keranjang = Keranjang::find()->where(['user_id' => $userId])->all();
 

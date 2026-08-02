@@ -12,6 +12,25 @@ use app\models\ProductRequest;
 
 class ProductRequestController extends Controller
 {
+    private function getAdminWhatsapp()
+    {
+        $admin = \app\models\User::find()
+            ->where(['role' => 'admin'])
+            ->one();
+
+        if (!$admin || empty($admin->no_hp)) {
+            return null;
+        }
+
+        $nomor = preg_replace('/[^0-9]/', '', $admin->no_hp);
+
+        if (substr($nomor, 0, 1) == '0') {
+            $nomor = '62' . substr($nomor, 1);
+        }
+
+        return $nomor;
+    }
+
     public function behaviors()
     {
         return [
@@ -55,6 +74,56 @@ class ProductRequestController extends Controller
             }
 
             if ($model->save()) {
+                $admin = \app\models\User::find()
+                    ->where(['role' => 'admin'])
+                    ->one();
+
+                if ($admin && !empty($admin->no_hp)) {
+
+                    $nomor = preg_replace('/[^0-9]/', '', $admin->no_hp);
+
+                    if (substr($nomor, 0, 1) == '0') {
+                        $nomor = '62' . substr($nomor, 1);
+                    }
+
+                    $user = Yii::$app->user->identity;
+
+                    $pesan =
+                        "📦 *PERMINTAAN PRODUK BARU*\n\n" .
+
+                        "Ada permintaan produk baru.\n\n" .
+
+                        "Pengguna : {$user->username}\n" .
+                        "Nama Produk : {$model->nama_produk}\n";
+
+                    // Tambahkan jika memang ada field jumlah
+                    if (isset($model->jumlah)) {
+                        $pesan .= "Jumlah : {$model->jumlah}\n";
+                    }
+
+                    // Tambahkan jika memang ada field keterangan
+                    if (!empty($model->keterangan)) {
+                        $pesan .= "Keterangan : {$model->keterangan}\n";
+                    }
+
+                    $pesan .= "\nSilakan login ke dashboard admin untuk menindaklanjuti.";
+
+                    try {
+
+                        $response = Yii::$app->whatsapp->send($nomor, $pesan);
+
+                        Yii::error('Nomor admin: ' . $nomor, 'whatsapp');
+                        Yii::error('Response Fonnte: ' . $response, 'whatsapp');
+
+                    } catch (\Exception $e) {
+
+                        Yii::error(
+                            'ERROR WA: ' . $e->getMessage(),
+                            'whatsapp'
+                        );
+
+                    }
+                }
 
                 Yii::$app->session->setFlash(
                     'success',
