@@ -47,15 +47,15 @@ $config = [
             'transport' => [
                 'scheme' => 'smtp',
                 'host' => 'smtp.gmail.com',
-                'username' => 'bautsiswanto@gmail.com',
-                'password' => 'glnavkcheiioezkk',
+                'username' => 'siswantobaut@gmail.com',
+                'password' => 'qstbekvtblyzsmlw',
                 'port' => 587,
                 'encryption' => 'tls',
             ],
 
             'messageConfig' => [
                 'from' => [
-                    'bautsiswanto@gmail.com' => 'Baut Siswanto'
+                    'siswantobaut@gmail.com' => 'Baut Siswanto'
                 ]
             ],
         ],
